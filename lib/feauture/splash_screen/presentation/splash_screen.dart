@@ -44,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen>
           opacity: _animation,
           child: Image(
             image: logo,
-            width: 175,
+            width: MediaQuery.of(context).size.width / 2,
           ),
         ),
       ),
