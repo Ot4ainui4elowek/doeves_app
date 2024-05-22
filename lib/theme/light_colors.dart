@@ -1,27 +1,35 @@
 import 'package:flutter/material.dart';
 
-class LightColors {
-  static const primary = Color(0xFF6A3EA1);
-  static const primaryDark = Color(0xFF3A2258);
-  static const primaryLight = Color(0xFFEFE9F7);
-
-  static const background = Color(0xFFFAF8FC);
-
-  static const secondary = Color(0xFFDEDC52);
-  static const secondaryDark = Color(0xFF565510);
-  static const secondaryLight = Color(0xFFF7F6D4);
-
-  static const black = Color(0xFF180E25);
-  static const darkGrey = Color(0xFF827D89);
-  static const grey = Color(0xFFC8C5CB);
-  static const lightGrey = Color(0xFFEFEEF0);
-  static const white = Colors.white;
-
-  static const tertiary = Color(0xFF60D889);
-  static const tertiaryDark = Color(0xFF1F7F40);
-  static const tertiaryLight = Color(0xFFDAF6E4);
-
-  static const error = Color(0xFFCE3A54);
-  static const errorDark = Color(0xFF5A1623);
-  static const errorLight = Color(0xFFF7DEE3);
+abstract class AppLightColors {
+  static const onPrimaryFixedVariant = Color(0xFF6A3457);
+  static const brightness = Brightness.light;
+  static const primary = Color(0xFFDF3A76);
+  static const onPrimary = Colors.white;
+  static const secondary = Color(0xFFB61263);
+  static const onSecondary = Colors.white;
+  static const error = Color(0xFFBA1A1A);
+  static const onError = Colors.white;
+  static const surface = Color(0xFFFFF8F9);
+  static const onSurface = Color(0xFF211A1D);
+  static const background = Colors.white;
+  static const onBackground = Colors.white;
+  static const tertiary = Color(0xFF743EC8);
+  static const onTertiary = Colors.white;
+  static const primaryContainer = Color(0xFFFFD8EC);
+  static const onPrimaryContainer = Color(0xFF37072A);
+  static const secondaryContainer = Color(0xFFFFD9E2);
+  static const onSecondaryContainer = Color(0xFF3A071D);
+  static const tertiaryContainer = Color(0xFFECDCFF);
+  static const onTertiaryContainer = Color(0xFF240E45);
+  static const errorContainer = Color(0xFFFFDAD6);
+  static const onErrorContainer = Color(0xFF410002);
+  static const outline = Color(0xFF81737A);
+  static const outlineVariant = Color(0xFFD3C2C9);
+  static const onSurfaceVariant = Color(0xFF4F4449);
+  static const inverseSurface = Color(0xFF362E32);
+  static const onInverseSurface = Color(0xFFFCEDF2);
+  static const scrim = Colors.black;
+  static const shadow = Colors.black;
+  static const inversePrimary = Color(0xFFF9B1DB);
+  static const surfaceContainer = Color(0xFFF9EAEF);
 }
