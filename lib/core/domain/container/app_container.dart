@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:doeves_app/feauture/login_page/presentation/bloc/theme_bloc.dart';
+import 'package:doeves_app/feauture/login_page/domain/bloc/theme_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 class AppContainer {

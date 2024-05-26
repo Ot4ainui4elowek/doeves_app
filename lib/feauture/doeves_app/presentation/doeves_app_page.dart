@@ -1,6 +1,6 @@
 import 'package:doeves_app/core/domain/container/app_container.dart';
 import 'package:doeves_app/core/domain/router/router.dart';
-import 'package:doeves_app/feauture/login_page/presentation/bloc/theme_bloc.dart';
+import 'package:doeves_app/feauture/login_page/domain/bloc/theme_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
