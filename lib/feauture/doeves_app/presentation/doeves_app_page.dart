@@ -1,16 +1,28 @@
+import 'package:doeves_app/core/domain/container/app_container.dart';
 import 'package:doeves_app/core/domain/router/router.dart';
-import 'package:doeves_app/theme/light_theme.dart';
+import 'package:doeves_app/feauture/login_page/presentation/bloc/theme_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DoevesApp extends StatelessWidget {
-  const DoevesApp({super.key});
+  final AppContainer appContainer;
+  DoevesApp({super.key, required this.appContainer}) {
+    //appContainer.serviceScope.themeService.add(ThemeSwitchDark());
+  }
+
+  ThemeBloc get themeService => appContainer.serviceScope.themeService;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Doeves',
-      theme: lightTheme,
-      routerConfig: router,
+    return BlocBuilder(
+      bloc: themeService,
+      builder: (context, state) {
+        return MaterialApp.router(
+          title: 'Doeves',
+          theme: themeService.state.theme,
+          routerConfig: router,
+        );
+      },
     );
   }
 }
