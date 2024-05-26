@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 final lightTheme = ThemeData(
   visualDensity: VisualDensity.adaptivePlatformDensity,
-  colorScheme: const ColorScheme.light(
-    brightness: AppLightColors.brightness,
+  colorScheme: const ColorScheme(
+    brightness: Brightness.light,
     primary: AppLightColors.primary,
     onPrimary: AppLightColors.onPrimary,
     secondary: AppLightColors.secondary,
