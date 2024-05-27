@@ -111,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
       children: [
         vm.authorizationIsValid.observer(
           (context, value) => AppFilledButton(
-            onPressed: value ? () {} : null,
+            onPressed: value ? () async => vm.signInAccount(context) : null,
             child: Text(
               'Login',
               style: AppTextTheme.textBase(weight: TextWeight.medium),

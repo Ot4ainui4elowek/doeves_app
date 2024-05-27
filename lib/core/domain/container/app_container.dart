@@ -1,6 +1,9 @@
 import 'dart:developer';
 
+import 'package:doeves_app/feauture/login_page/data/repository/authorization_mocked_repository.dart';
+import 'package:doeves_app/feauture/login_page/data/source/authorization_mocked_data.dart';
 import 'package:doeves_app/feauture/login_page/domain/bloc/theme_bloc.dart';
+import 'package:doeves_app/feauture/login_page/domain/repository/authorization_repository.dart';
 import 'package:get_it/get_it.dart';
 
 class AppContainer {
@@ -23,6 +26,9 @@ class AppContainer {
       serviceScope = ServiceScope(
         themeService: themeService,
       );
+      repositoryScope = RepositoryScope(
+          authorizationRepository: AuthorizationMockedRepository(
+              authorizationData: AuthorizationMockedDataSource()));
       log('App Container is initialized');
       return true;
     } catch (e, st) {
@@ -40,5 +46,6 @@ class ServiceScope {
 }
 
 class RepositoryScope {
-  const RepositoryScope();
+  final AuthorizationRepository authorizationRepository;
+  const RepositoryScope({required this.authorizationRepository});
 }
