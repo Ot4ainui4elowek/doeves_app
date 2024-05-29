@@ -18,4 +18,7 @@ abstract class AppRoutes {
   static const selectNewNotePage = 'select-new-note-page';
   static const goToSelectNewNotePage =
       '${AppRoutes.goToLoginPage}/${AppRoutes.selectNewNotePage}';
+  static const createNotePage = 'create-note-page';
+  static const goToCreateNotePage =
+      '${AppRoutes.goToLoginPage}/${AppRoutes.createNotePage}';
 }

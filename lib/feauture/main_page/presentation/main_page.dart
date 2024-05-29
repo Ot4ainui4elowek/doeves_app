@@ -1,4 +1,5 @@
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
+import 'package:doeves_app/core/presentation/app_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -6,6 +7,7 @@ class DoevesMainPage extends StatefulWidget {
   const DoevesMainPage({super.key, required navigationShell})
       : _navigationShell = navigationShell;
   final StatefulNavigationShell _navigationShell;
+
   @override
   State<DoevesMainPage> createState() => DoevesMainPageState();
 }
@@ -46,9 +48,13 @@ class DoevesMainPageState extends State<DoevesMainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: widget._navigationShell,
-      bottomNavigationBar: _bottomNavBarBuilder,
-      floatingActionButton: addNoteButtonBuilder,
+      body: AppWrapper(
+        child: Scaffold(
+          body: widget._navigationShell,
+          bottomNavigationBar: _bottomNavBarBuilder,
+          floatingActionButton: addNoteButtonBuilder,
+        ),
+      ),
     );
   }
 }

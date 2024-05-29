@@ -1,17 +1,10 @@
+import 'package:doeves_app/feauture/main_page/domain/entity/create_note_entity.dart';
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 
 class CreateNoteButtonListItem extends StatelessWidget {
-  final String title;
-  final String description;
-  final IconData icon;
-  final void Function() onPressed;
-  const CreateNoteButtonListItem(
-      {super.key,
-      required this.title,
-      required this.description,
-      required this.icon,
-      required this.onPressed});
+  final CreateNoteEntity createNote;
+  const CreateNoteButtonListItem({super.key, required this.createNote});
 
   Widget iconBuilder(BuildContext context) => Container(
         padding: const EdgeInsets.all(14),
@@ -24,7 +17,7 @@ class CreateNoteButtonListItem extends StatelessWidget {
           ),
         ),
         child: Icon(
-          icon,
+          createNote.icon,
           color: Theme.of(context).colorScheme.onPrimaryContainer,
         ),
       );
@@ -32,14 +25,14 @@ class CreateNoteButtonListItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            title,
+            createNote.title,
             style: AppTextTheme.textBase(weight: TextWeight.bold).copyWith(
               color: Theme.of(context).colorScheme.onPrimaryContainer,
             ),
           ),
           const SizedBox(height: 8),
           Text(
-            description,
+            createNote.description,
             style: AppTextTheme.text2Xs(weight: TextWeight.medium).copyWith(
               color: Theme.of(context).colorScheme.onPrimaryContainer,
             ),
@@ -59,7 +52,7 @@ class CreateNoteButtonListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-        onPressed: onPressed,
+        onPressed: () => createNote.onPressed(context),
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.all(0),
           elevation: 0,

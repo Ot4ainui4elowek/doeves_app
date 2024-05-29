@@ -1,7 +1,10 @@
+import 'dart:core';
+
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/core/presentation/text_fields/controllers/app_text_editing_controller.dart';
 import 'package:doeves_app/core/presentation/text_fields/controllers/password_text_editing_controller.dart';
+import 'package:doeves_app/feauture/login_page/domain/authorization_strategy/strategy.dart';
 import 'package:doeves_app/feauture/login_page/domain/entity/authorization_credentrials.dart';
 import 'package:doeves_app/feauture/login_page/domain/repository/authorization_repository.dart';
 import 'package:doeves_app/util/app_validator.dart';
@@ -35,6 +38,32 @@ class LoginPageViewModel {
 
   void goToNotesHomePage(BuildContext context) {
     context.go(AppRoutes.goToNotesHomePage);
+  }
+
+  Future<void> signIn(
+      {required SignInStrategy signInStrtegy,
+      required BuildContext context}) async {
+    final result = await signInStrtegy();
+    switch (result) {
+      case GoodUseCaseResult<AuthorizationCredentials>(:final data):
+        debugPrint(data.jwtToken);
+        if (!context.mounted) return;
+        goToNotesHomePage(context);
+        break;
+      case BadUseCaseResult<AuthorizationCredentials>(:final errorList):
+        for (final error in errorList) {
+          debugPrint(error.code);
+        }
+        break;
+    }
+  }
+
+  Future<void> signInWithEmail(BuildContext context) async {
+    final stretegy = SignInUsingEmailStrategy(
+        authorizationRepository: _authorizationRepository,
+        password: passwordTextController.text,
+        email: emailTextController.text);
+    return await signIn(signInStrtegy: stretegy, context: context);
   }
 
   Future<void> signInAccount(BuildContext context) async {
