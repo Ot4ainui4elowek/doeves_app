@@ -2,13 +2,14 @@ import 'package:doeves_app/core/data/remote_response.dart';
 import 'package:doeves_app/core/domain/app_error/app_error.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/feauture/login_page/data/model/authorization_credentials.dart';
-import 'package:doeves_app/feauture/login_page/data/source/authorization_data.dart';
+import 'package:doeves_app/feauture/login_page/data/source/authorization_data_for_mocked_data.dart';
 import 'package:doeves_app/feauture/login_page/domain/entity/authorization_credentrials.dart';
-import 'package:doeves_app/feauture/login_page/domain/repository/authorization_repository.dart';
+import 'package:doeves_app/feauture/login_page/domain/repository/authorization_repository_for_mocked_data.dart';
 import 'package:doeves_app/util/rest_api_error_list_ext.dart';
 
-class AuthorizationMockedRepository implements AuthorizationRepository {
-  final AuthorizationDataSource _authorizationData;
+class AuthorizationMockedRepository
+    implements AuthorizationRepositoryForMockedData {
+  final AuthorizationDataSourceForMockedData _authorizationData;
   AuthorizationMockedRepository({required authorizationData})
       : _authorizationData = authorizationData;
   @override

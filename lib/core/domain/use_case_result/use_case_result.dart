@@ -41,3 +41,44 @@ class BadUseCaseResult<T> implements UseCaseResult<T> {
   @override
   bool get isSuccess => false;
 }
+
+sealed class RestApiResult<T> {
+  final int statusCode;
+
+  const RestApiResult({
+    required this.statusCode,
+  });
+
+  const factory RestApiResult.data({
+    required final int statusCode,
+    required final T data,
+  }) = DataRestApiResult;
+
+  const factory RestApiResult.error({
+    required final int statusCode,
+    required final List<AppError> errorList,
+  }) = ErrorRestApiResult;
+
+  bool get isSuccess => switch (statusCode) {
+        >= 200 && < 300 => true,
+        _ => false,
+      };
+}
+
+class DataRestApiResult<T> extends RestApiResult<T> {
+  final T data;
+
+  const DataRestApiResult({
+    required super.statusCode,
+    required this.data,
+  });
+}
+
+class ErrorRestApiResult<T> extends RestApiResult<T> {
+  final List<AppError> errorList;
+
+  const ErrorRestApiResult({
+    required super.statusCode,
+    required this.errorList,
+  });
+}

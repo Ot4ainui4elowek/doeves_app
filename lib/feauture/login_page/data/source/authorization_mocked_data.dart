@@ -1,9 +1,10 @@
 import 'package:doeves_app/core/data/model/rest_api_error_model.dart';
 import 'package:doeves_app/core/data/remote_response.dart';
 import 'package:doeves_app/feauture/login_page/data/model/authorization_credentials.dart';
-import 'package:doeves_app/feauture/login_page/data/source/authorization_data.dart';
+import 'package:doeves_app/feauture/login_page/data/source/authorization_data_for_mocked_data.dart';
 
-class AuthorizationMockedDataSource implements AuthorizationDataSource {
+class AuthorizationMockedDataSource
+    implements AuthorizationDataSourceForMockedData {
   @override
   Future<RemoteResponse<AuthorizationCredentialsModel>> signIn(
       {required String email, required String password}) async {

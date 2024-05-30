@@ -1,0 +1,86 @@
+import 'package:dio/dio.dart';
+import 'package:doeves_app/core/data/remote_response.dart';
+import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
+import 'package:doeves_app/feauture/login_page/data/model/authorization_remote_response/error_model.dart';
+import 'package:doeves_app/feauture/login_page/data/model/http_status_and_errors.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:retrofit/dio.dart';
+
+import 'app_error/app_error.dart';
+
+abstract mixin class RestApiHandler {
+  @protected
+  Future<RestApiResult<D>> request<R, D>({
+    required final Future<HttpResponse<R>> Function() callback,
+    required final D Function(JsonType json) dataMapper,
+  }) async {
+    try {
+      final HttpResponse(:response) = await callback();
+      final Response(:data, :statusCode) = response;
+      switch (statusCode!) {
+        case >= 200 && < 300:
+          {
+            return RestApiResult.data(
+                statusCode: statusCode, data: dataMapper(data));
+          }
+
+        default:
+          {
+            return RestApiResult.error(
+              errorList: [
+                SpecificError(HttpStatusAndErrors.unableStatus.value),
+              ],
+              statusCode: statusCode,
+            );
+          }
+      }
+    } on DioException catch (error) {
+      final res = error.response;
+      if (res != null && res.statusCode != null) {
+        switch (res.statusCode!) {
+          case >= 400 && < 500:
+            {
+              final errorResponce = ErrorResponseModel.fromJson(res.data);
+              return RestApiResult.error(
+                errorList: [
+                  SpecificError(errorResponce.message),
+                  SpecificError(errorResponce.date),
+                  SpecificError(errorResponce.statusCode.toString()),
+                ],
+                statusCode: res.statusCode!,
+              );
+            }
+          case >= 500:
+            {
+              return RestApiResult.error(
+                errorList: [SpecificError(HttpStatusAndErrors.E500.value)],
+                statusCode: res.statusCode!,
+              );
+            }
+          default:
+            {
+              debugPrint('def');
+              return RestApiResult.error(
+                errorList: [
+                  SpecificError(HttpStatusAndErrors.unableStatus.value)
+                ],
+                statusCode: res.statusCode!,
+              );
+            }
+        }
+      } else {
+        return RestApiResult.error(
+          errorList: [
+            SpecificError(HttpStatusAndErrors.unknownException.value)
+          ],
+          statusCode: -1,
+        );
+      }
+    } catch (e) {
+      return RestApiResult.error(
+        statusCode: -1,
+        errorList: [SpecificError(HttpStatusAndErrors.handlerException.value)],
+      );
+    }
+  }
+}

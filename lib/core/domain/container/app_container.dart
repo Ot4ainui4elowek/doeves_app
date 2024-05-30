@@ -1,7 +1,8 @@
 import 'dart:developer';
 
-import 'package:doeves_app/feauture/login_page/data/repository/authorization_mocked_repository.dart';
-import 'package:doeves_app/feauture/login_page/data/source/authorization_mocked_data.dart';
+import 'package:dio/dio.dart';
+import 'package:doeves_app/feauture/login_page/data/repository/authorization_remote_tepository.dart';
+import 'package:doeves_app/feauture/login_page/data/source/authorization_data_source.dart';
 import 'package:doeves_app/feauture/login_page/domain/bloc/theme_bloc.dart';
 import 'package:doeves_app/feauture/login_page/domain/repository/authorization_repository.dart';
 import 'package:get_it/get_it.dart';
@@ -27,8 +28,9 @@ class AppContainer {
         themeService: themeService,
       );
       repositoryScope = RepositoryScope(
-          authorizationRepository: AuthorizationMockedRepository(
-              authorizationData: AuthorizationMockedDataSource()));
+          authorizationRepository: AuthorizationRemoteRepository(
+        authorizationDataSourse: AuthorizationClientDataSource(Dio()),
+      ));
       log('App Container is initialized');
       return true;
     } catch (e, st) {

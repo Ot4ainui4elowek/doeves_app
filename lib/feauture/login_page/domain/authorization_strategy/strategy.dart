@@ -1,9 +1,9 @@
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
-import 'package:doeves_app/feauture/login_page/domain/entity/authorization_credentrials.dart';
+import 'package:doeves_app/feauture/login_page/data/model/sign_in_response_model.dart';
 import 'package:doeves_app/feauture/login_page/domain/repository/authorization_repository.dart';
 
 abstract class AuthorizationStrategy {
-  Future<UseCaseResult<AuthorizationCredentials>> call();
+  Future<UseCaseResult<SignInResponseModel>> call();
 }
 
 abstract class SignInStrategy implements AuthorizationStrategy {}
@@ -18,7 +18,7 @@ class SignInUsingEmailStrategy implements SignInStrategy {
   final String password;
   final String email;
   @override
-  Future<UseCaseResult<AuthorizationCredentials>> call() async {
+  Future<UseCaseResult<SignInResponseModel>> call() async {
     return await authorizationRepository.signIn(
         email: email, password: password);
   }
