@@ -38,9 +38,12 @@ abstract mixin class RestApiHandler {
       final res = error.response;
       if (res != null && res.statusCode != null) {
         switch (res.statusCode!) {
-          case >= 400 && < 500:
+          case > 300 && < 500:
             {
-              final errorResponce = ErrorResponseModel.fromJson(res.data);
+              late final ErrorResponseModel errorResponce;
+              if (ErrorResponseModel.patternMatch(res.data)) {
+                errorResponce = ErrorResponseModel.fromJson(res.data);
+              }
               return RestApiResult.error(
                 errorList: [
                   SpecificError(errorResponce.message),
@@ -53,13 +56,12 @@ abstract mixin class RestApiHandler {
           case >= 500:
             {
               return RestApiResult.error(
-                errorList: [SpecificError(HttpStatusAndErrors.E500.value)],
+                errorList: [SpecificError(HttpStatusAndErrors.e500.value)],
                 statusCode: res.statusCode!,
               );
             }
           default:
             {
-              debugPrint('def');
               return RestApiResult.error(
                 errorList: [
                   SpecificError(HttpStatusAndErrors.unableStatus.value)
