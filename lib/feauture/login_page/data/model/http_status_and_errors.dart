@@ -12,10 +12,8 @@ enum HttpStatusAndErrors implements HttpStatus {
   handlerException('handler-exception'),
   unknownException('unknown-exception'),
   unableStatus('unhandled-status-code'),
-  E500('server-exception'),
-  E403('access denied'),
-  E401('bad creditinals suka blyat'),
-  E400('invalid data'),
+  e500('server-exception'),
+  e400('invalid data'),
   incorrectNumber('incorrectNumber'),
   passwordMismatch('passwordMismatch');
 
