@@ -1,15 +1,17 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:doeves_app/feauture/login_page/data/repository/authorization_remote_tepository.dart';
-import 'package:doeves_app/feauture/login_page/data/source/authorization_data_source.dart';
+import 'package:doeves_app/feauture/login_page/data/repository/authorization_remote_repository.dart';
+import 'package:doeves_app/feauture/login_page/data/source/authorization_client_data_source.dart';
 import 'package:doeves_app/feauture/login_page/domain/bloc/theme_bloc.dart';
 import 'package:doeves_app/feauture/login_page/domain/repository/authorization_repository.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 
 class AppContainer {
   late final ServiceScope serviceScope;
   late final RepositoryScope repositoryScope;
+  late final String? _restApiUrl;
 
   AppContainer.init() {
     ready = initDependencies();
@@ -21,6 +23,7 @@ class AppContainer {
   late final Future<bool> ready;
 
   Future<bool> initDependencies() async {
+    _restApiUrl = dotenv.env['APi_ADRESS'];
     try {
       final themeService = ThemeBloc();
 
@@ -29,7 +32,8 @@ class AppContainer {
       );
       repositoryScope = RepositoryScope(
           authorizationRepository: AuthorizationRemoteRepository(
-        authorizationDataSourse: AuthorizationClientDataSource(Dio()),
+        authorizationDataSourse:
+            AuthorizationClientDataSource(Dio(), baseUrl: _restApiUrl ?? ''),
       ));
       log('App Container is initialized');
       return true;
