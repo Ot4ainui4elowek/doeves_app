@@ -27,6 +27,12 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
+  void didUpdateWidget(covariant oldWidget) {
+    vm.init();
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   void dispose() {
     vm.dispose();
     super.dispose();

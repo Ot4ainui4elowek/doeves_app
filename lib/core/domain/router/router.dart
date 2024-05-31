@@ -73,7 +73,9 @@ final router = GoRouter(
     GoRoute(
       path: AppRoutes.goToRegistrationPage,
       builder: (context, state) => RegistrationPage(
-        vm: RegistrationPageViewModel(),
+        vm: RegistrationPageViewModel(
+            authorizationRepository:
+                AppContainer().repositoryScope.authorizationRepository),
       ),
     ),
   ],

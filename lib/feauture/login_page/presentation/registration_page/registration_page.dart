@@ -86,7 +86,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       children: [
         vm.registrationFormIsValid.observer(
           (context, value) => AppFilledButton(
-            onPressed: value ? () {} : null,
+            onPressed: value ? vm.signUpWitchEmailStrategy : null,
             child: Text(
               'Register',
               style: AppTextTheme.textBase(weight: TextWeight.medium),

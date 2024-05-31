@@ -65,21 +65,4 @@ class LoginPageViewModel {
         email: emailTextController.text);
     return await signIn(signInStrtegy: stretegy, context: context);
   }
-
-  // Future<void> signInAccount(BuildContext context) async {
-  //   final result = await _authorizationRepository.signIn(
-  //       email: emailTextController.text, password: passwordTextController.text);
-  //   switch (result) {
-  //     case GoodUseCaseResult<SignInResponseModel>(:final data):
-  //       debugPrint(data.token);
-  //       if (!context.mounted) return;
-  //       goToNotesHomePage(context);
-  //       break;
-  //     case BadUseCaseResult<SignInResponseModel>(:final errorList):
-  //       for (final error in errorList) {
-  //         debugPrint(error.code);
-  //       }
-  //       break;
-  //   }
-  // }
 }
