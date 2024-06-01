@@ -9,7 +9,7 @@ class SelectNewNotePageViewModel {
       title: 'Interesting Idea',
       description: 'Use free text area, feel free to write it all',
       onPressed: (BuildContext context) {
-        context.push(AppRoutes.goToCreateNotePage);
+        context.push(AppRoutes.createNotePage);
       },
       icon: Icons.lightbulb,
     ),

@@ -42,7 +42,7 @@ class DoevesMainPageState extends State<DoevesMainPage> {
         ],
       );
   Widget get addNoteButtonBuilder => FloatingActionButton(
-        onPressed: () => context.push(AppRoutes.goToSelectNewNotePage),
+        onPressed: () => context.push(AppRoutes.selectNewNotePage),
         child: const Icon(Icons.add_rounded),
       );
   @override

@@ -37,7 +37,7 @@ class LoginPageViewModel {
   }
 
   void goToNotesHomePage(BuildContext context) {
-    context.go(AppRoutes.goToNotesHomePage);
+    context.go(AppRoutes.notesHomePage);
   }
 
   Future<void> signIn(

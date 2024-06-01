@@ -19,59 +19,56 @@ final router = GoRouter(
   initialLocation: AppRoutes.splashScreen,
   routes: [
     GoRoute(
-        path: AppRoutes.splashScreen,
-        builder: (context, state) => SplashScreen(
-              vm: SplashScreenViewModel(),
-            ),
-        routes: [
-          GoRoute(
-            path: AppRoutes.loginPage,
-            builder: (context, state) => LoginPage(
-              vm: LoginPageViewModel(
-                  authorizationRepository:
-                      AppContainer().repositoryScope.authorizationRepository),
-            ),
-            routes: [
-              StatefulShellRoute.indexedStack(
-                builder: (context, state, navigationShell) => DoevesMainPage(
-                  navigationShell: navigationShell,
-                ),
-                branches: [
-                  StatefulShellBranch(routes: [
-                    GoRoute(
-                      path: AppRoutes.notesHomePage,
-                      builder: (context, state) => const NotesHomePage(),
-                    )
-                  ]),
-                  StatefulShellBranch(routes: [
-                    GoRoute(
-                      path: AppRoutes.finishedNotesPage,
-                      builder: (context, state) => const FinishedNotesPage(),
-                    )
-                  ]),
-                  StatefulShellBranch(routes: [
-                    GoRoute(
-                      path: AppRoutes.settingsPage,
-                      builder: (context, state) => const SettingsPage(),
-                    )
-                  ]),
-                ],
-              ),
-              GoRoute(
-                path: AppRoutes.selectNewNotePage,
-                builder: (context, state) => SelectNewNotePage(
-                  vm: SelectNewNotePageViewModel(),
-                ),
-              ),
-              GoRoute(
-                path: AppRoutes.createNotePage,
-                builder: (context, state) => const CreateNotePage(),
-              )
-            ],
-          ),
-        ]),
+      path: AppRoutes.splashScreen,
+      builder: (context, state) => SplashScreen(
+        vm: SplashScreenViewModel(),
+      ),
+    ),
     GoRoute(
-      path: AppRoutes.goToRegistrationPage,
+      path: AppRoutes.loginPage,
+      builder: (context, state) => LoginPage(
+        vm: LoginPageViewModel(
+            authorizationRepository:
+                AppContainer().repositoryScope.authorizationRepository),
+      ),
+    ),
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navigationShell) => DoevesMainPage(
+        navigationShell: navigationShell,
+      ),
+      branches: [
+        StatefulShellBranch(routes: [
+          GoRoute(
+            path: AppRoutes.notesHomePage,
+            builder: (context, state) => const NotesHomePage(),
+          )
+        ]),
+        StatefulShellBranch(routes: [
+          GoRoute(
+            path: AppRoutes.finishedNotesPage,
+            builder: (context, state) => const FinishedNotesPage(),
+          )
+        ]),
+        StatefulShellBranch(routes: [
+          GoRoute(
+            path: AppRoutes.settingsPage,
+            builder: (context, state) => const SettingsPage(),
+          )
+        ]),
+      ],
+    ),
+    GoRoute(
+      path: AppRoutes.selectNewNotePage,
+      builder: (context, state) => SelectNewNotePage(
+        vm: SelectNewNotePageViewModel(),
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.createNotePage,
+      builder: (context, state) => const CreateNotePage(),
+    ),
+    GoRoute(
+      path: AppRoutes.registrationPage,
       builder: (context, state) => RegistrationPage(
         vm: RegistrationPageViewModel(
             authorizationRepository:

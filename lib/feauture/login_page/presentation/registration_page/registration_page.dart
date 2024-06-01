@@ -107,7 +107,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               const SizedBox(height: 16),
               TextButton(
                 onPressed: () {
-                  context.go(AppRoutes.goToLoginPage);
+                  context.go(AppRoutes.loginPage);
                 },
                 child: const Text(
                   'Already have an account? Login here',
