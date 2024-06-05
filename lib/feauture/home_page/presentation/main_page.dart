@@ -47,9 +47,6 @@ class DoevesMainPageState extends State<DoevesMainPage> {
       onPressed: () {
         context.push(AppRoutes.selectNewNotePage);
       },
-      mini: true,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(30))),
       child: const Icon(Icons.add_rounded));
   @override
   Widget build(BuildContext context) {
@@ -58,9 +55,6 @@ class DoevesMainPageState extends State<DoevesMainPage> {
         child: Scaffold(
           body: widget._navigationShell,
           bottomNavigationBar: _bottomNavBarBuilder,
-          floatingActionButton: _addNoteButtonBuilder,
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.miniCenterFloat,
         ),
       ),
     );

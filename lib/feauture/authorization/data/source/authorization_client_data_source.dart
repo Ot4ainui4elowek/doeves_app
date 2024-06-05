@@ -19,7 +19,8 @@ abstract class AuthorizationClientDataSource {
     if (apiUrl != null) {
       return AuthorizationClientDataSource(dio, baseUrl: apiUrl);
     }
-    return AuthorizationClientDataSource(dio);
+    return AuthorizationClientDataSource(dio,
+        baseUrl: 'http://ec2-35-175-251-233.compute-1.amazonaws.com');
   }
 
   @POST('/api/v1/user/login')

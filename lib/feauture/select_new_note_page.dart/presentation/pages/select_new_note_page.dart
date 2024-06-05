@@ -1,7 +1,7 @@
 import 'package:doeves_app/core/presentation/app_bar.dart';
 import 'package:doeves_app/core/presentation/app_wrapper.dart';
-import 'package:doeves_app/feauture/main_page/presentation/pages/select_new_note_page.dart/create_note_button_list_item.dart';
-import 'package:doeves_app/feauture/main_page/presentation/pages/select_new_note_page.dart/select_new_note_page_vm.dart';
+import 'package:doeves_app/feauture/home_page/presentation/pages/select_new_note_page.dart/create_note_button_list_item.dart';
+import 'package:doeves_app/feauture/home_page/presentation/pages/select_new_note_page.dart/select_new_note_page_vm.dart';
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 
