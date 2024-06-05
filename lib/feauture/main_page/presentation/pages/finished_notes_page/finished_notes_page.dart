@@ -12,6 +12,7 @@ class _FinishedNotesPageState extends State<FinishedNotesPage> {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Text('finished'),
+      //floatingActionButton: AddNoteButton(),
     );
   }
 }

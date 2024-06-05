@@ -15,12 +15,12 @@ class SelectNewNotePage extends StatefulWidget {
 
 class _SelectNewNotePageState extends State<SelectNewNotePage> {
   SelectNewNotePageViewModel get vm => widget.vm;
-
   Widget get createButtonListBuilder => ListView.separated(
         shrinkWrap: true,
         scrollDirection: Axis.vertical,
         itemBuilder: (context, index) => CreateNoteButtonListItem(
-            createNote: vm.createNoteEntitysList[index]),
+          createNote: vm.createNoteEntitysList[index],
+        ),
         itemCount: vm.createNoteEntitysList.length,
         separatorBuilder: (context, index) => const SizedBox(height: 8),
       );

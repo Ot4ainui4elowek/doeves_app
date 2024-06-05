@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:doeves_app/core/data/remote_response.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
-import 'package:doeves_app/feauture/login_page/data/model/authorization_remote_response/error_model.dart';
-import 'package:doeves_app/feauture/login_page/data/model/http_status_and_errors.dart';
+import 'package:doeves_app/feauture/authorization/data/model/authorization_remote_response/error_model.dart';
+import 'package:doeves_app/feauture/authorization/data/model/http_status_and_errors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:retrofit/dio.dart';
 

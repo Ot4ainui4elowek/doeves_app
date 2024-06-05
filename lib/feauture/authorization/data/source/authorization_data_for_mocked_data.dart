@@ -1,0 +1,14 @@
+import 'package:doeves_app/core/data/remote_response.dart';
+import 'package:doeves_app/feauture/authorization/data/model/authorization_credentials.dart';
+
+abstract interface class AuthorizationDataSourceForMockedData {
+  Future<RemoteResponse<AuthorizationCredentialsModel>> signIn({
+    required final String email,
+    required final String password,
+  });
+  Future<RemoteResponse<AuthorizationCredentialsModel>> signUp({
+    required final String fullName,
+    required final String email,
+    required final String password,
+  });
+}

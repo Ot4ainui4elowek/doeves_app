@@ -9,19 +9,20 @@ class AppTextField extends StatelessWidget {
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final String? hintText;
+  final FocusNode? focusNode;
 
   final bool obscureText;
 
-  const AppTextField({
-    super.key,
-    this.labelText,
-    required this.controller,
-    this.keyboardType,
-    this.prefixIcon,
-    this.suffixIcon,
-    this.obscureText = false,
-    this.hintText,
-  });
+  const AppTextField(
+      {super.key,
+      this.labelText,
+      required this.controller,
+      this.keyboardType,
+      this.prefixIcon,
+      this.suffixIcon,
+      this.obscureText = false,
+      this.hintText,
+      this.focusNode});
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +30,7 @@ class AppTextField extends StatelessWidget {
         rvList: [controller.errorText],
         builder: (context) {
           return TextField(
+            focusNode: focusNode,
             controller: controller,
             keyboardType: keyboardType,
             obscureText: obscureText,

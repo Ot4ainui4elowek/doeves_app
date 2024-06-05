@@ -1,4 +1,5 @@
 import 'package:doeves_app/core/domain/app_error/app_error.dart';
+import 'package:doeves_app/feauture/authorization/data/model/authorization_remote_response/error_model.dart';
 
 sealed class UseCaseResult<T> {
   bool get isSuccess;
@@ -6,6 +7,7 @@ sealed class UseCaseResult<T> {
   factory UseCaseResult({
     T? data,
     List<AppError>? errorList,
+    ErrorResponseModel? errorData,
   }) {
     assert(((data == null) ^ (errorList == null)),
         'Data & error list can not be the same filled!');
@@ -13,7 +15,7 @@ sealed class UseCaseResult<T> {
       return UseCaseResult.good(data);
     }
     if (errorList != null) {
-      return UseCaseResult.bad(errorList);
+      return UseCaseResult.bad(errorList, errorData: errorData);
     }
 
     throw Exception('Something went wrong with UseCaseResult arguments!');
@@ -21,7 +23,9 @@ sealed class UseCaseResult<T> {
 
   const factory UseCaseResult.good(T data) = GoodUseCaseResult;
 
-  const factory UseCaseResult.bad(List<AppError> errorList) = BadUseCaseResult;
+  factory UseCaseResult.bad(List<AppError> errorList,
+          {ErrorResponseModel? errorData}) =>
+      BadUseCaseResult(errorList: errorList, errorData: errorData);
 }
 
 class GoodUseCaseResult<T> implements UseCaseResult<T> {
@@ -35,8 +39,8 @@ class GoodUseCaseResult<T> implements UseCaseResult<T> {
 
 class BadUseCaseResult<T> implements UseCaseResult<T> {
   final List<AppError> errorList;
-
-  const BadUseCaseResult(this.errorList);
+  final ErrorResponseModel? errorData;
+  const BadUseCaseResult({required this.errorList, this.errorData});
 
   @override
   bool get isSuccess => false;

@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
-    vm.goToLoginPage(context);
+    vm.initDependencies(context);
   }
 
   @override

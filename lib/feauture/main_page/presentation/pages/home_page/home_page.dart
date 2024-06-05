@@ -12,6 +12,7 @@ class _NotesHomePageState extends State<NotesHomePage> {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Text('home page'),
+      //floatingActionButton: AddNoteButton(),
     );
   }
 }

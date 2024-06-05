@@ -1,10 +1,10 @@
 import 'package:doeves_app/core/domain/container/app_container.dart';
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
+import 'package:doeves_app/feauture/authorization/presentation/login_page/login_page.dart';
+import 'package:doeves_app/feauture/authorization/presentation/login_page/login_page_vm.dart';
+import 'package:doeves_app/feauture/authorization/presentation/registration_page/registration_page.dart';
+import 'package:doeves_app/feauture/authorization/presentation/registration_page/registration_page_vm.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page.dart';
-import 'package:doeves_app/feauture/login_page/presentation/login_page/login_page.dart';
-import 'package:doeves_app/feauture/login_page/presentation/login_page/login_page_vm.dart';
-import 'package:doeves_app/feauture/login_page/presentation/registration_page/registration_page.dart';
-import 'package:doeves_app/feauture/login_page/presentation/registration_page/registration_page_vm.dart';
 import 'package:doeves_app/feauture/main_page/presentation/main_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/finished_notes_page/finished_notes_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/home_page/home_page.dart';
@@ -21,13 +21,18 @@ final router = GoRouter(
     GoRoute(
       path: AppRoutes.splashScreen,
       builder: (context, state) => SplashScreen(
-        vm: SplashScreenViewModel(),
+        vm: SplashScreenViewModel(
+          secureStorage: AppContainer().secureScope.secureStorage,
+        ),
       ),
     ),
     GoRoute(
       path: AppRoutes.loginPage,
       builder: (context, state) => LoginPage(
         vm: LoginPageViewModel(
+            notificationService:
+                AppContainer().serviceScope.notificationService,
+            storage: AppContainer().secureScope.secureStorage,
             authorizationRepository:
                 AppContainer().repositoryScope.authorizationRepository),
       ),
@@ -71,6 +76,8 @@ final router = GoRouter(
       path: AppRoutes.registrationPage,
       builder: (context, state) => RegistrationPage(
         vm: RegistrationPageViewModel(
+            notificationService:
+                AppContainer().serviceScope.notificationService,
             authorizationRepository:
                 AppContainer().repositoryScope.authorizationRepository),
       ),
