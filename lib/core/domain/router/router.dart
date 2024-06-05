@@ -6,8 +6,8 @@ import 'package:doeves_app/feauture/authorization/presentation/registration_page
 import 'package:doeves_app/feauture/authorization/presentation/registration_page/registration_page_vm.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page.dart';
 import 'package:doeves_app/feauture/home_page/presentation/pages/home_page.dart';
-import 'package:doeves_app/feauture/home_page/presentation/pages/select_new_note_page.dart/select_new_note_page.dart';
-import 'package:doeves_app/feauture/home_page/presentation/pages/select_new_note_page.dart/select_new_note_page_vm.dart';
+import 'package:doeves_app/feauture/select_new_note_page.dart/presentation/pages/select_new_note_page.dart';
+import 'package:doeves_app/feauture/select_new_note_page.dart/presentation/pages/select_new_note_page_vm.dart';
 import 'package:doeves_app/feauture/splash_screen/presentation/splash_screen.dart';
 import 'package:doeves_app/feauture/splash_screen/presentation/splash_screen_vm.dart';
 import 'package:go_router/go_router.dart';
