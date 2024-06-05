@@ -12,7 +12,7 @@ class CustomAppBar extends AppBar {
   }) : super(
           forceMaterialTransparency: true,
           automaticallyImplyLeading: false,
-          leadingWidth: 76,
+          leadingWidth: context.canPop() ? 76 : 0,
           centerTitle: true,
           leading: context.canPop()
               ? Container(
