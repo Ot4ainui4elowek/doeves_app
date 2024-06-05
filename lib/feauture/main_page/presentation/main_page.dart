@@ -36,9 +36,9 @@ class DoevesMainPageState extends State<DoevesMainPage> {
             label: 'Finished',
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.settings),
-            icon: Icon(Icons.settings_outlined),
-            label: 'Settings',
+            selectedIcon: Icon(Icons.collections_bookmark),
+            icon: Icon(Icons.collections_bookmark_outlined),
+            label: 'Collections',
           ),
         ],
       );

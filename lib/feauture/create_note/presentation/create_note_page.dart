@@ -51,18 +51,20 @@ class _CreateNotePageState extends State<CreateNotePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(
+        context: context,
+      ),
       body: AppWrapper(
         child: Scaffold(
-          appBar: CustomAppBar(
-            context: context,
-          ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              children: [
-                _titleBuilder,
-                _descriptionBuilder,
-              ],
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  _titleBuilder,
+                  _descriptionBuilder,
+                ],
+              ),
             ),
           ),
         ),

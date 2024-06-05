@@ -4,8 +4,12 @@ import 'package:doeves_app/feauture/authorization/presentation/login_page/login_
 import 'package:doeves_app/feauture/authorization/presentation/login_page/login_page_vm.dart';
 import 'package:doeves_app/feauture/authorization/presentation/registration_page/registration_page.dart';
 import 'package:doeves_app/feauture/authorization/presentation/registration_page/registration_page_vm.dart';
+import 'package:doeves_app/feauture/collections_of_notes_page/presentation/collections_of_notes_page.dart';
+import 'package:doeves_app/feauture/completed_notes_page/presentation/completed_notes_page.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page.dart';
 import 'package:doeves_app/feauture/home_page/presentation/pages/home_page.dart';
+import 'package:doeves_app/feauture/main_page/presentation/main_page.dart';
+import 'package:doeves_app/feauture/search_note_page/presentation/search_note_page.dart';
 import 'package:doeves_app/feauture/select_new_note_page.dart/presentation/pages/select_new_note_page.dart';
 import 'package:doeves_app/feauture/select_new_note_page.dart/presentation/pages/select_new_note_page_vm.dart';
 import 'package:doeves_app/feauture/splash_screen/presentation/splash_screen.dart';
@@ -34,9 +38,41 @@ final router = GoRouter(
                 AppContainer().repositoryScope.authorizationRepository),
       ),
     ),
-    GoRoute(
-      path: AppRoutes.notesHomePage,
-      builder: (context, state) => const NotesHomePage(),
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navigationShell) =>
+          DoevesMainPage(navigationShell: navigationShell),
+      branches: [
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: AppRoutes.notesHomePage,
+              builder: (context, state) => const NotesHomePage(),
+              routes: [
+                GoRoute(
+                  path: AppRoutes.notesSearchPage,
+                  builder: (context, state) => const SearchNotePage(),
+                ),
+              ],
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: AppRoutes.completedNotesPage,
+              builder: (context, state) => const CompletedNotesPage(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: AppRoutes.collectionOfNotesPage,
+              builder: (context, state) => const CollectionsOfNotesPage(),
+            ),
+          ],
+        ),
+      ],
     ),
     GoRoute(
       path: AppRoutes.selectNewNotePage,
