@@ -8,7 +8,7 @@ abstract class AppRoutes {
   static const selectNewNotePage = '/select-new-note';
   static const createNotePage = '/create-note';
   static const collectionOfNotesPage = '/collection-of-notes';
-  static const notesSearchPage = 'notes-search';
+  static const notesSearchPage = '/notes-search';
   static const goToNotesSearchPage =
       '${AppRoutes.notesHomePage}/${AppRoutes.notesSearchPage}';
 }

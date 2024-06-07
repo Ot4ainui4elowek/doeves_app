@@ -28,6 +28,13 @@ class AuthorizationRepositoryImpl
           {
             return UseCaseResult.good(data);
           }
+        case ErrorWitchDataRestApiResult<SignInResponseModel>(
+            :final errorData,
+            :final errorList
+          ):
+          {
+            return UseCaseResult.bad(errorList, errorData: errorData);
+          }
         case ErrorRestApiResult<SignInResponseModel>(:final errorList):
           {
             return UseCaseResult.bad(errorList);
@@ -57,6 +64,13 @@ class AuthorizationRepositoryImpl
         case DataRestApiResult<SignUpResponseModel>(:final data):
           {
             return UseCaseResult.good(data);
+          }
+        case ErrorWitchDataRestApiResult<SignUpResponseModel>(
+            :final errorData,
+            :final errorList
+          ):
+          {
+            return UseCaseResult.bad(errorList, errorData: errorData);
           }
         case ErrorRestApiResult<SignUpResponseModel>(:final errorList):
           {

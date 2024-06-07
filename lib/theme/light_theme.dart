@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 final lightTheme = ThemeData(
   visualDensity: VisualDensity.adaptivePlatformDensity,
   colorScheme: const ColorScheme(
+    surfaceContainer: AppLightColors.surfaceContainer,
     brightness: Brightness.light,
     primary: AppLightColors.primary,
     onPrimary: AppLightColors.onPrimary,
@@ -36,6 +37,11 @@ final lightTheme = ThemeData(
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
       padding: EdgeInsets.zero,
+    ),
+  ),
+  iconButtonTheme: const IconButtonThemeData(
+    style: ButtonStyle(
+      iconColor: WidgetStatePropertyAll(AppLightColors.outline),
     ),
   ),
 );

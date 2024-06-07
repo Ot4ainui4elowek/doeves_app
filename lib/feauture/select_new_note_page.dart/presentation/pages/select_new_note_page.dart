@@ -1,4 +1,4 @@
-import 'package:doeves_app/core/presentation/app_bar.dart';
+import 'package:doeves_app/core/presentation/app_bars/title_app_bar.dart';
 import 'package:doeves_app/core/presentation/app_wrapper.dart';
 import 'package:doeves_app/feauture/select_new_note_page.dart/presentation/pages/select_new_note_page_vm.dart';
 import 'package:doeves_app/feauture/select_new_note_page.dart/presentation/widgets/create_note_button_list_item.dart';
@@ -27,7 +27,7 @@ class _SelectNewNotePageState extends State<SelectNewNotePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: TitleAppBar(
         context: context,
         titleText: 'New notes',
       ),

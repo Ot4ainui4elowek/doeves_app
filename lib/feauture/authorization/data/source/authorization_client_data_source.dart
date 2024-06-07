@@ -11,7 +11,6 @@ part 'authorization_client_data_source.g.dart';
 abstract class AuthorizationClientDataSource {
   factory AuthorizationClientDataSource(Dio dio, {String baseUrl}) =
       _AuthorizationClientDataSource;
-
   factory AuthorizationClientDataSource.create({
     String? apiUrl,
   }) {

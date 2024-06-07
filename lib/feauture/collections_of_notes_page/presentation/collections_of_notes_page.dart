@@ -10,6 +10,8 @@ class CollectionsOfNotesPage extends StatefulWidget {
 class _CollectionsOfNotesPageState extends State<CollectionsOfNotesPage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return const Scaffold(
+      body: Text('completed'),
+    );
   }
 }

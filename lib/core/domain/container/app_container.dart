@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:doeves_app/core/data/secure_storage/secure_storage.dart';
 import 'package:doeves_app/core/presentation/notification_service/notification_service.dart';
+import 'package:doeves_app/core/presentation/notification_service/snack_bar_notification_service/snack_bar_notification_service_impl.dart';
 import 'package:doeves_app/feauture/authorization/data/repository/authorization_remote_repository.dart';
 import 'package:doeves_app/feauture/authorization/data/source/authorization_client_data_source.dart';
 import 'package:doeves_app/feauture/authorization/domain/bloc/theme_bloc.dart';

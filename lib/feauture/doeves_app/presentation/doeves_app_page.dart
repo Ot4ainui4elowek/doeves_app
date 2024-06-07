@@ -18,6 +18,7 @@ class DoevesApp extends StatelessWidget {
       bloc: themeService,
       builder: (context, state) {
         return MaterialApp.router(
+          debugShowCheckedModeBanner: false,
           title: 'Doeves',
           theme: themeService.state.theme,
           routerConfig: router,

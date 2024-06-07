@@ -1,4 +1,4 @@
-import 'package:doeves_app/core/presentation/app_bar.dart';
+import 'package:doeves_app/core/presentation/app_bars/title_app_bar.dart';
 import 'package:doeves_app/core/presentation/app_wrapper.dart';
 import 'package:doeves_app/core/presentation/text_fields/controllers/app_text_editing_controller.dart';
 import 'package:doeves_app/theme/text_theme.dart';
@@ -51,7 +51,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: TitleAppBar(
         context: context,
       ),
       body: AppWrapper(

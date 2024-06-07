@@ -8,12 +8,14 @@ import 'package:doeves_app/feauture/collections_of_notes_page/presentation/colle
 import 'package:doeves_app/feauture/completed_notes_page/presentation/completed_notes_page.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page.dart';
 import 'package:doeves_app/feauture/home_page/presentation/pages/home_page.dart';
-import 'package:doeves_app/feauture/main_page/presentation/main_page.dart';
+import 'package:doeves_app/feauture/main_page/presentation/main_page_large.dart';
+import 'package:doeves_app/feauture/main_page/presentation/main_page_small.dart';
 import 'package:doeves_app/feauture/search_note_page/presentation/search_note_page.dart';
 import 'package:doeves_app/feauture/select_new_note_page.dart/presentation/pages/select_new_note_page.dart';
 import 'package:doeves_app/feauture/select_new_note_page.dart/presentation/pages/select_new_note_page_vm.dart';
 import 'package:doeves_app/feauture/splash_screen/presentation/splash_screen.dart';
 import 'package:doeves_app/feauture/splash_screen/presentation/splash_screen_vm.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 final router = GoRouter(
@@ -38,21 +40,22 @@ final router = GoRouter(
                 AppContainer().repositoryScope.authorizationRepository),
       ),
     ),
+    GoRoute(
+      path: AppRoutes.notesSearchPage,
+      builder: (context, state) => const SearchNotePage(),
+    ),
     StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) =>
-          DoevesMainPage(navigationShell: navigationShell),
+      builder: (context, state, navigationShell) => LayoutBuilder(
+        builder: (context, constraints) => constraints.maxWidth < 400
+            ? MainPageSmall(navigationShell: navigationShell)
+            : MainPageLarge(navigationShell: navigationShell),
+      ),
       branches: [
         StatefulShellBranch(
           routes: [
             GoRoute(
               path: AppRoutes.notesHomePage,
               builder: (context, state) => const NotesHomePage(),
-              routes: [
-                GoRoute(
-                  path: AppRoutes.notesSearchPage,
-                  builder: (context, state) => const SearchNotePage(),
-                ),
-              ],
             ),
           ],
         ),

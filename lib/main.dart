@@ -7,10 +7,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
-  // AuthorizationClientDataSource(Dio())
-  //     .signIn(const SignInRequestModel(
-  //         email: 'test@gmail.com', password: 'Test1234'))
-  //     .then((res) => debugPrint(res.response.statusCode.toString()));
   runApp(DoevesApp(
     appContainer: AppContainer.init(),
   ));

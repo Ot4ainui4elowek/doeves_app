@@ -44,13 +44,12 @@ abstract mixin class RestApiHandler {
               if (ErrorResponseModel.patternMatch(res.data)) {
                 errorResponce = ErrorResponseModel.fromJson(res.data);
               }
-              return RestApiResult.error(
+              return RestApiResult.errorWitchData(
+                errorData: errorResponce,
+                statusCode: res.statusCode!,
                 errorList: [
                   SpecificError(errorResponce.message),
-                  SpecificError(errorResponce.date),
-                  SpecificError(errorResponce.statusCode.toString()),
                 ],
-                statusCode: res.statusCode!,
               );
             }
           case >= 500:

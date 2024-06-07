@@ -62,6 +62,11 @@ sealed class RestApiResult<T> {
     required final int statusCode,
     required final List<AppError> errorList,
   }) = ErrorRestApiResult;
+  const factory RestApiResult.errorWitchData({
+    required final int statusCode,
+    required final List<AppError> errorList,
+    required final ErrorResponseModel errorData,
+  }) = ErrorWitchDataRestApiResult;
 
   bool get isSuccess => switch (statusCode) {
         >= 200 && < 300 => true,
@@ -84,5 +89,15 @@ class ErrorRestApiResult<T> extends RestApiResult<T> {
   const ErrorRestApiResult({
     required super.statusCode,
     required this.errorList,
+  });
+}
+
+class ErrorWitchDataRestApiResult<T> extends ErrorRestApiResult<T> {
+  final ErrorResponseModel errorData;
+
+  const ErrorWitchDataRestApiResult({
+    required super.errorList,
+    required super.statusCode,
+    required this.errorData,
   });
 }
