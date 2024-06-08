@@ -8,15 +8,7 @@ class DoevesApp extends StatelessWidget {
   final AppContainer appContainer;
   const DoevesApp({super.key, required this.appContainer});
 
-  void _switchThemeAsPhoneTheme(BuildContext context) {
-    debugPrint('render');
-    MediaQuery.of(context).platformBrightness == Brightness.dark
-        ? themeBloc.add(ThemeSwitchDark())
-        : themeBloc.add(ThemeSwitchLight());
-  }
-
   ThemeBloc get themeService => appContainer.serviceScope.themeService;
-  ThemeBloc get themeBloc => appContainer.serviceScope.themeService;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
