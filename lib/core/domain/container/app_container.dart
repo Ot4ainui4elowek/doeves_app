@@ -30,26 +30,42 @@ class AppContainer {
       secureScope = SecureScope(
         secureStorage: secureStorage,
       );
+      _initServiceScope();
+      _initReposytoryScope();
+      log('App Container is initialized');
+      return true;
+    } catch (e, st) {
+      log('App Container has not been initialized', error: e, stackTrace: st);
+      return false;
+    }
+  }
 
+  void _initServiceScope() async {
+    try {
       final themeService = ThemeBloc();
       final notificationService = SnackBarNotificationServiceImpl();
       serviceScope = ServiceScope(
         themeService: themeService,
         notificationService: notificationService,
       );
+      throw Exception();
+    } catch (e, st) {
+      log('Services scope has not been initialized', error: e, stackTrace: st);
+    }
+  }
 
+  void _initReposytoryScope() async {
+    try {
+      final apiUrl = dotenv.env['APi_ADRESS'];
       final authorizationRepository = AuthorizationRepositoryImpl(
-        authorizationDataSourse: AuthorizationClientDataSource.create(
-            apiUrl: dotenv.env['APi_ADRESS']),
+        authorizationDataSourse:
+            AuthorizationClientDataSource.create(apiUrl: apiUrl),
       );
       repositoryScope =
           RepositoryScope(authorizationRepository: authorizationRepository);
-
-      log('App Container is initialized');
-      return true;
     } catch (e, st) {
-      log('App Container has not been initialized', error: e, stackTrace: st);
-      return false;
+      log('Reposytory scope has not been initialized',
+          error: e, stackTrace: st);
     }
   }
 }

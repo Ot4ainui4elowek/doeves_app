@@ -1,3 +1,4 @@
+import 'package:doeves_app/core/presentation/logo/app_logo_animated.dart';
 import 'package:doeves_app/feauture/splash_screen/presentation/splash_screen_vm.dart';
 import 'package:flutter/material.dart';
 
@@ -9,19 +10,8 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
-  final logo = const AssetImage('assets/images/logo.png');
+class _SplashScreenState extends State<SplashScreen> {
   SplashScreenViewModel get vm => widget.vm;
-
-  late final AnimationController _controller = AnimationController(
-    duration: const Duration(seconds: 1),
-    vsync: this,
-  )..repeat(reverse: true, min: 0.2);
-  late final Animation<double> _animation = CurvedAnimation(
-    parent: _controller,
-    curve: Curves.ease,
-  );
 
   @override
   void initState() {
@@ -30,22 +20,13 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: FadeTransition(
-          opacity: _animation,
-          child: Image(
-            image: logo,
-            width: MediaQuery.of(context).size.width / 2,
-            color: Theme.of(context).colorScheme.primary,
-          ),
+        child: AppLogoAnimated(
+          repeat: true,
+          width: MediaQuery.of(context).size.width / 2,
+          curve: Curves.linear,
         ),
       ),
     );

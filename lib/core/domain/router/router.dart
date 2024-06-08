@@ -46,7 +46,7 @@ final router = GoRouter(
     ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) => LayoutBuilder(
-        builder: (context, constraints) => constraints.maxWidth < 400
+        builder: (context, constraints) => constraints.maxWidth < 540
             ? MainPageSmall(navigationShell: navigationShell)
             : MainPageLarge(navigationShell: navigationShell),
       ),

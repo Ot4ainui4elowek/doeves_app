@@ -41,6 +41,9 @@ final darkTheme = ThemeData(
   ),
   iconButtonTheme: const IconButtonThemeData(
     style: ButtonStyle(
+      padding: WidgetStatePropertyAll(
+        EdgeInsets.all(13),
+      ),
       iconColor: WidgetStatePropertyAll(AppDarkColors.outline),
     ),
   ),

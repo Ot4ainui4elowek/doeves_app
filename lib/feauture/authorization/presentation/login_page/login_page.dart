@@ -1,6 +1,7 @@
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/presentation/app_wrapper.dart';
 import 'package:doeves_app/core/presentation/buttons/app_filled_button.dart';
+import 'package:doeves_app/core/presentation/logo/app_logo_animated.dart';
 import 'package:doeves_app/core/presentation/text_fields/app_text_field.dart';
 import 'package:doeves_app/core/presentation/text_fields/password_text_field.dart';
 import 'package:doeves_app/feauture/authorization/presentation/login_page/login_page_vm.dart';
@@ -17,7 +18,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final logo = const AssetImage('assets/images/logo.png');
   LoginPageViewModel get vm => widget.vm;
 
   @override
@@ -47,10 +47,10 @@ class _LoginPageState extends State<LoginPage> {
             style: AppTextTheme.text2Xl(weight: TextWeight.bold),
           ),
           const SizedBox(height: 5),
-          Image(
-            image: logo,
+          const AppLogoAnimated(
+            curve: Curves.linear,
+            repeat: false,
             width: 170,
-            color: Theme.of(context).colorScheme.primary,
           ),
           const SizedBox(height: 16),
           Text(

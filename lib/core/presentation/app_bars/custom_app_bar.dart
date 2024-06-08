@@ -17,16 +17,20 @@ class CustomAppBar extends AppBar {
           toolbarHeight: 70,
           automaticallyImplyLeading: false,
           title: Container(
+            height: 50,
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(28)),
               color: Theme.of(context).colorScheme.surfaceContainer,
             ),
-            child: Flex(
-              direction: Axis.horizontal,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 leadeing ??
                     (context.canPop()
                         ? CustomBackButton(
+                            style: const ButtonStyle(
+                                padding: WidgetStatePropertyAll(
+                                    EdgeInsets.symmetric(horizontal: 8))),
                             color: Theme.of(context).colorScheme.outline,
                           )
                         : const SizedBox(height: 0)),

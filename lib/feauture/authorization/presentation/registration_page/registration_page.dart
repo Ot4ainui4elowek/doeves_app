@@ -1,6 +1,7 @@
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/presentation/app_wrapper.dart';
 import 'package:doeves_app/core/presentation/buttons/app_filled_button.dart';
+import 'package:doeves_app/core/presentation/buttons/back_button.dart';
 import 'package:doeves_app/core/presentation/text_fields/app_text_field.dart';
 import 'package:doeves_app/core/presentation/text_fields/controllers/password_text_editing_controller.dart';
 import 'package:doeves_app/core/presentation/text_fields/password_text_field.dart';
@@ -42,25 +43,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
         forceMaterialTransparency: true,
         automaticallyImplyLeading: false,
         title: context.canPop()
-            ? TextButton(
-                onPressed: context.pop,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.arrow_back_ios_new_rounded,
-                      size: 15,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    const SizedBox(width: 7),
-                    Text(
-                      'Back to Login',
-                      style: AppTextTheme.textBase(weight: TextWeight.medium)
-                          .copyWith(
-                              color: Theme.of(context).colorScheme.primary),
-                    ),
-                  ],
-                ),
+            ? CustomBackButton(
+                text: 'Back to login',
+                onPressed: () => context.go(AppRoutes.loginPage),
               )
             : null,
       );

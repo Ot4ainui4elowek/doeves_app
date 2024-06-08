@@ -54,24 +54,33 @@ class LoginPageViewModel {
       {required SignInStrategy signInStrtegy,
       required BuildContext context}) async {
     final result = await signInStrtegy();
-    if (context.mounted) {
-      _notificationService.responseNotification(
-          response: result,
-          context: context,
-          goodUseCaseMessage: 'Login successful');
-    }
+
     switch (result) {
       case GoodUseCaseResult<SignInResponseModel>(:final data):
-        debugPrint(data.token);
         await _storage.writeToken(token: data.token);
         if (context.mounted) {
           goToNotesHomePage(context);
         }
         break;
-      case BadUseCaseResult<SignInResponseModel>(:final errorList):
-        for (final error in errorList) {
-          debugPrint(error.code);
+      case BadUseCaseResult<SignInResponseModel>(
+          :final errorList,
+          :final errorData
+        ):
+        if (context.mounted) {
+          _notificationService.responseNotification(
+            context: context,
+            goodUseCaseMessage: 'Login successful',
+            response: result,
+          );
         }
+        if (errorData != null) {
+          debugPrint(errorData.message);
+        } else {
+          for (final error in errorList) {
+            debugPrint(error.code);
+          }
+        }
+
         break;
     }
   }

@@ -1,5 +1,6 @@
 import 'package:doeves_app/core/presentation/app_bars/custom_app_bar.dart';
 import 'package:doeves_app/core/presentation/app_wrapper.dart';
+import 'package:doeves_app/core/presentation/buttons/app_bar_button.dart';
 import 'package:doeves_app/core/presentation/hero_widgets/hero_search_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -30,13 +31,14 @@ class _SearchNotePageState extends State<SearchNotePage> {
   }
 
   List<Widget> get _actionsBuilder => [
-        IconButton(
+        AppBarButton(
           onPressed: () {},
-          icon: const Icon(Icons.filter_alt_outlined),
           style: ButtonStyle(
-            padding: const WidgetStatePropertyAll(EdgeInsets.all(16)),
             backgroundColor: WidgetStatePropertyAll(
                 Theme.of(context).colorScheme.surfaceContainer),
+          ),
+          child: const Icon(
+            Icons.filter_alt_outlined,
           ),
         ),
         const SizedBox(width: 16),

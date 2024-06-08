@@ -11,6 +11,11 @@ part 'authorization_client_data_source.g.dart';
 abstract class AuthorizationClientDataSource {
   factory AuthorizationClientDataSource(Dio dio, {String baseUrl}) =
       _AuthorizationClientDataSource;
+  factory AuthorizationClientDataSource.createAmazon() =>
+      AuthorizationClientDataSource(
+        Dio(),
+        baseUrl: 'http://ec2-35-175-251-233.compute-1.amazonaws.com',
+      );
   factory AuthorizationClientDataSource.create({
     String? apiUrl,
   }) {
@@ -18,8 +23,9 @@ abstract class AuthorizationClientDataSource {
     if (apiUrl != null) {
       return AuthorizationClientDataSource(dio, baseUrl: apiUrl);
     }
-    return AuthorizationClientDataSource(dio,
-        baseUrl: 'http://ec2-35-175-251-233.compute-1.amazonaws.com');
+    return AuthorizationClientDataSource(
+      dio,
+    );
   }
 
   @POST('/api/v1/user/login')

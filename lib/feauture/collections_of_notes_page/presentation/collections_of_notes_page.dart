@@ -11,7 +11,7 @@ class _CollectionsOfNotesPageState extends State<CollectionsOfNotesPage> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Text('completed'),
+      body: Text('collection'),
     );
   }
 }

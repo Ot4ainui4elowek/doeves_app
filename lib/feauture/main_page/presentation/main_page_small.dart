@@ -1,6 +1,8 @@
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/presentation/app_bars/custom_app_bar.dart';
 import 'package:doeves_app/core/presentation/hero_widgets/hero_search_widget.dart';
+import 'package:doeves_app/feauture/app_drawer/presentation/app_drawer.dart';
+import 'package:doeves_app/feauture/home_page/presentation/widgets/add_note_button/add_note_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,7 +16,6 @@ class MainPageSmall extends StatefulWidget {
 }
 
 class MainPageSmallState extends State<MainPageSmall> {
-  final logo = const AssetImage('assets/images/logo.png');
   void _onTap(BuildContext context, int index) {
     widget._navigationShell.goBranch(
       index,
@@ -45,48 +46,33 @@ class MainPageSmallState extends State<MainPageSmall> {
         ],
       );
 
-  PreferredSizeWidget get _appBarBuilder => CustomAppBar(
-        context: context,
-        titleWidget: Expanded(
-          child: HeroSearchWidget(
-            onTap: () => context.push(AppRoutes.notesSearchPage),
-          ),
-        ),
-        leadeing: StatefulBuilder(
-          builder: (BuildContext context, setState) {
-            return IconButton(
-              icon: Icon(
-                Icons.menu,
-                color: Theme.of(context).colorScheme.outline,
-              ),
-              padding: const EdgeInsets.all(16),
-              onPressed: Scaffold.of(context).openDrawer,
-            );
-          },
-        ),
-      );
-  Widget get _appDrawerBuilder => Drawer(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Image(
-                width: 120,
-                image: logo,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ],
-          ),
-        ),
+  Widget get _burgerMenuButtonBuilder => StatefulBuilder(
+        builder: (BuildContext context, setState) {
+          return IconButton(
+            onPressed: Scaffold.of(context).openDrawer,
+            icon: Icon(
+              Icons.menu,
+              color: Theme.of(context).colorScheme.outline,
+            ),
+          );
+        },
       );
 
+  PreferredSizeWidget get _appBarBuilder => CustomAppBar(
+        context: context,
+        leadeing: _burgerMenuButtonBuilder,
+        titleWidget: HeroSearchWidget(
+          onTap: () => context.push(AppRoutes.notesSearchPage),
+        ),
+      );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBarBuilder,
       body: widget._navigationShell,
       bottomNavigationBar: _bottomNavBarBuilder,
-      drawer: _appDrawerBuilder,
+      drawer: AppDrawer(),
+      floatingActionButton: const AddNoteButton(),
     );
   }
 }

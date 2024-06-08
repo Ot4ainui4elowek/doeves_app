@@ -1,4 +1,4 @@
-import 'package:doeves_app/feauture/home_page/domain/entity/create_note_entity.dart';
+import 'package:doeves_app/feauture/select_new_note_page.dart/domain/domain/entity/create_note_entity.dart';
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +9,7 @@ class CreateNoteButtonListItem extends StatelessWidget {
   Widget _iconBuilder(BuildContext context) => Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.onPrimary,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: const BorderRadius.all(Radius.circular(16)),
           border: Border.all(
             color: Theme.of(context).colorScheme.onPrimaryContainer,
