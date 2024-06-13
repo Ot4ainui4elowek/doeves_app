@@ -4,7 +4,7 @@ import 'package:doeves_app/core/presentation/app_wrapper.dart';
 import 'package:doeves_app/core/presentation/buttons/app_bar_button.dart';
 import 'package:doeves_app/core/presentation/hero_widgets/hero_search_widget.dart';
 import 'package:doeves_app/feauture/app_drawer/presentation/app_drawer.dart';
-import 'package:doeves_app/feauture/home_page/presentation/widgets/add_note_button/add_note_button.dart';
+import 'package:doeves_app/feauture/main_page/presentation/widgets/add_note_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

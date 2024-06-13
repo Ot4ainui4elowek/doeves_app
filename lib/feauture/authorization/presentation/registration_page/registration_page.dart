@@ -39,7 +39,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     super.dispose();
   }
 
-  PreferredSizeWidget get appBarBuilder => AppBar(
+  PreferredSizeWidget get _appBarBuilder => AppBar(
         forceMaterialTransparency: true,
         automaticallyImplyLeading: false,
         title: context.canPop()
@@ -181,7 +181,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: appBarBuilder,
+        appBar: _appBarBuilder,
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(

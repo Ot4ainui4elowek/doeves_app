@@ -48,7 +48,6 @@ class AppContainer {
         themeService: themeService,
         notificationService: notificationService,
       );
-      throw Exception();
     } catch (e, st) {
       log('Services scope has not been initialized', error: e, stackTrace: st);
     }

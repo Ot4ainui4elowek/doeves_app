@@ -30,7 +30,7 @@ class CustomAppBar extends AppBar {
                         ? CustomBackButton(
                             style: const ButtonStyle(
                                 padding: WidgetStatePropertyAll(
-                                    EdgeInsets.symmetric(horizontal: 8))),
+                                    EdgeInsets.only(left: 8, right: 16))),
                             color: Theme.of(context).colorScheme.outline,
                           )
                         : const SizedBox(height: 0)),
