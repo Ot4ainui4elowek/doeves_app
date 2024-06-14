@@ -1,4 +1,0 @@
-enum NoteContentTypes {
-  text,
-  image,
-}
