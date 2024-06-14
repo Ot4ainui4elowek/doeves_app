@@ -1,7 +1,6 @@
 import 'dart:core';
 
 import 'package:doeves_app/core/data/secure_storage/secure_storage.dart';
-import 'package:doeves_app/core/domain/network_info/network_info.dart';
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/core/presentation/notification_service/notification_service.dart';
@@ -29,7 +28,6 @@ class LoginPageViewModel {
   final AuthorizationRepository _authorizationRepository;
   final SecureStorage _storage;
   final NotificationService _notificationService;
-  final NetworkInfoImpl netInfo = NetworkInfoImpl();
   void init() {
     emailTextController.addListener(checkFormIsValid);
     passwordTextController.addListener(checkFormIsValid);

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:doeves_app/core/data/secure_storage/secure_storage.dart';
+import 'package:doeves_app/core/domain/network_info/network_info.dart';
 import 'package:doeves_app/core/presentation/notification_service/notification_service.dart';
 import 'package:doeves_app/core/presentation/notification_service/snack_bar_notification_service/snack_bar_notification_service_impl.dart';
 import 'package:doeves_app/feauture/authorization/data/repository/authorization_remote_repository.dart';
@@ -44,9 +45,11 @@ class AppContainer {
     try {
       final themeService = ThemeBloc();
       final notificationService = SnackBarNotificationServiceImpl();
+      final networkService = NetworkInfoServiceImpl();
       serviceScope = ServiceScope(
         themeService: themeService,
         notificationService: notificationService,
+        networkService: networkService,
       );
     } catch (e, st) {
       log('Services scope has not been initialized', error: e, stackTrace: st);
@@ -60,6 +63,7 @@ class AppContainer {
         authorizationDataSourse:
             AuthorizationClientDataSource.create(apiUrl: apiUrl),
       );
+
       repositoryScope =
           RepositoryScope(authorizationRepository: authorizationRepository);
     } catch (e, st) {
@@ -77,9 +81,11 @@ class SecureScope {
 class ServiceScope {
   final ThemeBloc themeService;
   final NotificationService notificationService;
+  final NetworkInfoServiceImpl networkService;
   const ServiceScope({
     required this.notificationService,
     required this.themeService,
+    required this.networkService,
   });
 }
 

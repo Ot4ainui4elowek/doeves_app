@@ -1,5 +1,6 @@
 import 'package:doeves_app/core/domain/container/app_container.dart';
 import 'package:doeves_app/core/presentation/logo/app_logo_animated.dart';
+import 'package:doeves_app/core/presentation/network_connection_widget/network_connection_widget.dart';
 import 'package:doeves_app/feauture/authorization/domain/bloc/theme_bloc.dart';
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,8 @@ class AppDrawer extends StatelessWidget {
               repeat: false,
               curve: Curves.easeOutSine,
             ),
+            const SizedBox(height: 20),
+            NetworkConnectionWidget(),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
