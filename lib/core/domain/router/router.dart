@@ -42,7 +42,20 @@ final router = GoRouter(
     ),
     GoRoute(
       path: AppRoutes.notesSearchPage,
-      builder: (context, state) => const SearchNotePage(),
+      pageBuilder: (context, state) => CustomTransitionPage(
+        child: const SearchNotePage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            SlideTransition(
+          position: animation.drive(
+            Tween(
+              begin: const Offset(0, 1),
+              end: Offset.zero,
+            ),
+          ),
+          //opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+          child: child,
+        ),
+      ),
     ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) => LayoutBuilder(
@@ -79,22 +92,49 @@ final router = GoRouter(
     ),
     GoRoute(
       path: AppRoutes.selectNewNotePage,
-      builder: (context, state) => SelectNewNotePage(
-        vm: SelectNewNotePageViewModel(),
+      pageBuilder: (context, state) => CustomTransitionPage(
+        child: SelectNewNotePage(
+          vm: SelectNewNotePageViewModel(),
+        ),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            SlideTransition(
+          position: animation
+              .drive(Tween(begin: const Offset(1, 0), end: Offset.zero)),
+          //opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+          child: child,
+        ),
       ),
     ),
     GoRoute(
       path: AppRoutes.createNotePage,
-      builder: (context, state) => const CreateNotePage(),
+      pageBuilder: (context, state) => CustomTransitionPage(
+        child: const CreateNotePage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            SlideTransition(
+          position: animation
+              .drive(Tween(begin: const Offset(1, 0), end: Offset.zero)),
+          //opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+          child: child,
+        ),
+      ),
     ),
     GoRoute(
       path: AppRoutes.registrationPage,
-      builder: (context, state) => RegistrationPage(
-        vm: RegistrationPageViewModel(
-            notificationService:
-                AppContainer().serviceScope.notificationService,
-            authorizationRepository:
-                AppContainer().repositoryScope.authorizationRepository),
+      pageBuilder: (context, state) => CustomTransitionPage(
+        child: RegistrationPage(
+          vm: RegistrationPageViewModel(
+              notificationService:
+                  AppContainer().serviceScope.notificationService,
+              authorizationRepository:
+                  AppContainer().repositoryScope.authorizationRepository),
+        ),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            SlideTransition(
+          position: animation
+              .drive(Tween(begin: const Offset(1, 0), end: Offset.zero)),
+          //opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+          child: child,
+        ),
       ),
     ),
   ],
