@@ -64,7 +64,7 @@ class _AuthorizationClientDataSource implements AuthorizationClientDataSource {
     )
             .compose(
               _dio.options,
-              '/api/v1/user/make',
+              '/api/v1/user',
               queryParameters: queryParameters,
               data: _data,
             )

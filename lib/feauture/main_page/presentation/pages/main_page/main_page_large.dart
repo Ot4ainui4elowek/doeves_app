@@ -78,6 +78,7 @@ class _MainPageLargeState extends State<MainPageLarge> {
                   titleWidget: HeroSearchWidget(
                     onTap: () => context.push(AppRoutes.notesSearchPage),
                   ),
+                  leadingIsAutomaticlySet: false,
                 ),
                 body: widget._navigationShell,
               ),

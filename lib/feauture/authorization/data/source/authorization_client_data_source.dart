@@ -31,7 +31,7 @@ abstract class AuthorizationClientDataSource {
   @POST('/api/v1/user/login')
   Future<HttpResponse<SignInResponseModel>> signIn(
       @Body() SignInRequestModel data);
-  @POST('/api/v1/user/make')
+  @POST('/api/v1/user')
   Future<HttpResponse<SignUpResponseModel>> signUp(
       @Body() SignUpRequestModel data);
 }

@@ -10,11 +10,9 @@ class NotesHomePage extends StatefulWidget {
 class _NotesHomePageState extends State<NotesHomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: SingleChildScrollView(
-        child: Container(
-          child: const Text('home'),
-        ),
+        child: Text('home'),
       ),
     );
   }

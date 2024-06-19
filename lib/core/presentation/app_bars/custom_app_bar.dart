@@ -6,13 +6,15 @@ class CustomAppBar extends AppBar {
   final BuildContext context;
   final Widget? leadeing;
   final Widget? titleWidget;
-  CustomAppBar(
-      {super.key,
-      required this.context,
-      this.leadeing,
-      this.titleWidget,
-      super.actions})
-      : super(
+  final bool leadingIsAutomaticlySet;
+  CustomAppBar({
+    super.key,
+    required this.context,
+    this.leadeing,
+    this.titleWidget,
+    super.actions,
+    this.leadingIsAutomaticlySet = true,
+  }) : super(
           forceMaterialTransparency: true,
           toolbarHeight: 70,
           automaticallyImplyLeading: false,
@@ -26,7 +28,7 @@ class CustomAppBar extends AppBar {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 leadeing ??
-                    (context.canPop()
+                    (context.canPop() && leadingIsAutomaticlySet
                         ? CustomBackButton(
                             style: const ButtonStyle(
                                 padding: WidgetStatePropertyAll(
