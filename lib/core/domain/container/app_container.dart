@@ -5,9 +5,11 @@ import 'package:doeves_app/core/domain/network_info/network_info.dart';
 import 'package:doeves_app/core/presentation/notification_service/notification_service.dart';
 import 'package:doeves_app/core/presentation/notification_service/snack_bar_notification_service/snack_bar_notification_service_impl.dart';
 import 'package:doeves_app/feauture/authorization/data/repository/authorization_remote_repository.dart';
+import 'package:doeves_app/feauture/authorization/data/repository/verification_repository_impl.dart';
 import 'package:doeves_app/feauture/authorization/data/source/authorization_client_data_source.dart';
 import 'package:doeves_app/feauture/authorization/domain/bloc/theme_bloc.dart';
 import 'package:doeves_app/feauture/authorization/domain/repository/authorization_repository.dart';
+import 'package:doeves_app/feauture/authorization/domain/repository/verification_repository.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 
@@ -59,13 +61,16 @@ class AppContainer {
   void _initReposytoryScope() async {
     try {
       final apiUrl = dotenv.env['APi_ADRESS'];
-      final authorizationRepository = AuthorizationRepositoryImpl(
-        authorizationDataSourse:
-            AuthorizationClientDataSource.create(apiUrl: apiUrl),
+      final authDataSource =
+          AuthorizationClientDataSource.create(apiUrl: apiUrl);
+      final authorizationRepository =
+          AuthorizationRepositoryImpl(authorizationDataSourse: authDataSource);
+      final verificationRepository =
+          VerificationRepositoryImpl(dataSourse: authDataSource);
+      repositoryScope = RepositoryScope(
+        authorizationRepository: authorizationRepository,
+        verificationRepository: verificationRepository,
       );
-
-      repositoryScope =
-          RepositoryScope(authorizationRepository: authorizationRepository);
     } catch (e, st) {
       log('Reposytory scope has not been initialized',
           error: e, stackTrace: st);
@@ -91,5 +96,9 @@ class ServiceScope {
 
 class RepositoryScope {
   final AuthorizationRepository authorizationRepository;
-  const RepositoryScope({required this.authorizationRepository});
+  final VerificationRepository verificationRepository;
+  const RepositoryScope({
+    required this.authorizationRepository,
+    required this.verificationRepository,
+  });
 }

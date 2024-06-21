@@ -4,6 +4,8 @@ import 'package:doeves_app/feauture/authorization/presentation/login_page/login_
 import 'package:doeves_app/feauture/authorization/presentation/login_page/login_page_vm.dart';
 import 'package:doeves_app/feauture/authorization/presentation/registration_page/registration_page.dart';
 import 'package:doeves_app/feauture/authorization/presentation/registration_page/registration_page_vm.dart';
+import 'package:doeves_app/feauture/authorization/presentation/verification_page/verification_page.dart';
+import 'package:doeves_app/feauture/authorization/presentation/verification_page/verification_page_vm.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/collections_of_notes_page/collections_of_notes_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/completed_notes_page/completed_notes_page.dart';
@@ -30,16 +32,33 @@ final router = GoRouter(
       ),
     ),
     GoRoute(
-      path: AppRoutes.loginPage,
-      builder: (context, state) => LoginPage(
-        vm: LoginPageViewModel(
-            notificationService:
-                AppContainer().serviceScope.notificationService,
-            storage: AppContainer().secureScope.secureStorage,
-            authorizationRepository:
-                AppContainer().repositoryScope.authorizationRepository),
-      ),
-    ),
+        path: AppRoutes.loginPage,
+        builder: (context, state) => LoginPage(
+              vm: LoginPageViewModel(
+                  notificationService:
+                      AppContainer().serviceScope.notificationService,
+                  storage: AppContainer().secureScope.secureStorage,
+                  authorizationRepository:
+                      AppContainer().repositoryScope.authorizationRepository),
+            ),
+        routes: [
+          GoRoute(
+              path: AppRoutes.verificationPage,
+              name: AppRoutes.verificationPage,
+              builder: (context, state) {
+                final String email = state.extra as String;
+                return VerificationPage(
+                  vm: VerificationPageViewModel(
+                    notificationService:
+                        AppContainer().serviceScope.notificationService,
+                    secureStorage: AppContainer().secureScope.secureStorage,
+                    verificationRepository:
+                        AppContainer().repositoryScope.verificationRepository,
+                  ),
+                  email: email,
+                );
+              })
+        ]),
     GoRoute(
       path: AppRoutes.notesSearchPage,
       pageBuilder: (context, state) => CustomTransitionPage(

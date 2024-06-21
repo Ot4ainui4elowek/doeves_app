@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AppWrapper extends StatelessWidget {
-  const AppWrapper({super.key, required this.child});
+  const AppWrapper({super.key, required this.child, this.maxWidth = 1000});
   final Widget child;
+  final double maxWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +11,7 @@ class AppWrapper extends StatelessWidget {
       color: Theme.of(context).colorScheme.surface,
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1000),
+          constraints: BoxConstraints(maxWidth: maxWidth),
           child: child,
         ),
       ),

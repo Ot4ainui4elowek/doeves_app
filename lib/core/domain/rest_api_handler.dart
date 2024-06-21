@@ -48,7 +48,7 @@ abstract mixin class RestApiHandler {
                 errorData: errorResponce,
                 statusCode: res.statusCode!,
                 errorList: [
-                  SpecificError(errorResponce.message),
+                  SpecificError(errorResponce.content),
                 ],
               );
             }

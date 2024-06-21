@@ -24,7 +24,7 @@ class SnackBarNotificationServiceImpl implements NotificationService {
           if (errorData != null) {
             showNotification(
                 context: context,
-                message: errorData.message,
+                message: errorData.content,
                 theme: SnackBarThemeImpl.error());
           } else {
             showNotification(

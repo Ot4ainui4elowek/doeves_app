@@ -55,10 +55,8 @@ class _AppElevatedButtonState extends State<AppElevatedButton> {
       child: ElevatedButton(
         onPressed: widget.onPressed != null ? _onPressed : null,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          disabledBackgroundColor: Colors.transparent,
-        ),
+            elevation: 0,
+            backgroundColor: Theme.of(context).colorScheme.primaryContainer),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 18),
           child: !_isLoading

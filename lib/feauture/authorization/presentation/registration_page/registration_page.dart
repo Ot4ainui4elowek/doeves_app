@@ -188,6 +188,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               horizontal: 16,
             ),
             child: AppWrapper(
+              maxWidth: 500,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

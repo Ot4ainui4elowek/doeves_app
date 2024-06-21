@@ -11,4 +11,7 @@ abstract class AppRoutes {
   static const notesSearchPage = '/notes-search';
   static const goToNotesSearchPage =
       '${AppRoutes.notesHomePage}/${AppRoutes.notesSearchPage}';
+  static const verificationPage = 'verification';
+  static const goToVerificationPage =
+      '${AppRoutes.loginPage}/${AppRoutes.verificationPage}';
 }

@@ -1,5 +1,7 @@
 import 'dart:core';
 
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+import 'package:doeves_app/core/data/model/jwt_payload_model.dart';
 import 'package:doeves_app/core/data/secure_storage/secure_storage.dart';
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
@@ -48,6 +50,11 @@ class LoginPageViewModel {
     context.go(AppRoutes.notesHomePage);
   }
 
+  void goToVerificationPage(
+      {required BuildContext context, required String email}) {
+    context.goNamed(AppRoutes.verificationPage, extra: email);
+  }
+
   Future<void> signIn(
       {required SignInStrategy signInStrtegy,
       required BuildContext context}) async {
@@ -56,8 +63,15 @@ class LoginPageViewModel {
     switch (result) {
       case GoodUseCaseResult<SignInResponseModel>(:final data):
         await _storage.writeToken(token: data.token);
+
+        final JwtPayloadModel payload =
+            JwtPayloadModel.fromJson(JWT.decode(data.token).payload);
         if (context.mounted) {
-          goToNotesHomePage(context);
+          if (payload.isVerified) {
+            goToNotesHomePage(context);
+          } else {
+            goToVerificationPage(context: context, email: data.userDTO.email);
+          }
         }
         break;
       case BadUseCaseResult<SignInResponseModel>(
@@ -72,7 +86,7 @@ class LoginPageViewModel {
           );
         }
         if (errorData != null) {
-          debugPrint(errorData.message);
+          debugPrint(errorData.content);
         } else {
           for (final error in errorList) {
             debugPrint(error.code);

@@ -158,6 +158,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: AppWrapper(
+          maxWidth: 500,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

@@ -78,9 +78,11 @@ class AuthorizationRepositoryImpl
           }
       }
     } catch (e) {
-      return UseCaseResult.bad([
-        SpecificError(HttpStatusAndErrors.invalidRequest.value),
-      ]);
+      return UseCaseResult.bad(
+        [
+          SpecificError(HttpStatusAndErrors.invalidRequest.value),
+        ],
+      );
     }
   }
 }

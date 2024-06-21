@@ -3,6 +3,7 @@ import 'package:doeves_app/feauture/authorization/data/model/sign_in_request_mod
 import 'package:doeves_app/feauture/authorization/data/model/sign_in_response_model.dart';
 import 'package:doeves_app/feauture/authorization/data/model/sign_up_request_model.dart';
 import 'package:doeves_app/feauture/authorization/data/model/sign_up_response_model.dart';
+import 'package:doeves_app/feauture/authorization/data/model/verification_response_model.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'authorization_client_data_source.g.dart';
@@ -31,7 +32,19 @@ abstract class AuthorizationClientDataSource {
   @POST('/api/v1/user/login')
   Future<HttpResponse<SignInResponseModel>> signIn(
       @Body() SignInRequestModel data);
+
   @POST('/api/v1/user')
   Future<HttpResponse<SignUpResponseModel>> signUp(
       @Body() SignUpRequestModel data);
+
+  @POST('/api/v1/user/verification')
+  Future<HttpResponse<VerificationResponseModel>> sendVerificationCode(
+    @Header('Authorization') String token,
+    @Query('code') int code,
+  );
+
+  @POST('/api/v1/user/verification/new')
+  Future<HttpResponse<VerificationResponseModel>> resendVerificationCode(
+    @Header('Authorization') String jwtToken,
+  );
 }

@@ -9,7 +9,7 @@ part of 'error_model.dart';
 ErrorResponseModel _$ErrorResponseModelFromJson(Map<String, dynamic> json) =>
     ErrorResponseModel(
       path: json['path'] as String,
-      message: json['message'] as String,
+      content: json['content'] as String,
       statusCode: (json['status_code'] as num).toInt(),
       date: json['date'] as String,
     );
@@ -17,7 +17,7 @@ ErrorResponseModel _$ErrorResponseModelFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$ErrorResponseModelToJson(ErrorResponseModel instance) =>
     <String, dynamic>{
       'path': instance.path,
-      'message': instance.message,
+      'content': instance.content,
       'status_code': instance.statusCode,
       'date': instance.date,
     };
