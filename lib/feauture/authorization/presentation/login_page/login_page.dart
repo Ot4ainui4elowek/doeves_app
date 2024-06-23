@@ -98,7 +98,9 @@ class _LoginPageState extends State<LoginPage> {
         ),
         const SizedBox(height: 12),
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            context.go(AppRoutes.operationStatusPage);
+          },
           child: Text(
             'Forgot Password',
             style: AppTextTheme.textBase(

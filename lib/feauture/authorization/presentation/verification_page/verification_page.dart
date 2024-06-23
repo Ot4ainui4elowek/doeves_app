@@ -81,9 +81,12 @@ class _VerificationPageState extends State<VerificationPage> {
   Widget get _sendCodeButtonsBuilder => Column(
         children: [
           const SizedBox(height: 50),
-          AppFilledButton(
-            child: const Text('Send'),
-            onPressed: () async => vm.sendCodeByVerification(context),
+          vm.codeIsValid.observer(
+            (context, value) => AppFilledButton(
+              onPressed:
+                  value ? () async => vm.sendCodeByVerification(context) : null,
+              child: const Text('Send'),
+            ),
           ),
           const SizedBox(height: 20),
           Text(
@@ -97,6 +100,18 @@ class _VerificationPageState extends State<VerificationPage> {
           ),
         ],
       );
+
+  @override
+  void initState() {
+    vm.init(context);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    vm.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
