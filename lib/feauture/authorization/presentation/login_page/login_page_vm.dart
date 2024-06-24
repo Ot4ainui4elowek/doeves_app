@@ -62,38 +62,43 @@ class LoginPageViewModel {
 
     switch (result) {
       case GoodUseCaseResult<SignInResponseModel>(:final data):
-        await _storage.writeToken(token: data.token);
+        {
+          await _storage.writeToken(token: data.token);
+          await _storage.writeEmail(email: data.userDTO.email);
 
-        final JwtPayloadModel payload =
-            JwtPayloadModel.fromJson(JWT.decode(data.token).payload);
-        if (context.mounted) {
-          if (payload.isVerified) {
-            goToNotesHomePage(context);
-          } else {
-            goToVerificationPage(context: context, email: data.userDTO.email);
+          final JwtPayloadModel payload =
+              JwtPayloadModel.fromJson(JWT.decode(data.token).payload);
+          if (context.mounted) {
+            if (payload.isVerified) {
+              goToNotesHomePage(context);
+            } else {
+              goToVerificationPage(context: context, email: data.userDTO.email);
+            }
           }
+          break;
         }
-        break;
       case BadUseCaseResult<SignInResponseModel>(
           :final errorList,
           :final errorData
         ):
-        if (context.mounted) {
-          _notificationService.responseNotification(
-            context: context,
-            goodUseCaseMessage: 'Login successful',
-            response: result,
-          );
-        }
-        if (errorData != null) {
-          debugPrint(errorData.content);
-        } else {
-          for (final error in errorList) {
-            debugPrint(error.code);
+        {
+          if (context.mounted) {
+            _notificationService.responseNotification(
+              context: context,
+              goodUseCaseMessage: 'Login successful',
+              response: result,
+            );
           }
-        }
+          if (errorData != null) {
+            debugPrint(errorData.content);
+          } else {
+            for (final error in errorList) {
+              debugPrint(error.code);
+            }
+          }
 
-        break;
+          break;
+        }
     }
   }
 

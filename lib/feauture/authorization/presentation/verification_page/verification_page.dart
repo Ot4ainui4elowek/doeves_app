@@ -8,9 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class VerificationPage extends StatefulWidget {
-  const VerificationPage({super.key, required this.vm, required this.email});
+  const VerificationPage({
+    super.key,
+    required this.vm,
+  });
   final VerificationPageViewModel vm;
-  final String email;
 
   @override
   State<VerificationPage> createState() => _VerificationPageState();
@@ -70,10 +72,12 @@ class _VerificationPageState extends State<VerificationPage> {
               style: AppTextTheme.text2Xl(weight: TextWeight.medium),
             ),
           ),
-          Text(
-            widget.email,
-            style: AppTextTheme.textXl(weight: TextWeight.regular)
-                .copyWith(color: Theme.of(context).colorScheme.primary),
+          vm.email.observer(
+            (context, value) => Text(
+              value,
+              style: AppTextTheme.textXl(weight: TextWeight.regular)
+                  .copyWith(color: Theme.of(context).colorScheme.primary),
+            ),
           ),
         ],
       );

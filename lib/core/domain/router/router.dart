@@ -1,8 +1,5 @@
-import 'package:doeves_app/core/domain/app_error/app_error.dart';
 import 'package:doeves_app/core/domain/container/app_container.dart';
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
-import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
-import 'package:doeves_app/core/presentation/buttons/app_filled_button.dart';
 import 'package:doeves_app/feauture/authorization/presentation/login_page/login_page.dart';
 import 'package:doeves_app/feauture/authorization/presentation/login_page/login_page_vm.dart';
 import 'package:doeves_app/feauture/authorization/presentation/registration_page/registration_page.dart';
@@ -10,14 +7,11 @@ import 'package:doeves_app/feauture/authorization/presentation/registration_page
 import 'package:doeves_app/feauture/authorization/presentation/verification_page/verification_page.dart';
 import 'package:doeves_app/feauture/authorization/presentation/verification_page/verification_page_vm.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page.dart';
-import 'package:doeves_app/feauture/error_page/presentation/error_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/collections_of_notes_page/collections_of_notes_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/completed_notes_page/completed_notes_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/home_page/home_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/main_page/main_page_large.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/main_page/main_page_small.dart';
-import 'package:doeves_app/feauture/operation_status_page/domain/entity/data_for_the_status_page.dart';
-import 'package:doeves_app/feauture/operation_status_page/presentation/operation_status_page.dart';
 import 'package:doeves_app/feauture/search_note_page/presentation/search_note_page.dart';
 import 'package:doeves_app/feauture/select_new_note_page.dart/presentation/pages/select_new_note_page.dart';
 import 'package:doeves_app/feauture/select_new_note_page.dart/presentation/pages/select_new_note_page_vm.dart';
@@ -38,29 +32,6 @@ final router = GoRouter(
       ),
     ),
     GoRoute(
-        path: AppRoutes.operationStatusPage,
-        builder: (context, state) {
-          if (state.extra is DataForTheStatusPage) {
-            return OperationStatusPage(
-              data: DataForTheStatusPage(
-                  leadingOnPressed: () => context.go(AppRoutes.loginPage),
-                  result: UseCaseResult.bad([SpecificError('Oooops!')]),
-                  actions: [
-                    AppFilledButton(
-                      child: const Text('Go to login'),
-                      onPressed: () {
-                        context.go(AppRoutes.loginPage);
-                      },
-                    )
-                  ]),
-            );
-          } else {
-            return const ErrorPage(
-              errorMessage: 'Operation status data is not valid',
-            );
-          }
-        }),
-    GoRoute(
         path: AppRoutes.loginPage,
         builder: (context, state) => LoginPage(
               vm: LoginPageViewModel(
@@ -72,21 +43,20 @@ final router = GoRouter(
             ),
         routes: [
           GoRoute(
-              path: AppRoutes.verificationPage,
-              name: AppRoutes.verificationPage,
-              builder: (context, state) {
-                final String email = state.extra as String;
-                return VerificationPage(
-                  vm: VerificationPageViewModel(
-                    notificationService:
-                        AppContainer().serviceScope.notificationService,
-                    secureStorage: AppContainer().secureScope.secureStorage,
-                    verificationRepository:
-                        AppContainer().repositoryScope.verificationRepository,
-                  ),
-                  email: email,
-                );
-              })
+            path: AppRoutes.verificationPage,
+            name: AppRoutes.verificationPage,
+            builder: (context, state) {
+              return VerificationPage(
+                vm: VerificationPageViewModel(
+                  notificationService:
+                      AppContainer().serviceScope.notificationService,
+                  secureStorage: AppContainer().secureScope.secureStorage,
+                  verificationRepository:
+                      AppContainer().repositoryScope.verificationRepository,
+                ),
+              );
+            },
+          )
         ]),
     GoRoute(
       path: AppRoutes.notesSearchPage,
