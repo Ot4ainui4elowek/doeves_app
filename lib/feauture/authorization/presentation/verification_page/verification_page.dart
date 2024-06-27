@@ -98,9 +98,11 @@ class _VerificationPageState extends State<VerificationPage> {
             style: AppTextTheme.textBase(weight: TextWeight.medium),
           ),
           const SizedBox(height: 20),
-          AppElevatedButton(
-            child: const Text('Resend the code'),
-            onPressed: () async => vm.sendCodeByEmail(context),
+          vm.canResendCode.observer(
+            (context, value) => AppElevatedButton(
+              onPressed: value ? () async => vm.sendCodeByEmail(context) : null,
+              child: const Text('Resend the code'),
+            ),
           ),
         ],
       );

@@ -51,6 +51,8 @@ class VerificationPageViewModel {
     }
   }
 
+  final canResendCode = true.rv;
+
   void checkCodeIsValid() {
     codeIsValid(codeControllers
         .every((textController) => textController.text.isNotEmpty));
@@ -65,6 +67,7 @@ class VerificationPageViewModel {
           theme: SnackBarThemeImpl.error());
       return;
     }
+
     final response = await _verificationRepository.sendVerificationCode(
         code: int.parse(
             codeControllers.map((controller) => controller.text).join('')),
@@ -89,9 +92,15 @@ class VerificationPageViewModel {
           theme: SnackBarThemeImpl.error());
       return;
     }
+
     final response = await _verificationRepository
         .resendVerificationCode('pidr pizda token elda chlen $token');
 
+    canResendCode(false);
+    Future.delayed(
+      const Duration(seconds: 60),
+      () => canResendCode(true),
+    );
     if (context.mounted) {
       _notificationService.responseNotification(
           response: response,
