@@ -1,4 +1,4 @@
-import 'package:doeves_app/feauture/select_new_note_page.dart/domain/entity/create_note_entity.dart';
+import 'package:doeves_app/feauture/select_new_note_page/domain/entity/create_note_entity.dart';
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 

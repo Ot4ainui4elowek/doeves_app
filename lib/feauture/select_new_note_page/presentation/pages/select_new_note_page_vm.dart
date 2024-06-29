@@ -1,5 +1,5 @@
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
-import 'package:doeves_app/feauture/select_new_note_page.dart/domain/entity/create_note_entity.dart';
+import 'package:doeves_app/feauture/select_new_note_page/domain/entity/create_note_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
