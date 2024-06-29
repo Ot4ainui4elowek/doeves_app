@@ -1,0 +1,87 @@
+import 'package:doeves_app/feauture/main_page/domain/entity/note_with_content/content/content.dart';
+import 'package:doeves_app/feauture/main_page/domain/entity/note_with_content/content/image_content_impl.dart';
+import 'package:doeves_app/feauture/main_page/domain/entity/note_with_content/content/text_content_impl.dart';
+import 'package:doeves_app/feauture/main_page/domain/entity/note_with_content/note_with_content_impl.dart';
+import 'package:doeves_app/theme/text_theme.dart';
+import 'package:flutter/material.dart';
+
+class NoteWithContentWidget extends StatelessWidget {
+  const NoteWithContentWidget({super.key, required this.note});
+  final NoteWithContentImpl note;
+
+  Widget _contentBuilder(Content content) {
+    switch (content) {
+      case TextContentImpl(:final text):
+        {
+          return Text(
+            text,
+            style: AppTextTheme.textBase(weight: TextWeight.regular),
+          );
+        }
+      case ImageContentImpl(:final imageRef):
+        {
+          return imageContentBuilder(imageRef);
+        }
+      default:
+        return throw Exception();
+    }
+  }
+
+  Widget imageContentBuilder(String imageRef) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Image:',
+          style: AppTextTheme.textSm(weight: TextWeight.regular),
+        ),
+        Container(
+          width: 75,
+          height: 50,
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(
+              Radius.circular(5),
+            ),
+          ),
+          clipBehavior: Clip.hardEdge,
+          child: FittedBox(
+            fit: BoxFit.cover,
+            child: Image.network(
+              imageRef,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surfaceContainer,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(14),
+          )),
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+        titleTextStyle: AppTextTheme.textBase(weight: TextWeight.medium)
+            .copyWith(color: Theme.of(context).colorScheme.onSurface),
+        title: Text(note.title),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: ListView.separated(
+            shrinkWrap: true,
+            itemCount: note.content.length,
+            itemBuilder: (context, index) =>
+                _contentBuilder(note.content[index]),
+            separatorBuilder: (context, index) => const Divider(
+              height: 25,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
