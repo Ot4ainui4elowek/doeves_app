@@ -20,14 +20,14 @@ class NoteWithContentWidget extends StatelessWidget {
         }
       case ImageContentImpl(:final imageRef):
         {
-          return imageContentBuilder(imageRef);
+          return _imageContentBuilder(imageRef);
         }
       default:
         return throw Exception();
     }
   }
 
-  Widget imageContentBuilder(String imageRef) {
+  Widget _imageContentBuilder(String imageRef) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,12 +44,10 @@ class NoteWithContentWidget extends StatelessWidget {
               Radius.circular(5),
             ),
           ),
-          clipBehavior: Clip.hardEdge,
-          child: FittedBox(
+          clipBehavior: Clip.antiAlias,
+          child: Image.network(
+            imageRef,
             fit: BoxFit.cover,
-            child: Image.network(
-              imageRef,
-            ),
           ),
         ),
       ],
@@ -85,3 +83,58 @@ class NoteWithContentWidget extends StatelessWidget {
     );
   }
 }
+
+// class _ImageContent extends StatelessWidget {
+//   const _ImageContent(this.imageRef);
+//   final String imageRef;
+//   @override
+//   Widget build(BuildContext context) {
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         Text(
+//           'Image:',
+//           style: AppTextTheme.textSm(weight: TextWeight.regular),
+//         ),
+//         Container(
+//           width: 75,
+//           height: 50,
+//           decoration: const BoxDecoration(
+//             borderRadius: BorderRadius.all(
+//               Radius.circular(5),
+//             ),
+//           ),
+//           clipBehavior: Clip.antiAlias,
+//           child: Image.network(
+//             imageRef,
+//             fit: BoxFit.cover,
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
+
+// class _ContentWidget extends StatelessWidget {
+//   const _ContentWidget(this.content);
+//   final Content content;
+//   @override
+//   Widget build(BuildContext context) {
+//     switch (content) {
+//       case TextContentImpl(:final text):
+//         {
+//           return Text(
+//             text,
+//             style: AppTextTheme.textBase(weight: TextWeight.regular),
+//           );
+//         }
+//       case ImageContentImpl(:final imageRef):
+//         {
+//           return _ImageContent(imageRef);
+//         }
+//       default:
+//         return throw Exception();
+//     }
+//   }
+// }

@@ -27,8 +27,6 @@ class _NotesHomePageState extends State<NotesHomePage> {
       content: [
         const TextContentImpl('this is macbook'),
         const TextContentImpl('some text in note'),
-        const ImageContentImpl(
-            'https://xstore.md/images/product/2022/06/Apple-Macbook-Air-M2-Space-Gray-2.jpg'),
       ],
     ),
     NoteWithContentImpl(
@@ -36,8 +34,6 @@ class _NotesHomePageState extends State<NotesHomePage> {
       content: [
         const TextContentImpl('this is macbook'),
         const TextContentImpl('some text in note'),
-        const ImageContentImpl(
-            'https://xstore.md/images/product/2022/06/Apple-Macbook-Air-M2-Space-Gray-2.jpg'),
       ],
     ),
     NoteWithContentImpl(
@@ -45,12 +41,30 @@ class _NotesHomePageState extends State<NotesHomePage> {
       content: [
         const TextContentImpl('this is macbook'),
         const TextContentImpl('some text in note'),
-        const ImageContentImpl(
-            'https://xstore.md/images/product/2022/06/Apple-Macbook-Air-M2-Space-Gray-2.jpg'),
+      ],
+    ),
+    NoteWithContentImpl(
+      title: 'This is first note',
+      content: [
+        const TextContentImpl('this is macbook'),
+        const TextContentImpl('some text in note'),
+      ],
+    ),
+    NoteWithContentImpl(
+      title: 'This is first note',
+      content: [
+        const TextContentImpl('this is macbook'),
+        const TextContentImpl('some text in note'),
+      ],
+    ),
+    NoteWithContentImpl(
+      title: 'This is first note',
+      content: [
+        const TextContentImpl('this is macbook'),
+        const TextContentImpl('some text in note'),
       ],
     ),
   ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
