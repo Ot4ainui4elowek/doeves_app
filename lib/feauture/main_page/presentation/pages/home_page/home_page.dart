@@ -15,6 +15,8 @@ class _NotesHomePageState extends State<NotesHomePage> {
   final List<NoteWithContentImpl> notes = [
     NoteWithContentImpl(
       title: 'This is first note',
+      description:
+          'This is description, и тут можно писать своё описание заметки',
       content: [
         const TextContentImpl('this is macbook'),
         const TextContentImpl('some text in note'),
@@ -24,6 +26,8 @@ class _NotesHomePageState extends State<NotesHomePage> {
     ),
     NoteWithContentImpl(
       title: 'This is first note',
+      description:
+          'This is description, и тут можно писать своё описание заметки',
       content: [
         const TextContentImpl('this is macbook'),
         const TextContentImpl('some text in note'),
@@ -31,6 +35,8 @@ class _NotesHomePageState extends State<NotesHomePage> {
     ),
     NoteWithContentImpl(
       title: 'This is first note',
+      description:
+          'This is description, и тут можно писать своё описание заметки',
       content: [
         const TextContentImpl('this is macbook'),
         const TextContentImpl('some text in note'),
@@ -38,6 +44,8 @@ class _NotesHomePageState extends State<NotesHomePage> {
     ),
     NoteWithContentImpl(
       title: 'This is first note',
+      description:
+          'This is description, и тут можно писать своё описание заметки',
       content: [
         const TextContentImpl('this is macbook'),
         const TextContentImpl('some text in note'),
@@ -45,6 +53,8 @@ class _NotesHomePageState extends State<NotesHomePage> {
     ),
     NoteWithContentImpl(
       title: 'This is first note',
+      description:
+          'This is description, и тут можно писать своё описание заметки',
       content: [
         const TextContentImpl('this is macbook'),
         const TextContentImpl('some text in note'),
@@ -52,6 +62,8 @@ class _NotesHomePageState extends State<NotesHomePage> {
     ),
     NoteWithContentImpl(
       title: 'This is first note',
+      description:
+          'This is description, и тут можно писать своё описание заметки',
       content: [
         const TextContentImpl('this is macbook'),
         const TextContentImpl('some text in note'),
@@ -59,6 +71,8 @@ class _NotesHomePageState extends State<NotesHomePage> {
     ),
     NoteWithContentImpl(
       title: 'This is first note',
+      description:
+          'This is description, и тут можно писать своё описание заметки',
       content: [
         const TextContentImpl('this is macbook'),
         const TextContentImpl('some text in note'),

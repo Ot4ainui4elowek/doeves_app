@@ -53,12 +53,21 @@ class _CreateNotePageState extends State<CreateNotePage> {
     return Scaffold(
       appBar: TitleAppBar(
         context: context,
+        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.check))],
       ),
       body: AppWrapper(
+        maxWidth: 700,
         child: Scaffold(
+          bottomSheet: Container(
+            child: Row(
+              children: [
+                IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
+              ],
+            ),
+          ),
           body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Container(
+              margin: const EdgeInsets.all(16),
               child: Column(
                 children: [
                   _titleBuilder,

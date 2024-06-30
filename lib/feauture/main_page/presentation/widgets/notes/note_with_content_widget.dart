@@ -9,25 +9,50 @@ class NoteWithContentWidget extends StatelessWidget {
   const NoteWithContentWidget({super.key, required this.note});
   final NoteWithContentImpl note;
 
-  Widget _contentBuilder(Content content) {
-    switch (content) {
-      case TextContentImpl(:final text):
-        {
-          return Text(
-            text,
-            style: AppTextTheme.textBase(weight: TextWeight.regular),
-          );
-        }
-      case ImageContentImpl(:final imageRef):
-        {
-          return _imageContentBuilder(imageRef);
-        }
-      default:
-        return throw Exception();
-    }
-  }
+  Widget get _contentListViewBuilder => ListView.separated(
+        shrinkWrap: true,
+        itemCount: note.content.length,
+        itemBuilder: (context, index) => _ContentWidget(note.content[index]),
+        separatorBuilder: (context, index) => const Divider(height: 25),
+      );
 
-  Widget _imageContentBuilder(String imageRef) {
+  Widget _descriptionBuilder(BuildContext context) => Text(
+        note.description,
+        style: AppTextTheme.textBase(weight: TextWeight.regular)
+            .copyWith(color: Theme.of(context).colorScheme.outline),
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainer,
+        borderRadius: const BorderRadius.all(Radius.circular(14)),
+      ),
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+        titleTextStyle: AppTextTheme.textBase(weight: TextWeight.medium)
+            .copyWith(color: Theme.of(context).colorScheme.onSurface),
+        title: Text(note.title),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 10),
+            _descriptionBuilder(context),
+            const SizedBox(height: 10),
+            _contentListViewBuilder,
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ImageContent extends StatelessWidget {
+  const _ImageContent(this.imageRef);
+  final String imageRef;
+  @override
+  Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,9 +65,7 @@ class NoteWithContentWidget extends StatelessWidget {
           width: 75,
           height: 50,
           decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(5),
-            ),
+            borderRadius: BorderRadius.all(Radius.circular(5)),
           ),
           clipBehavior: Clip.antiAlias,
           child: Image.network(
@@ -53,88 +76,30 @@ class NoteWithContentWidget extends StatelessWidget {
       ],
     );
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceContainer,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(14),
-          )),
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-        titleTextStyle: AppTextTheme.textBase(weight: TextWeight.medium)
-            .copyWith(color: Theme.of(context).colorScheme.onSurface),
-        title: Text(note.title),
-        subtitle: Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: ListView.separated(
-            shrinkWrap: true,
-            itemCount: note.content.length,
-            itemBuilder: (context, index) =>
-                _contentBuilder(note.content[index]),
-            separatorBuilder: (context, index) => const Divider(
-              height: 25,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }
 
-// class _ImageContent extends StatelessWidget {
-//   const _ImageContent(this.imageRef);
-//   final String imageRef;
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         Text(
-//           'Image:',
-//           style: AppTextTheme.textSm(weight: TextWeight.regular),
-//         ),
-//         Container(
-//           width: 75,
-//           height: 50,
-//           decoration: const BoxDecoration(
-//             borderRadius: BorderRadius.all(
-//               Radius.circular(5),
-//             ),
-//           ),
-//           clipBehavior: Clip.antiAlias,
-//           child: Image.network(
-//             imageRef,
-//             fit: BoxFit.cover,
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
-
-// class _ContentWidget extends StatelessWidget {
-//   const _ContentWidget(this.content);
-//   final Content content;
-//   @override
-//   Widget build(BuildContext context) {
-//     switch (content) {
-//       case TextContentImpl(:final text):
-//         {
-//           return Text(
-//             text,
-//             style: AppTextTheme.textBase(weight: TextWeight.regular),
-//           );
-//         }
-//       case ImageContentImpl(:final imageRef):
-//         {
-//           return _ImageContent(imageRef);
-//         }
-//       default:
-//         return throw Exception();
-//     }
-//   }
-// }
+class _ContentWidget extends StatelessWidget {
+  const _ContentWidget(this.content);
+  final Content content;
+  @override
+  Widget build(BuildContext context) {
+    switch (content) {
+      case TextContentImpl(:final text):
+        {
+          return Text(
+            text,
+            style: AppTextTheme.textSm(weight: TextWeight.regular),
+          );
+        }
+      case ImageContentImpl(:final imageRef):
+        {
+          return _ImageContent(imageRef);
+        }
+      default:
+        {
+          debugPrint('Content builder exception');
+          return const SizedBox(height: 0);
+        }
+    }
+  }
+}

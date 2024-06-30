@@ -4,9 +4,11 @@ import 'package:doeves_app/feauture/main_page/domain/entity/note_with_content/co
 class NoteWithContentImpl implements Note {
   NoteWithContentImpl({
     required this.title,
+    required this.description,
     required this.content,
   });
   @override
   final String title;
+  final String description;
   final List<Content> content;
 }

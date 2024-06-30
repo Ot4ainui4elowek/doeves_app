@@ -25,7 +25,7 @@ class _MainPageLargeState extends State<MainPageLarge> {
     );
   }
 
-  List<NavigationRailDestination> get _nabigationItemsBuilder => [
+  List<NavigationRailDestination> get _navigationItemsBuilder => [
         const NavigationRailDestination(
           selectedIcon: Icon(Icons.home),
           icon: Icon(Icons.home_outlined),
@@ -58,7 +58,7 @@ class _MainPageLargeState extends State<MainPageLarge> {
           },
         ),
         trailing: const AddNoteButton(),
-        destinations: _nabigationItemsBuilder,
+        destinations: _navigationItemsBuilder,
         selectedIndex: widget._navigationShell.currentIndex,
         onDestinationSelected: (int index) => _onTap(context, index),
       );
@@ -72,6 +72,7 @@ class _MainPageLargeState extends State<MainPageLarge> {
           _navigationBuilder,
           Expanded(
             child: AppWrapper(
+              maxWidth: 700,
               child: Scaffold(
                 appBar: CustomAppBar(
                   context: context,

@@ -32,6 +32,7 @@ class _SelectNewNotePageState extends State<SelectNewNotePage> {
         titleText: 'New notes',
       ),
       body: AppWrapper(
+        maxWidth: 700,
         child: Scaffold(
           body: SingleChildScrollView(
             child: Padding(

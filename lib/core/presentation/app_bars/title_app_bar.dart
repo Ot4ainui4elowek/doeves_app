@@ -10,6 +10,7 @@ class TitleAppBar extends AppBar {
     super.key,
     required this.context,
     this.titleText = '',
+    super.actions,
   }) : super(
           forceMaterialTransparency: true,
           automaticallyImplyLeading: false,

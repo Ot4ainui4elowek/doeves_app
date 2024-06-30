@@ -47,6 +47,7 @@ class _SearchNotePageState extends State<SearchNotePage> {
   @override
   Widget build(BuildContext context) {
     return AppWrapper(
+      maxWidth: 700,
       child: Scaffold(
         appBar: CustomAppBar(
           context: context,
