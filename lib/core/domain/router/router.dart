@@ -7,6 +7,7 @@ import 'package:doeves_app/feauture/authorization/presentation/registration_page
 import 'package:doeves_app/feauture/authorization/presentation/verification_page/verification_page.dart';
 import 'package:doeves_app/feauture/authorization/presentation/verification_page/verification_page_vm.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page.dart';
+import 'package:doeves_app/feauture/create_note/presentation/create_note_page_vm.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/collections_of_notes_page/collections_of_notes_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/completed_notes_page/completed_notes_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/home_page/home_page.dart';
@@ -126,7 +127,9 @@ final router = GoRouter(
     GoRoute(
       path: AppRoutes.createNotePage,
       pageBuilder: (context, state) => CustomTransitionPage(
-        child: const CreateNotePage(),
+        child: CreateNotePage(
+          vm: CreateNotePageViewModel(),
+        ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) =>
             SlideTransition(
           position: animation

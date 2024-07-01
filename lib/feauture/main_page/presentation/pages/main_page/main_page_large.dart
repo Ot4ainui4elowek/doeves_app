@@ -57,7 +57,9 @@ class _MainPageLargeState extends State<MainPageLarge> {
             );
           },
         ),
-        trailing: const AddNoteButton(),
+        trailing: const AddNoteButton(
+          shape: CircleBorder(),
+        ),
         destinations: _navigationItemsBuilder,
         selectedIndex: widget._navigationShell.currentIndex,
         onDestinationSelected: (int index) => _onTap(context, index),

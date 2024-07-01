@@ -23,27 +23,36 @@ class MainPageSmallState extends State<MainPageSmall> {
     );
   }
 
-  Widget get _bottomNavBarBuilder => NavigationBar(
-        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-        onDestinationSelected: (int index) => _onTap(context, index),
-        selectedIndex: widget._navigationShell.currentIndex,
-        destinations: const <Widget>[
-          NavigationDestination(
-            selectedIcon: Icon(Icons.home),
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            selectedIcon: Icon(Icons.bookmark_added),
-            icon: Icon(Icons.bookmark_added_outlined),
-            label: 'Finished',
-          ),
-          NavigationDestination(
-            selectedIcon: Icon(Icons.collections_bookmark),
-            icon: Icon(Icons.collections_bookmark_outlined),
-            label: 'Collections',
-          ),
-        ],
+  List<NavigationDestination> get _navigationDestinitionBuilder =>
+      const <NavigationDestination>[
+        NavigationDestination(
+          selectedIcon: Icon(Icons.home),
+          icon: Icon(Icons.home_outlined),
+          label: 'Home',
+        ),
+        NavigationDestination(
+          selectedIcon: Icon(Icons.bookmark_added),
+          icon: Icon(Icons.bookmark_added_outlined),
+          label: 'Finished',
+        ),
+        NavigationDestination(
+          selectedIcon: Icon(Icons.collections_bookmark),
+          icon: Icon(Icons.collections_bookmark_outlined),
+          label: 'Collections',
+        ),
+      ];
+
+  Widget get _bottomNavigationBarBuilder => BottomAppBar(
+        padding: const EdgeInsets.only(right: 75),
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 5,
+        child: NavigationBar(
+          backgroundColor: Colors.transparent,
+          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+          onDestinationSelected: (int index) => _onTap(context, index),
+          selectedIndex: widget._navigationShell.currentIndex,
+          destinations: _navigationDestinitionBuilder,
+        ),
       );
 
   Widget get _burgerMenuButtonBuilder => StatefulBuilder(
@@ -70,9 +79,12 @@ class MainPageSmallState extends State<MainPageSmall> {
     return Scaffold(
       appBar: _appBarBuilder,
       body: widget._navigationShell,
-      bottomNavigationBar: _bottomNavBarBuilder,
+      bottomNavigationBar: _bottomNavigationBarBuilder,
       drawer: AppDrawer(),
-      floatingActionButton: const AddNoteButton(),
+      floatingActionButton: const AddNoteButton(
+        shape: CircleBorder(),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 }
