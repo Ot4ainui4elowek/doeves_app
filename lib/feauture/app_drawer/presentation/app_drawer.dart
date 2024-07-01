@@ -12,7 +12,13 @@ class AppDrawer extends StatelessWidget {
 
   Widget get _themeSwitchBuilder => BlocBuilder(
         bloc: _themeBloc,
-        builder: (context, state) => Switch(
+        builder: (context, state) => SwitchListTile(
+          hoverColor: Colors.transparent,
+          contentPadding: EdgeInsets.zero,
+          title: Text(
+            'Dark theme',
+            style: AppTextTheme.textBase(weight: TextWeight.medium),
+          ),
           value: _themeBloc.state is DarkTheme,
           onChanged: (value) => _themeBloc.add(
             _themeBloc.state is DarkTheme
@@ -37,16 +43,7 @@ class AppDrawer extends StatelessWidget {
             const SizedBox(height: 20),
             NetworkConnectionWidget(),
             const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Dark theme',
-                  style: AppTextTheme.textBase(weight: TextWeight.medium),
-                ),
-                _themeSwitchBuilder,
-              ],
-            )
+            _themeSwitchBuilder,
           ],
         ),
       ),
