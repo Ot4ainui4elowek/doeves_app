@@ -81,17 +81,13 @@ class _NotesHomePageState extends State<NotesHomePage> {
   ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-            child: ListView.separated(
-                shrinkWrap: true,
-                itemBuilder: (context, index) =>
-                    NoteWithContentWidget(note: notes[index]),
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: 10),
-                itemCount: notes.length)),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+      child: ListView.separated(
+        itemBuilder: (context, index) =>
+            NoteWithContentWidget(note: notes[index]),
+        separatorBuilder: (context, index) => const SizedBox(height: 10),
+        itemCount: notes.length,
       ),
     );
   }

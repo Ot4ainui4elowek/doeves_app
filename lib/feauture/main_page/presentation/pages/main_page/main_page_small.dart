@@ -82,6 +82,7 @@ class MainPageSmallState extends State<MainPageSmall> {
       bottomNavigationBar: _bottomNavigationBarBuilder,
       drawer: AppDrawer(),
       floatingActionButton: const AddNoteButton(
+        elevation: 0,
         shape: CircleBorder(),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,

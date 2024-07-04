@@ -11,6 +11,7 @@ class NoteWithContentWidget extends StatelessWidget {
 
   Widget get _contentListViewBuilder => ListView.separated(
         shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
         itemCount: note.content.length,
         itemBuilder: (context, index) => _ContentWidget(note.content[index]),
         separatorBuilder: (context, index) => const Divider(height: 25),
@@ -30,12 +31,16 @@ class NoteWithContentWidget extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(14)),
       ),
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-        titleTextStyle: AppTextTheme.textBase(weight: TextWeight.medium)
-            .copyWith(color: Theme.of(context).colorScheme.onSurface),
-        title: Text(note.title),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 14,
+          vertical: 7,
+        ),
+        title: Text(
+          note.title,
+          style: AppTextTheme.textBase(weight: TextWeight.medium)
+              .copyWith(color: Theme.of(context).colorScheme.onSurface),
+        ),
         subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 10),
             _descriptionBuilder(context),

@@ -120,6 +120,8 @@ class _CreateNotePageState extends State<CreateNotePage> {
           bottomNavigationBar: _bottomNavigationBarBuilder,
           floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           floatingActionButton: FloatingActionButton(
+            elevation: 0,
+            hoverElevation: 0,
             shape: const CircleBorder(),
             onPressed: () {},
             child: const Icon(Icons.check),
