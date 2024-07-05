@@ -41,6 +41,7 @@ class NoteWithContentWidget extends StatelessWidget {
               .copyWith(color: Theme.of(context).colorScheme.onSurface),
         ),
         subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 10),
             _descriptionBuilder(context),

@@ -14,6 +14,7 @@ import 'package:doeves_app/feauture/main_page/presentation/pages/home_page/home_
 import 'package:doeves_app/feauture/main_page/presentation/pages/main_page/main_page_large.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/main_page/main_page_small.dart';
 import 'package:doeves_app/feauture/search_note_page/presentation/search_note_page.dart';
+import 'package:doeves_app/feauture/search_note_page/presentation/search_note_page_vm.dart';
 import 'package:doeves_app/feauture/select_new_note_page/presentation/pages/select_new_note_page.dart';
 import 'package:doeves_app/feauture/select_new_note_page/presentation/pages/select_new_note_page_vm.dart';
 import 'package:doeves_app/feauture/splash_screen/presentation/splash_screen.dart';
@@ -62,7 +63,9 @@ final router = GoRouter(
     GoRoute(
       path: AppRoutes.notesSearchPage,
       pageBuilder: (context, state) => CustomTransitionPage(
-        child: const SearchNotePage(),
+        child: SearchNotePage(
+          vm: SearchNotePageViewModel(),
+        ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) =>
             SlideTransition(
           position: animation.drive(

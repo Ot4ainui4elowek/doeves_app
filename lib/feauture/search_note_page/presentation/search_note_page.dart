@@ -2,31 +2,29 @@ import 'package:doeves_app/core/presentation/app_bars/custom_app_bar.dart';
 import 'package:doeves_app/core/presentation/app_wrapper.dart';
 import 'package:doeves_app/core/presentation/buttons/app_bar_button.dart';
 import 'package:doeves_app/core/presentation/hero_widgets/hero_search_widget.dart';
+import 'package:doeves_app/feauture/search_note_page/presentation/search_note_page_vm.dart';
 import 'package:flutter/material.dart';
 
 class SearchNotePage extends StatefulWidget {
-  const SearchNotePage({super.key});
+  const SearchNotePage({super.key, required this.vm});
+  final SearchNotePageViewModel vm;
 
   @override
   State<SearchNotePage> createState() => _SearchNotePageState();
 }
 
 class _SearchNotePageState extends State<SearchNotePage> {
-  late final FocusNode focusNode;
+  SearchNotePageViewModel get vm => widget.vm;
   @override
   void initState() {
     super.initState();
-    focusNode = FocusNode();
-    Future.delayed(const Duration(milliseconds: 350), () {
-      // 350 was the least I could go
-      focusNode.requestFocus();
-    });
+    vm.focusSearchTextField();
   }
 
 // Dispose
   @override
   void dispose() {
-    focusNode.dispose();
+    vm.focusNode.dispose();
     super.dispose();
   }
 
@@ -52,7 +50,7 @@ class _SearchNotePageState extends State<SearchNotePage> {
         appBar: CustomAppBar(
           context: context,
           titleWidget: HeroSearchWidget(
-            focusNode: focusNode,
+            focusNode: vm.focusNode,
           ),
           actions: _actionsBuilder,
         ),

@@ -43,26 +43,28 @@ class _MainPageLargeState extends State<MainPageLarge> {
         ),
       ];
 
-  Widget get _navigationBuilder => NavigationRail(
-        groupAlignment: -1,
-        labelType: NavigationRailLabelType.selected,
-        leading: StatefulBuilder(
-          builder: (BuildContext context, setState) {
-            return AppBarButton(
-              onPressed: Scaffold.of(context).openDrawer,
-              child: Icon(
-                Icons.menu,
-                color: Theme.of(context).colorScheme.outline,
-              ),
-            );
-          },
+  Widget get _navigationBuilder => Center(
+        child: NavigationRail(
+          groupAlignment: -1,
+          labelType: NavigationRailLabelType.selected,
+          leading: StatefulBuilder(
+            builder: (BuildContext context, setState) {
+              return AppBarButton(
+                onPressed: Scaffold.of(context).openDrawer,
+                child: Icon(
+                  Icons.menu,
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+              );
+            },
+          ),
+          trailing: const AddNoteButton(
+            shape: CircleBorder(),
+          ),
+          destinations: _navigationItemsBuilder,
+          selectedIndex: widget._navigationShell.currentIndex,
+          onDestinationSelected: (int index) => _onTap(context, index),
         ),
-        trailing: const AddNoteButton(
-          shape: CircleBorder(),
-        ),
-        destinations: _navigationItemsBuilder,
-        selectedIndex: widget._navigationShell.currentIndex,
-        onDestinationSelected: (int index) => _onTap(context, index),
       );
   @override
   Widget build(BuildContext context) {
