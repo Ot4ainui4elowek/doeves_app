@@ -13,9 +13,9 @@ class CreateNotePageViewModel {
         title: 'Add text',
       ),
       AddContentButtonWidgetEntity(
-        icon: Icons.image,
-        onPressed: () {},
-        title: 'Add image',
+        icon: Icons.account_tree_rounded,
+        onPressed: _contentList.addTaskListContent,
+        title: 'Add tasks list',
       ),
       AddContentButtonWidgetEntity(
         icon: Icons.mic_rounded,

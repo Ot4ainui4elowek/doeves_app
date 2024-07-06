@@ -4,7 +4,9 @@ import 'package:doeves_app/core/presentation/buttons/app_elevated_button.dart';
 import 'package:doeves_app/core/presentation/text_fields/controllers/app_text_editing_controller.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/add_content_button_widget_entity.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/create_content_entity.dart';
-import 'package:doeves_app/feauture/create_note/domain/entity/content/create_text_content_impl.dart';
+import 'package:doeves_app/feauture/create_note/domain/entity/content/tasks_list/create_task_list_impl.dart';
+import 'package:doeves_app/feauture/create_note/domain/entity/content/tasks_list/task_list_item.dart';
+import 'package:doeves_app/feauture/create_note/domain/entity/content/text/create_text_content_impl.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page_vm.dart';
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +16,6 @@ import 'package:reactive_variables/reactive_variables.dart';
 class CreateNotePage extends StatefulWidget {
   const CreateNotePage({super.key, required this.vm});
   final CreateNotePageViewModel vm;
-
   @override
   State<CreateNotePage> createState() => _CreateNotePageState();
 }
@@ -62,7 +63,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
         (context, value) => ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) => _ContentWidget(
+          itemBuilder: (context, index) => _ContentFactoryWidget(
             content: value[index],
             deleteContent: vm.deleteContent,
           ),
@@ -111,78 +112,170 @@ class _CreateNotePageState extends State<CreateNotePage> {
   }
 }
 
-class _ContentWidget extends StatelessWidget {
-  const _ContentWidget({
+class _ContentFactoryWidget extends StatelessWidget {
+  const _ContentFactoryWidget({
     required this.content,
     required this.deleteContent,
   });
   final CreateContentEntity content;
   final void Function(int id) deleteContent;
-  @override
-  Widget build(BuildContext context) {
+  Widget contentBuilder() {
     switch (content) {
       case CreateTextContentImpl():
         {
-          return _TextContentWidget(
-            content: content as CreateTextContentImpl,
-            deleteContent: deleteContent,
-          );
+          return _TextContentWidget(content as CreateTextContentImpl);
+        }
+      case CreateTasksListImpl():
+        {
+          return _TaskListContentWidget(content as CreateTasksListImpl);
         }
       default:
         return const SizedBox(height: 0);
     }
   }
-}
 
-class _TextContentWidget extends StatelessWidget {
-  const _TextContentWidget({
-    required this.content,
-    required this.deleteContent,
-  });
-
-  final CreateTextContentImpl content;
-
-  final void Function(int id) deleteContent;
-
-  Widget _textBuilder(BuildContext context) {
-    final textStyle =
-        AppTextTheme.textBase(weight: TextWeight.regular).copyWith(
-      color: Theme.of(context).colorScheme.outline,
-    );
-
-    return Padding(
-      padding: const EdgeInsets.only(right: 56),
-      child: TextField(
-        maxLines: null,
-        controller: content.controller,
-        style: textStyle,
-        decoration: InputDecoration(
-          hintText: 'Note...',
-          border: InputBorder.none,
-          hintStyle: textStyle,
-        ),
-      ),
+  @override
+  Widget build(BuildContext context) {
+    return _ContentWidget(
+      contentBuilder: contentBuilder(),
+      deleteContent: deleteContent,
+      id: content.id,
     );
   }
+}
 
+class _ContentWidget extends StatelessWidget {
+  const _ContentWidget(
+      {required this.contentBuilder,
+      required this.deleteContent,
+      required this.id});
+  final Widget contentBuilder;
+  final int id;
+  final void Function(int id) deleteContent;
   @override
   Widget build(BuildContext context) {
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        _textBuilder(context),
+        Padding(
+          padding: const EdgeInsets.only(right: 56),
+          child: contentBuilder,
+        ),
         Positioned(
           top: 0,
           right: 0,
           child: IconButton(
               onPressed: () {
-                deleteContent(content.id);
+                deleteContent(id);
               },
               icon: const Icon(
                 Icons.close_rounded,
               )),
         )
       ],
+    );
+  }
+}
+
+class _TaskListContentWidget extends StatelessWidget {
+  const _TaskListContentWidget(this.tasksList);
+  final CreateTasksListImpl tasksList;
+
+  Widget _taskBuilder(int index) {
+    return Obs(
+      rvList: [tasksList[index].isSuccess],
+      builder: (context) => CheckboxListTile(
+        contentPadding: EdgeInsets.zero,
+        title: _ContentTextField(controller: tasksList[index].text),
+        value: tasksList[index].isSuccess.value,
+        onChanged: (switchValue) {
+          tasksList[index].isSuccess(!tasksList[index].isSuccess.value);
+          switchValue = tasksList[index].isSuccess.value;
+        },
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        _ContentTextField(
+          controller: tasksList.listTitle,
+          hint: 'This is a list of something...',
+          style: AppTextTheme.textBase(weight: TextWeight.medium).copyWith(
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+        tasksList.observer(
+          (context, value) => ListView.separated(
+            shrinkWrap: true,
+            itemBuilder: (context, index) => _taskBuilder(index),
+            separatorBuilder: (context, index) => const Divider(),
+            itemCount: value.length,
+          ),
+        ),
+        const Divider(
+          height: 25,
+        ),
+        OutlinedButton(
+            onPressed: () {
+              tasksList.add(TaskListItem());
+            },
+            style: const ButtonStyle(
+                shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(14)))),
+                padding: WidgetStatePropertyAll(EdgeInsets.all(24))),
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(Icons.add),
+                Text('Add task'),
+                SizedBox(height: 0),
+              ],
+            ))
+      ],
+    );
+  }
+}
+
+class _TextContentWidget extends StatelessWidget {
+  const _TextContentWidget(this.content);
+
+  final CreateTextContentImpl content;
+
+  @override
+  Widget build(BuildContext context) {
+    return _ContentTextField(
+      controller: content.controller,
+    );
+  }
+}
+
+class _ContentTextField extends StatelessWidget {
+  const _ContentTextField({
+    required this.controller,
+    this.style,
+    this.hint = 'Some text...',
+  });
+  final AppTextEditingController controller;
+  final String hint;
+  final TextStyle? style;
+  @override
+  Widget build(BuildContext context) {
+    final textStyle =
+        AppTextTheme.textBase(weight: TextWeight.regular).copyWith(
+      color: Theme.of(context).colorScheme.outline,
+    );
+    return TextField(
+      maxLines: null,
+      controller: controller,
+      style: style ?? textStyle,
+      decoration: InputDecoration(
+        hintText: hint,
+        border: InputBorder.none,
+        hintStyle: style ?? textStyle,
+      ),
     );
   }
 }
@@ -247,16 +340,6 @@ class _AddContentButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppElevatedButton(
-      // style: ButtonStyle(
-      //   shape: WidgetStatePropertyAll(
-      //     RoundedRectangleBorder(
-      //       borderRadius: BorderRadius.circular(14),
-      //     ),
-      //   ),
-      //   padding: const WidgetStatePropertyAll(
-      //     EdgeInsets.symmetric(vertical: 26, horizontal: 16),
-      //   ),
-      // ),
       onPressed: content.canPopOnTap
           ? () {
               content.onPressed();
