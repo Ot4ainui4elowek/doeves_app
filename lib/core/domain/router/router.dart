@@ -11,6 +11,7 @@ import 'package:doeves_app/feauture/create_note/presentation/create_note_page_vm
 import 'package:doeves_app/feauture/main_page/presentation/pages/collections_of_notes_page/collections_of_notes_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/completed_notes_page/completed_notes_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/home_page/home_page.dart';
+import 'package:doeves_app/feauture/main_page/presentation/pages/home_page/home_page_vm.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/main_page/main_page_large.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/main_page/main_page_small.dart';
 import 'package:doeves_app/feauture/search_note_page/presentation/search_note_page.dart';
@@ -90,7 +91,9 @@ final router = GoRouter(
           routes: [
             GoRoute(
               path: AppRoutes.notesHomePage,
-              builder: (context, state) => const NotesHomePage(),
+              builder: (context, state) => NotesHomePage(
+                vm: NotesHomePageViewModel(),
+              ),
             ),
           ],
         ),

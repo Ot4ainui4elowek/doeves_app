@@ -1,4 +1,5 @@
 import 'package:doeves_app/core/presentation/app_bars/title_app_bar.dart';
+import 'package:doeves_app/core/presentation/app_divider.dart';
 import 'package:doeves_app/core/presentation/app_wrapper.dart';
 import 'package:doeves_app/core/presentation/buttons/app_elevated_button.dart';
 import 'package:doeves_app/core/presentation/text_fields/controllers/app_text_editing_controller.dart';
@@ -60,27 +61,43 @@ class _CreateNotePageState extends State<CreateNotePage> {
   }
 
   Widget get _contentListBuilder => vm.contentList.observer(
-        (context, value) => ListView.separated(
+        (context, value) => ReorderableListView.builder(
+          //buildDefaultDragHandles: false,
+          onReorder: (oldIndex, newIndex) => vm.onContentDrag(
+            oldIndex: oldIndex,
+            newIndex: newIndex,
+            context: context,
+          ),
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) => _ContentFactoryWidget(
+            key: ValueKey(value[index]),
             content: value[index],
             deleteContent: vm.deleteContent,
           ),
-          separatorBuilder: (context, index) => const Divider(
-            height: 25,
-          ),
+          // separatorBuilder: (context, index) => AppDivider(
+          //   context: context,
+          //   height: 25,
+          // ),
           itemCount: vm.contentList.length,
         ),
       );
 
   Widget get _bodyBuilder => SingleChildScrollView(
         child: Container(
-          margin: const EdgeInsets.all(16),
+          clipBehavior: Clip.antiAlias,
+          decoration: const BoxDecoration(),
           child: Column(
             children: [
-              _titleBuilder,
-              _descriptionBuilder,
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  children: [
+                    _titleBuilder,
+                    _descriptionBuilder,
+                  ],
+                ),
+              ),
               _contentListBuilder,
             ],
           ),
@@ -114,6 +131,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
 
 class _ContentFactoryWidget extends StatelessWidget {
   const _ContentFactoryWidget({
+    super.key,
     required this.content,
     required this.deleteContent,
   });
@@ -137,6 +155,7 @@ class _ContentFactoryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _ContentWidget(
+      key: ValueKey(content),
       contentBuilder: contentBuilder(),
       deleteContent: deleteContent,
       id: content.id,
@@ -145,34 +164,45 @@ class _ContentFactoryWidget extends StatelessWidget {
 }
 
 class _ContentWidget extends StatelessWidget {
-  const _ContentWidget(
-      {required this.contentBuilder,
-      required this.deleteContent,
-      required this.id});
+  const _ContentWidget({
+    super.key,
+    required this.contentBuilder,
+    required this.deleteContent,
+    required this.id,
+  });
   final Widget contentBuilder;
   final int id;
   final void Function(int id) deleteContent;
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 56),
-          child: contentBuilder,
+    return Dismissible(
+      direction: DismissDirection.endToStart,
+      onDismissed: (direction) {
+        deleteContent(id);
+      },
+      key: ValueKey(id),
+      background: Container(
+        key: ValueKey(id),
+        color: Theme.of(context).colorScheme.surfaceContainer,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 40),
+              child: contentBuilder,
+            ),
+            // Positioned(
+            //   top: 10,
+            //   right: 10,
+            //   child: Icon(Icons.drag_indicator_outlined,
+            //       color: Theme.of(context).colorScheme.outline),
+            // )
+          ],
         ),
-        Positioned(
-          top: 0,
-          right: 0,
-          child: IconButton(
-              onPressed: () {
-                deleteContent(id);
-              },
-              icon: const Icon(
-                Icons.close_rounded,
-              )),
-        )
-      ],
+      ),
     );
   }
 }
@@ -211,27 +241,41 @@ class _TaskListContentWidget extends StatelessWidget {
           (context, value) => ListView.separated(
             shrinkWrap: true,
             itemBuilder: (context, index) => _taskBuilder(index),
-            separatorBuilder: (context, index) => const Divider(),
+            separatorBuilder: (context, index) => AppDivider(
+              height: 25,
+              context: context,
+            ),
             itemCount: value.length,
           ),
         ),
-        const Divider(
+        AppDivider(
+          context: context,
           height: 25,
         ),
         OutlinedButton(
             onPressed: () {
               tasksList.add(TaskListItem());
             },
-            style: const ButtonStyle(
-                shape: WidgetStatePropertyAll(RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(14)))),
-                padding: WidgetStatePropertyAll(EdgeInsets.all(24))),
-            child: const Row(
+            style: ButtonStyle(
+                shape: const WidgetStatePropertyAll(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(14)),
+                  ),
+                ),
+                side: WidgetStatePropertyAll(
+                    BorderSide(color: Theme.of(context).colorScheme.outline)),
+                padding: const WidgetStatePropertyAll(EdgeInsets.all(24))),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(Icons.add),
-                Text('Add task'),
-                SizedBox(height: 0),
+                const Icon(
+                  Icons.add,
+                ),
+                Text(
+                  'Add task',
+                  style: AppTextTheme.textBase(weight: TextWeight.medium),
+                ),
+                const SizedBox(height: 0),
               ],
             ))
       ],

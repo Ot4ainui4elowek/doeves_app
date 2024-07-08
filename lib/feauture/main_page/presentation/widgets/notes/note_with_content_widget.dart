@@ -6,7 +6,10 @@ import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 
 class NoteWithContentWidget extends StatelessWidget {
-  const NoteWithContentWidget({super.key, required this.note});
+  const NoteWithContentWidget({
+    super.key,
+    required this.note,
+  });
   final NoteWithContentImpl note;
 
   Widget get _contentListViewBuilder => ListView.separated(
@@ -26,6 +29,7 @@ class NoteWithContentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surfaceContainer,
         borderRadius: const BorderRadius.all(Radius.circular(14)),

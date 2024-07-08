@@ -47,6 +47,7 @@ final darkTheme = ThemeData(
       iconColor: WidgetStatePropertyAll(AppDarkColors.outline),
     ),
   ),
+  dividerColor: AppDarkColors.outline,
   inputDecorationTheme: const InputDecorationTheme(
     prefixIconColor: AppDarkColors.outline,
     border:
