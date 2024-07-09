@@ -61,8 +61,7 @@ class AppContainer {
   void _initReposytoryScope() async {
     try {
       final apiUrl = dotenv.env['APi_ADRESS'];
-      final authDataSource =
-          AuthorizationClientDataSource.create(apiUrl: apiUrl);
+      final authDataSource = AuthorizationClientDataSource.createAmazon();
       final authorizationRepository =
           AuthorizationRepositoryImpl(authorizationDataSourse: authDataSource);
       final verificationRepository =

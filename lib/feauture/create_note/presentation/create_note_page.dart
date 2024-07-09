@@ -232,7 +232,7 @@ class _TaskListContentWidget extends StatelessWidget {
             ),
             side: WidgetStatePropertyAll(
                 BorderSide(color: Theme.of(context).colorScheme.outline)),
-            padding: const WidgetStatePropertyAll(EdgeInsets.all(24))),
+            padding: const WidgetStatePropertyAll(EdgeInsets.all(12))),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -261,6 +261,7 @@ class _TaskListContentWidget extends StatelessWidget {
         ),
         tasksList.observer(
           (context, value) => ReorderableListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
             buildDefaultDragHandles: false,
             onReorder: (oldIndex, newIndex) => tasksList.onTaskDrag(
                 context: context, oldIndex: oldIndex, newIndex: newIndex),
@@ -310,7 +311,6 @@ class _TaskWidget extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             Positioned(
-              top: 8,
               left: 0,
               child: _task.isSuccess.observer(
                 (context, successValue) => Checkbox(
@@ -330,7 +330,6 @@ class _TaskWidget extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: 8,
               right: 0,
               child: ReorderableDelayedDragStartListener(
                 index: _index,
