@@ -47,6 +47,9 @@ final lightTheme = ThemeData(
       iconColor: WidgetStatePropertyAll(AppLightColors.outline),
     ),
   ),
+  checkboxTheme: const CheckboxThemeData(
+    side: BorderSide(color: AppLightColors.outline, width: 2),
+  ),
   dividerColor: AppLightColors.outline,
   inputDecorationTheme: const InputDecorationTheme(
     prefixIconColor: AppLightColors.outline,

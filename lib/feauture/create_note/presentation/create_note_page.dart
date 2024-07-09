@@ -1,3 +1,4 @@
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:doeves_app/core/presentation/app_bars/title_app_bar.dart';
 import 'package:doeves_app/core/presentation/app_divider.dart';
 import 'package:doeves_app/core/presentation/app_wrapper.dart';
@@ -23,38 +24,32 @@ class CreateNotePage extends StatefulWidget {
 
 class _CreateNotePageState extends State<CreateNotePage> {
   CreateNotePageViewModel get vm => widget.vm;
-  Widget get _titleBuilder => Column(
-        children: [
-          const SizedBox(height: 24),
-          TextField(
-            maxLines: null,
-            controller: AppTextEditingController(),
-            style: AppTextTheme.text2Xl(weight: TextWeight.bold),
-            decoration: InputDecoration(
-              hintText: 'My New Idea!',
-              border: InputBorder.none,
-              hintStyle: AppTextTheme.text2Xl(weight: TextWeight.bold).copyWith(
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
-            ),
-          ),
-        ],
-      );
+  Widget get _titleBuilder {
+    final textStyle = AppTextTheme.text2Xl(weight: TextWeight.bold).copyWith(
+      color: Theme.of(context).colorScheme.onSurface,
+    );
+    return Column(
+      children: [
+        const SizedBox(height: 24),
+        _ContentTextField(
+          controller: AppTextEditingController(),
+          hint: 'My New Idea!',
+          style: textStyle,
+        ),
+      ],
+    );
+  }
+
   Widget get _descriptionBuilder {
     final textStyle = AppTextTheme.textBase(weight: TextWeight.medium).copyWith(
       color: Theme.of(context).colorScheme.outline,
     );
     return Column(
       children: [
-        TextField(
-          maxLines: null,
+        _ContentTextField(
           controller: AppTextEditingController(),
+          hint: "I'll do something...",
           style: textStyle,
-          decoration: InputDecoration(
-            hintText: "I'll do something...",
-            border: InputBorder.none,
-            hintStyle: textStyle,
-          ),
         ),
       ],
     );
@@ -62,7 +57,8 @@ class _CreateNotePageState extends State<CreateNotePage> {
 
   Widget get _contentListBuilder => vm.contentList.observer(
         (context, value) => ReorderableListView.builder(
-          //buildDefaultDragHandles: false,
+          anchor: 0,
+          buildDefaultDragHandles: false,
           onReorder: (oldIndex, newIndex) => vm.onContentDrag(
             oldIndex: oldIndex,
             newIndex: newIndex,
@@ -70,15 +66,16 @@ class _CreateNotePageState extends State<CreateNotePage> {
           ),
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) => _ContentFactoryWidget(
+          itemBuilder: (context, index) => ReorderableDragStartListener(
+            enabled: false,
             key: ValueKey(value[index]),
-            content: value[index],
-            deleteContent: vm.deleteContent,
+            index: index,
+            child: _ContentFactoryWidget(
+              index: index,
+              content: value[index],
+              deleteContent: vm.deleteContent,
+            ),
           ),
-          // separatorBuilder: (context, index) => AppDivider(
-          //   context: context,
-          //   height: 25,
-          // ),
           itemCount: vm.contentList.length,
         ),
       );
@@ -131,10 +128,11 @@ class _CreateNotePageState extends State<CreateNotePage> {
 
 class _ContentFactoryWidget extends StatelessWidget {
   const _ContentFactoryWidget({
-    super.key,
     required this.content,
     required this.deleteContent,
+    required this.index,
   });
+  final int index;
   final CreateContentEntity content;
   final void Function(int id) deleteContent;
   Widget contentBuilder() {
@@ -155,6 +153,7 @@ class _ContentFactoryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _ContentWidget(
+      index: index,
       key: ValueKey(content),
       contentBuilder: contentBuilder(),
       deleteContent: deleteContent,
@@ -169,7 +168,9 @@ class _ContentWidget extends StatelessWidget {
     required this.contentBuilder,
     required this.deleteContent,
     required this.id,
+    required this.index,
   });
+  final int index;
   final Widget contentBuilder;
   final int id;
   final void Function(int id) deleteContent;
@@ -191,15 +192,23 @@ class _ContentWidget extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             Padding(
-              padding: const EdgeInsets.only(right: 40),
+              padding: const EdgeInsets.only(right: 36),
               child: contentBuilder,
             ),
-            // Positioned(
-            //   top: 10,
-            //   right: 10,
-            //   child: Icon(Icons.drag_indicator_outlined,
-            //       color: Theme.of(context).colorScheme.outline),
-            // )
+            Positioned(
+              top: 0,
+              right: -8,
+              child: ReorderableDelayedDragStartListener(
+                index: index,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.drag_indicator_outlined,
+                    color: Theme.of(context).colorScheme.outline,
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -211,20 +220,33 @@ class _TaskListContentWidget extends StatelessWidget {
   const _TaskListContentWidget(this.tasksList);
   final CreateTasksListImpl tasksList;
 
-  Widget _taskBuilder(int index) {
-    return Obs(
-      rvList: [tasksList[index].isSuccess],
-      builder: (context) => CheckboxListTile(
-        contentPadding: EdgeInsets.zero,
-        title: _ContentTextField(controller: tasksList[index].text),
-        value: tasksList[index].isSuccess.value,
-        onChanged: (switchValue) {
-          tasksList[index].isSuccess(!tasksList[index].isSuccess.value);
-          switchValue = tasksList[index].isSuccess.value;
+  Widget _addButtonBuilder(BuildContext context) => OutlinedButton(
+        onPressed: () {
+          tasksList.add(TaskListItem());
         },
-      ),
-    );
-  }
+        style: ButtonStyle(
+            shape: const WidgetStatePropertyAll(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(14)),
+              ),
+            ),
+            side: WidgetStatePropertyAll(
+                BorderSide(color: Theme.of(context).colorScheme.outline)),
+            padding: const WidgetStatePropertyAll(EdgeInsets.all(24))),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Icon(
+              Icons.add,
+            ),
+            Text(
+              'Add task',
+              style: AppTextTheme.textBase(weight: TextWeight.medium),
+            ),
+            const SizedBox(height: 0),
+          ],
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -238,12 +260,20 @@ class _TaskListContentWidget extends StatelessWidget {
           ),
         ),
         tasksList.observer(
-          (context, value) => ListView.separated(
+          (context, value) => ReorderableListView.builder(
+            buildDefaultDragHandles: false,
+            onReorder: (oldIndex, newIndex) => tasksList.onTaskDrag(
+                context: context, oldIndex: oldIndex, newIndex: newIndex),
             shrinkWrap: true,
-            itemBuilder: (context, index) => _taskBuilder(index),
-            separatorBuilder: (context, index) => AppDivider(
-              height: 25,
-              context: context,
+            itemBuilder: (context, index) => ReorderableDragStartListener(
+              index: index,
+              enabled: false,
+              key: ValueKey(value[index]),
+              child: _TaskWidget(
+                index: index,
+                task: value[index],
+                deleteTask: tasksList.deleteTask,
+              ),
             ),
             itemCount: value.length,
           ),
@@ -252,33 +282,67 @@ class _TaskListContentWidget extends StatelessWidget {
           context: context,
           height: 25,
         ),
-        OutlinedButton(
-            onPressed: () {
-              tasksList.add(TaskListItem());
-            },
-            style: ButtonStyle(
-                shape: const WidgetStatePropertyAll(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(14)),
-                  ),
-                ),
-                side: WidgetStatePropertyAll(
-                    BorderSide(color: Theme.of(context).colorScheme.outline)),
-                padding: const WidgetStatePropertyAll(EdgeInsets.all(24))),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Icon(
-                  Icons.add,
-                ),
-                Text(
-                  'Add task',
-                  style: AppTextTheme.textBase(weight: TextWeight.medium),
-                ),
-                const SizedBox(height: 0),
-              ],
-            ))
+        _addButtonBuilder(context),
       ],
+    );
+  }
+}
+
+class _TaskWidget extends StatelessWidget {
+  const _TaskWidget({
+    required TaskListItem task,
+    required void Function(JWT) deleteTask,
+    required int index,
+  })  : _index = index,
+        _deleteTask = deleteTask,
+        _task = task;
+  final int _index;
+  final TaskListItem _task;
+  final void Function(JWT id) _deleteTask;
+  @override
+  Widget build(BuildContext context) {
+    return Dismissible(
+      key: ValueKey(_task),
+      direction: DismissDirection.endToStart,
+      onDismissed: (direction) => _deleteTask(_task.id),
+      child: Container(
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Positioned(
+              top: 8,
+              left: 0,
+              child: _task.isSuccess.observer(
+                (context, successValue) => Checkbox(
+                  value: successValue,
+                  onChanged: (value) {
+                    _task.isSuccess(!_task.isSuccess.value);
+                    value = _task.isSuccess.value;
+                  },
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(left: 45, right: 35),
+              child: _ContentTextField(
+                focusNode: _task.focusNode,
+                controller: _task.text,
+              ),
+            ),
+            Positioned(
+              top: 8,
+              right: 0,
+              child: ReorderableDelayedDragStartListener(
+                index: _index,
+                child: Icon(
+                  Icons.drag_indicator_outlined,
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
@@ -298,12 +362,16 @@ class _TextContentWidget extends StatelessWidget {
 
 class _ContentTextField extends StatelessWidget {
   const _ContentTextField({
-    required this.controller,
+    required AppTextEditingController controller,
     this.style,
-    this.hint = 'Some text...',
-  });
-  final AppTextEditingController controller;
-  final String hint;
+    String hint = 'Some text...',
+    FocusNode? focusNode,
+  })  : _hint = hint,
+        _controller = controller,
+        _focusNode = focusNode;
+  final FocusNode? _focusNode;
+  final AppTextEditingController _controller;
+  final String _hint;
   final TextStyle? style;
   @override
   Widget build(BuildContext context) {
@@ -312,11 +380,12 @@ class _ContentTextField extends StatelessWidget {
       color: Theme.of(context).colorScheme.outline,
     );
     return TextField(
+      focusNode: _focusNode,
       maxLines: null,
-      controller: controller,
+      controller: _controller,
       style: style ?? textStyle,
       decoration: InputDecoration(
-        hintText: hint,
+        hintText: _hint,
         border: InputBorder.none,
         hintStyle: style ?? textStyle,
       ),

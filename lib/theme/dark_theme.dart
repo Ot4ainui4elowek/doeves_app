@@ -47,6 +47,9 @@ final darkTheme = ThemeData(
       iconColor: WidgetStatePropertyAll(AppDarkColors.outline),
     ),
   ),
+  checkboxTheme: const CheckboxThemeData(
+    side: BorderSide(color: AppDarkColors.outline, width: 2),
+  ),
   dividerColor: AppDarkColors.outline,
   inputDecorationTheme: const InputDecorationTheme(
     prefixIconColor: AppDarkColors.outline,

@@ -14,23 +14,20 @@ class _NotesHomePageState extends State<NotesHomePage> {
   NotesHomePageViewModel get vm => widget.vm;
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-      child: vm.notes.observer(
-        (context, value) => ReorderableListView.builder(
-          buildDefaultDragHandles: false,
-          onReorder: (oldIndex, newIndex) => vm.onNoteDrag(oldIndex, newIndex),
-          itemBuilder: (context, index) => ReorderableDragStartListener(
-            key: ValueKey(index * value[index].description.length),
-            index: index,
-            child: NoteWithContentWidget(
-              note: value[index],
-            ),
+    return vm.notes.observer(
+      (context, value) => ReorderableListView.builder(
+        buildDefaultDragHandles: false,
+        onReorder: (oldIndex, newIndex) => vm.onNoteDrag(oldIndex, newIndex),
+        itemBuilder: (context, index) => ReorderableDelayedDragStartListener(
+          key: ValueKey(index * value[index].description.length),
+          index: index,
+          child: NoteWithContentWidget(
+            note: value[index],
           ),
-
-          //separatorBuilder: (context, index) => const SizedBox(height: 10),
-          itemCount: value.length,
         ),
+
+        //separatorBuilder: (context, index) => const SizedBox(height: 10),
+        itemCount: value.length,
       ),
     );
   }
