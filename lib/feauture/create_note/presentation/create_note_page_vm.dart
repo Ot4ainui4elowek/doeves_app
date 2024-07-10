@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:doeves_app/feauture/create_note/domain/entity/add_content_button_widget_entity.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/create_content_entity.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/tasks_list/create_task_list_impl.dart';
@@ -33,7 +35,8 @@ class CreateNotePageViewModel {
   }
 
   void _addTaskListContent() {
-    contentList.add(CreateTasksListImpl([TaskListItem()]));
+    contentList
+        .add(CreateTasksListImpl([TaskListItem(id: Random().nextInt(10000))]));
   }
 
   void deleteContent(int id) {

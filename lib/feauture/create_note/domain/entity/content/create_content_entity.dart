@@ -1,3 +1,4 @@
 abstract class CreateContentEntity {
-  late final int id;
+  const CreateContentEntity(this.id);
+  final int id;
 }

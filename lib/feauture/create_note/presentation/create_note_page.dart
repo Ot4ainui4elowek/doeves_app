@@ -1,15 +1,16 @@
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:doeves_app/core/presentation/app_bars/title_app_bar.dart';
-import 'package:doeves_app/core/presentation/app_divider.dart';
 import 'package:doeves_app/core/presentation/app_wrapper.dart';
-import 'package:doeves_app/core/presentation/buttons/app_elevated_button.dart';
+import 'package:doeves_app/core/presentation/buttons/app_text_cion_button.dart';
+import 'package:doeves_app/core/presentation/text_fields/clear_text_field.dart';
 import 'package:doeves_app/core/presentation/text_fields/controllers/app_text_editing_controller.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/add_content_button_widget_entity.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/create_content_entity.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/tasks_list/create_task_list_impl.dart';
-import 'package:doeves_app/feauture/create_note/domain/entity/content/tasks_list/task_list_item.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/text/create_text_content_impl.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page_vm.dart';
+import 'package:doeves_app/feauture/create_note/presentation/widgets/content_widget.dart';
+import 'package:doeves_app/feauture/create_note/presentation/widgets/tasks_list/tasks_list_widget.dart';
+import 'package:doeves_app/feauture/create_note/presentation/widgets/text_content_widget.dart';
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -31,10 +32,11 @@ class _CreateNotePageState extends State<CreateNotePage> {
     return Column(
       children: [
         const SizedBox(height: 24),
-        _ContentTextField(
+        ClearTextField(
+          context: context,
           controller: AppTextEditingController(),
-          hint: 'My New Idea!',
-          style: textStyle,
+          hintText: 'My New Idea!',
+          textStyle: textStyle,
         ),
       ],
     );
@@ -46,10 +48,11 @@ class _CreateNotePageState extends State<CreateNotePage> {
     );
     return Column(
       children: [
-        _ContentTextField(
+        ClearTextField(
+          context: context,
           controller: AppTextEditingController(),
-          hint: "I'll do something...",
-          style: textStyle,
+          hintText: "I'll do something...",
+          textStyle: textStyle,
         ),
       ],
     );
@@ -96,6 +99,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
                 ),
               ),
               _contentListBuilder,
+              const SizedBox(height: 50),
             ],
           ),
         ),
@@ -139,11 +143,11 @@ class _ContentFactoryWidget extends StatelessWidget {
     switch (content) {
       case CreateTextContentImpl():
         {
-          return _TextContentWidget(content as CreateTextContentImpl);
+          return TextContentWidget(content as CreateTextContentImpl);
         }
       case CreateTasksListImpl():
         {
-          return _TaskListContentWidget(content as CreateTasksListImpl);
+          return TaskListContentWidget(content as CreateTasksListImpl);
         }
       default:
         return const SizedBox(height: 0);
@@ -152,242 +156,12 @@ class _ContentFactoryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _ContentWidget(
+    return ContentWidget(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       index: index,
       key: ValueKey(content),
       contentBuilder: contentBuilder(),
-      deleteContent: deleteContent,
-      id: content.id,
-    );
-  }
-}
-
-class _ContentWidget extends StatelessWidget {
-  const _ContentWidget({
-    super.key,
-    required this.contentBuilder,
-    required this.deleteContent,
-    required this.id,
-    required this.index,
-  });
-  final int index;
-  final Widget contentBuilder;
-  final int id;
-  final void Function(int id) deleteContent;
-  @override
-  Widget build(BuildContext context) {
-    return Dismissible(
-      direction: DismissDirection.endToStart,
-      onDismissed: (direction) {
-        deleteContent(id);
-      },
-      key: ValueKey(id),
-      background: Container(
-        key: ValueKey(id),
-        color: Theme.of(context).colorScheme.surfaceContainer,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 36),
-              child: contentBuilder,
-            ),
-            Positioned(
-              top: 0,
-              right: -8,
-              child: ReorderableDelayedDragStartListener(
-                index: index,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Icon(
-                    Icons.drag_indicator_outlined,
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _TaskListContentWidget extends StatelessWidget {
-  const _TaskListContentWidget(this.tasksList);
-  final CreateTasksListImpl tasksList;
-
-  Widget _addButtonBuilder(BuildContext context) => OutlinedButton(
-        onPressed: () {
-          tasksList.add(TaskListItem());
-        },
-        style: ButtonStyle(
-            shape: const WidgetStatePropertyAll(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(14)),
-              ),
-            ),
-            side: WidgetStatePropertyAll(
-                BorderSide(color: Theme.of(context).colorScheme.outline)),
-            padding: const WidgetStatePropertyAll(EdgeInsets.all(12))),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Icon(
-              Icons.add,
-            ),
-            Text(
-              'Add task',
-              style: AppTextTheme.textBase(weight: TextWeight.medium),
-            ),
-            const SizedBox(height: 0),
-          ],
-        ),
-      );
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _ContentTextField(
-          controller: tasksList.listTitle,
-          hint: 'This is a list of something...',
-          style: AppTextTheme.textBase(weight: TextWeight.medium).copyWith(
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ),
-        tasksList.observer(
-          (context, value) => ReorderableListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            buildDefaultDragHandles: false,
-            onReorder: (oldIndex, newIndex) => tasksList.onTaskDrag(
-                context: context, oldIndex: oldIndex, newIndex: newIndex),
-            shrinkWrap: true,
-            itemBuilder: (context, index) => ReorderableDragStartListener(
-              index: index,
-              enabled: false,
-              key: ValueKey(value[index]),
-              child: _TaskWidget(
-                index: index,
-                task: value[index],
-                deleteTask: tasksList.deleteTask,
-              ),
-            ),
-            itemCount: value.length,
-          ),
-        ),
-        AppDivider(
-          context: context,
-          height: 25,
-        ),
-        _addButtonBuilder(context),
-      ],
-    );
-  }
-}
-
-class _TaskWidget extends StatelessWidget {
-  const _TaskWidget({
-    required TaskListItem task,
-    required void Function(JWT) deleteTask,
-    required int index,
-  })  : _index = index,
-        _deleteTask = deleteTask,
-        _task = task;
-  final int _index;
-  final TaskListItem _task;
-  final void Function(JWT id) _deleteTask;
-  @override
-  Widget build(BuildContext context) {
-    return Dismissible(
-      key: ValueKey(_task),
-      direction: DismissDirection.endToStart,
-      onDismissed: (direction) => _deleteTask(_task.id),
-      child: Container(
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Positioned(
-              left: 0,
-              child: _task.isSuccess.observer(
-                (context, successValue) => Checkbox(
-                  value: successValue,
-                  onChanged: (value) {
-                    _task.isSuccess(!_task.isSuccess.value);
-                    value = _task.isSuccess.value;
-                  },
-                ),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(left: 45, right: 35),
-              child: _ContentTextField(
-                focusNode: _task.focusNode,
-                controller: _task.text,
-              ),
-            ),
-            Positioned(
-              right: 0,
-              child: ReorderableDelayedDragStartListener(
-                index: _index,
-                child: Icon(
-                  Icons.drag_indicator_outlined,
-                  color: Theme.of(context).colorScheme.outline,
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _TextContentWidget extends StatelessWidget {
-  const _TextContentWidget(this.content);
-
-  final CreateTextContentImpl content;
-
-  @override
-  Widget build(BuildContext context) {
-    return _ContentTextField(
-      controller: content.controller,
-    );
-  }
-}
-
-class _ContentTextField extends StatelessWidget {
-  const _ContentTextField({
-    required AppTextEditingController controller,
-    this.style,
-    String hint = 'Some text...',
-    FocusNode? focusNode,
-  })  : _hint = hint,
-        _controller = controller,
-        _focusNode = focusNode;
-  final FocusNode? _focusNode;
-  final AppTextEditingController _controller;
-  final String _hint;
-  final TextStyle? style;
-  @override
-  Widget build(BuildContext context) {
-    final textStyle =
-        AppTextTheme.textBase(weight: TextWeight.regular).copyWith(
-      color: Theme.of(context).colorScheme.outline,
-    );
-    return TextField(
-      focusNode: _focusNode,
-      maxLines: null,
-      controller: _controller,
-      style: style ?? textStyle,
-      decoration: InputDecoration(
-        hintText: _hint,
-        border: InputBorder.none,
-        hintStyle: style ?? textStyle,
-      ),
+      deleteContent: () => deleteContent(content.id),
     );
   }
 }
@@ -397,6 +171,9 @@ class _BottomBar extends StatelessWidget {
   final List<AddContentButtonWidgetEntity> _contentWidgetDatatList;
 
   void _showNavigationBar(BuildContext context) {
+    if (FocusScope.of(context).hasFocus) {
+      FocusScope.of(context).unfocus();
+    }
     showModalBottomSheet(
       showDragHandle: true,
       context: context,
@@ -451,28 +228,22 @@ class _AddContentButtonWidget extends StatelessWidget {
   final AddContentButtonWidgetEntity content;
   @override
   Widget build(BuildContext context) {
-    return AppElevatedButton(
+    return AppTextIconButton(
       onPressed: content.canPopOnTap
           ? () {
               content.onPressed();
               context.pop();
             }
           : content.onPressed,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Icon(
-            content.icon,
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
-          Text(
-            content.title,
-            style: AppTextTheme.textBase(
-              weight: TextWeight.medium,
-            ).copyWith(color: Theme.of(context).colorScheme.onSurface),
-          ),
-          const SizedBox(height: 0),
-        ],
+      icon: Icon(
+        content.icon,
+        color: Theme.of(context).colorScheme.onSurface,
+      ),
+      text: Text(
+        content.title,
+        style: AppTextTheme.textBase(
+          weight: TextWeight.medium,
+        ).copyWith(color: Theme.of(context).colorScheme.onSurface),
       ),
     );
   }

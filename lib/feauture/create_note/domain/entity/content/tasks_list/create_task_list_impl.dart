@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:doeves_app/core/presentation/text_fields/controllers/app_text_editing_controller.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/create_content_entity.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/tasks_list/task_list_item.dart';
@@ -15,7 +14,7 @@ class CreateTasksListImpl extends Rv<List<TaskListItem>>
     id = Random().nextInt(1000);
   }
 
-  void deleteTask(JWT id) {
+  void deleteTask(int id) {
     removeWhere((task) => task.id == id);
   }
 
