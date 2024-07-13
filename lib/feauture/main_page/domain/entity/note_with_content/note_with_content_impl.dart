@@ -6,9 +6,13 @@ class NoteWithContentImpl implements Note {
     required this.title,
     required this.description,
     required this.content,
+    required this.id,
   });
   @override
   final String title;
   final String description;
   final List<Content> content;
+
+  @override
+  final int id;
 }

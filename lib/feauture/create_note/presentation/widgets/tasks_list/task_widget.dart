@@ -17,39 +17,35 @@ class TaskWidget extends StatelessWidget {
   final void Function(int id) _deleteTask;
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
-        key: ValueKey(_task),
-        direction: DismissDirection.endToStart,
-        onDismissed: (direction) => _deleteTask(_task.id),
-        child: ContentWidget(
-          deleteContent: () => _deleteTask(_task.id),
-          index: _index,
-          contentBuilder: Stack(
-            children: [
-              Positioned(
-                left: 0,
-                child: _task.isSuccess.observer(
-                  (context, successValue) => Checkbox(
-                    value: successValue,
-                    onChanged: (value) {
-                      _task.isSuccess(!_task.isSuccess.value);
-                      value = _task.isSuccess.value;
-                    },
-                  ),
-                ),
+    return ContentWidget(
+      deleteContent: () => _deleteTask(_task.id),
+      index: _index,
+      contentBuilder: Stack(
+        children: [
+          Positioned(
+            left: 0,
+            child: _task.isSuccess.observer(
+              (context, successValue) => Checkbox(
+                value: successValue,
+                onChanged: (value) {
+                  _task.isSuccess(!_task.isSuccess.value);
+                  value = _task.isSuccess.value;
+                },
               ),
-              Container(
-                margin: const EdgeInsets.only(
-                  left: 45,
-                ),
-                child: ClearTextField(
-                  context: context,
-                  focusNode: _task.focusNode,
-                  controller: _task.text,
-                ),
-              ),
-            ],
+            ),
           ),
-        ));
+          Container(
+            margin: const EdgeInsets.only(
+              left: 45,
+            ),
+            child: ClearTextField(
+              context: context,
+              focusNode: _task.focusNode,
+              controller: _task.text,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

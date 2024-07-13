@@ -1,4 +1,7 @@
+import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
+import 'package:doeves_app/feauture/main_page/data/notes_mocked_repository_impl.dart';
 import 'package:doeves_app/feauture/main_page/domain/entity/note_with_content/note_with_content_impl.dart';
+import 'package:flutter/material.dart';
 import 'package:reactive_variables/reactive_variables.dart';
 
 // [
@@ -70,11 +73,70 @@ import 'package:reactive_variables/reactive_variables.dart';
 //   ]
 
 class NotesHomePageViewModel {
-  final Rv<List<NoteWithContentImpl>> notes = List.generate(
-    8,
-    (index) => NoteWithContentImpl(
-        title: 'title $index', description: 'descr', content: []),
-  ).rv;
+  NotesHomePageViewModel({required NotesMockedRepositoryImpl repository})
+      : _repository = repository;
+
+  late final ScrollController scrollController = ScrollController();
+  void init() {
+    debugPrint('init');
+    scrollController.addListener(checkScroll);
+  }
+
+  void dispose() {
+    scrollController.removeListener(checkScroll);
+  }
+
+  void checkScroll() {
+    if (!isLoading.value &&
+        scrollController.position.atEdge &&
+        scrollController.position.pixels != 0) {
+      getNotes();
+      debugPrint('yes');
+    } else {
+      debugPrint('no');
+    }
+  }
+
+  final isLoading = false.rv;
+
+  final NotesMockedRepositoryImpl _repository;
+
+  final Rv<List<NoteWithContentImpl>> notes = Rv([]);
+
+  Future<void> getNotes() async {
+    isLoading(true);
+    final result =
+        await _repository.getAllNotes(ofest: notes.length, limit: 10);
+    isLoading(false);
+    switch (result) {
+      case GoodUseCaseResult<List<NoteWithContentImpl>>(:final data):
+        {
+          notes.addAll(data);
+        }
+      default:
+        {
+          debugPrint('bad');
+        }
+    }
+  }
+
+  Future<void> addNote(
+      {String description = 'This is added note',
+      title = 'WTF its work!'}) async {
+    final result =
+        await _repository.addNote(description: description, title: title);
+    switch (result) {
+      case GoodUseCaseResult<NoteWithContentImpl>(:final data):
+        {
+          notes.value.insert(0, data);
+          notes.refresh();
+        }
+      default:
+        {
+          debugPrint('bad');
+        }
+    }
+  }
 
   void onNoteDrag(int oldIndex, int newIndex) {
     if (oldIndex < newIndex) {

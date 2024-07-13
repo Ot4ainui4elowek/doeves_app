@@ -13,13 +13,36 @@ class NotesHomePage extends StatefulWidget {
 class _NotesHomePageState extends State<NotesHomePage> {
   NotesHomePageViewModel get vm => widget.vm;
   @override
+  void initState() {
+    vm.getNotes();
+    vm.init();
+
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant oldWidget) {
+    vm.getNotes();
+    vm.init();
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    vm.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return vm.notes.observer(
       (context, value) => ReorderableListView.builder(
+        scrollController: vm.scrollController,
+        shrinkWrap: true,
         buildDefaultDragHandles: false,
         onReorder: (oldIndex, newIndex) => vm.onNoteDrag(oldIndex, newIndex),
         itemBuilder: (context, index) => ReorderableDelayedDragStartListener(
-          key: ValueKey(index * value[index].description.length),
+          key: ValueKey(value[index].description),
           index: index,
           child: NoteWithContentWidget(
             note: value[index],
