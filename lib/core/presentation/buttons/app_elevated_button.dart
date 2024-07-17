@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:doeves_app/theme/light_colors.dart';
 import 'package:flutter/material.dart';
 
 class AppElevatedButton extends StatefulWidget {
@@ -8,12 +7,16 @@ class AppElevatedButton extends StatefulWidget {
   final FutureOr<void> Function()? onPressed;
 
   final double? width;
+  final double? elevation;
+  final Color? progressIndicatorColor;
 
   const AppElevatedButton({
     super.key,
     this.onPressed,
     this.child,
     this.width,
+    this.elevation,
+    this.progressIndicatorColor,
   });
 
   @override
@@ -55,7 +58,7 @@ class _AppElevatedButtonState extends State<AppElevatedButton> {
       child: ElevatedButton(
         onPressed: widget.onPressed != null ? _onPressed : null,
         style: ElevatedButton.styleFrom(
-            elevation: 0,
+            elevation: widget.elevation ?? 0,
             backgroundColor: Theme.of(context).colorScheme.primaryContainer),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 18),
@@ -63,8 +66,11 @@ class _AppElevatedButtonState extends State<AppElevatedButton> {
               ? widget.child
               : SizedBox(
                   width: _buttonHeight! - 36.0,
-                  child: const CircularProgressIndicator.adaptive(
-                    backgroundColor: AppLightColors.background,
+                  child: CircularProgressIndicator.adaptive(
+                    valueColor: AlwaysStoppedAnimation(
+                        widget.progressIndicatorColor ??
+                            Theme.of(context).colorScheme.onSurface),
+                    backgroundColor: Theme.of(context).colorScheme.surface,
                   ),
                 ),
         ),

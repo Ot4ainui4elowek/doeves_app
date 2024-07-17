@@ -47,9 +47,6 @@ abstract mixin class RestApiHandler {
               return RestApiResult.errorWitchData(
                 errorData: errorResponce,
                 statusCode: res.statusCode!,
-                errorList: [
-                  SpecificError(errorResponce.content),
-                ],
               );
             }
           case >= 500:

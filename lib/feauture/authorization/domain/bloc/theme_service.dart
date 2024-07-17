@@ -6,8 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'theme_event.dart';
 part 'theme_state.dart';
 
-class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
-  ThemeBloc() : super(LightTheme()) {
+class ThemeService extends Bloc<ThemeEvent, ThemeState> {
+  ThemeService() : super(LightTheme()) {
     on<ThemeSwitchDark>((event, emit) {
       emit(DarkTheme());
     });

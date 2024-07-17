@@ -1,84 +1,22 @@
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
-import 'package:doeves_app/feauture/main_page/data/notes_mocked_repository_impl.dart';
+import 'package:doeves_app/feauture/main_page/data/repository/notes_mocked_repository_impl.dart';
 import 'package:doeves_app/feauture/main_page/domain/entity/note_with_content/note_with_content_impl.dart';
+import 'package:doeves_app/feauture/main_page/domain/notes/notes_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:reactive_variables/reactive_variables.dart';
-
-// [
-//     NoteWithContentImpl(
-//       title: 'This is first note',
-//       description:
-//           'This is description, и тут можно писать своё описание заметки',
-//       content: [
-//         const TextContentImpl('this is macbook'),
-//         const TextContentImpl('some text in note'),
-//         const ImageContentImpl(
-//             'https://xstore.md/images/product/2022/06/Apple-Macbook-Air-M2-Space-Gray-2.jpg'),
-//       ],
-//     ),
-//     NoteWithContentImpl(
-//       title: 'This is first note',
-//       description:
-//           'This is description, и тут можно писать своё описание заметки',
-//       content: [
-//         const TextContentImpl('this is macbook'),
-//         const TextContentImpl('some text in note'),
-//       ],
-//     ),
-//     NoteWithContentImpl(
-//       title: 'This is first note',
-//       description:
-//           'This is description, и тут можно писать своё описание заметки',
-//       content: [
-//         const TextContentImpl('this is macbook'),
-//         const TextContentImpl('some text in note'),
-//       ],
-//     ),
-//     NoteWithContentImpl(
-//       title: 'This is first note',
-//       description:
-//           'This is description, и тут можно писать своё описание заметки',
-//       content: [
-//         const TextContentImpl('this is macbook'),
-//         const TextContentImpl('some text in note'),
-//       ],
-//     ),
-//     NoteWithContentImpl(
-//       title: 'This is first note',
-//       description:
-//           'This is description, и тут можно писать своё описание заметки',
-//       content: [
-//         const TextContentImpl('this is macbook'),
-//         const TextContentImpl('some text in note'),
-//       ],
-//     ),
-//     NoteWithContentImpl(
-//       title: 'This is first note',
-//       description:
-//           'This is description, и тут можно писать своё описание заметки',
-//       content: [
-//         const TextContentImpl('this is macbook'),
-//         const TextContentImpl('some text in note'),
-//       ],
-//     ),
-//     NoteWithContentImpl(
-//       title: 'This is first note',
-//       description:
-//           'This is description, и тут можно писать своё описание заметки',
-//       content: [
-//         const TextContentImpl('this is macbook'),
-//         const TextContentImpl('some text in note'),
-//       ],
-//     ),
-//   ]
 
 class NotesHomePageViewModel {
   NotesHomePageViewModel({required NotesMockedRepositoryImpl repository})
       : _repository = repository;
 
+  final GlobalKey<RefreshIndicatorState> refreshIndicatorKey = GlobalKey();
+
   late final ScrollController scrollController = ScrollController();
-  void init() {
+  void init() async {
     debugPrint('init');
+    notesBloc.add(NotesEvent.loadingNotes());
+    await getNotes();
+    notesBloc.add(NotesEvent.clearState());
     scrollController.addListener(checkScroll);
   }
 
@@ -90,10 +28,8 @@ class NotesHomePageViewModel {
     if (!isLoading.value &&
         scrollController.position.atEdge &&
         scrollController.position.pixels != 0) {
+      notesBloc.add(NotesEvent.loadingNotes());
       getNotes();
-      debugPrint('yes');
-    } else {
-      debugPrint('no');
     }
   }
 
@@ -103,21 +39,27 @@ class NotesHomePageViewModel {
 
   final Rv<List<NoteWithContentImpl>> notes = Rv([]);
 
+  final NotesBloc notesBloc = NotesBloc();
+
   Future<void> getNotes() async {
     isLoading(true);
+
     final result =
         await _repository.getAllNotes(ofest: notes.length, limit: 10);
+
+    notesBloc.add(NotesEvent.fetchNotes(result: result));
+
     isLoading(false);
-    switch (result) {
-      case GoodUseCaseResult<List<NoteWithContentImpl>>(:final data):
-        {
-          notes.addAll(data);
-        }
-      default:
-        {
-          debugPrint('bad');
-        }
+
+    if (result is GoodUseCaseResult<List<NoteWithContentImpl>>) {
+      notes.addAll(result.data);
     }
+  }
+
+  Future<void> refreshNotes() async {
+    notesBloc.add(NotesEvent.clearState());
+    notes.clear();
+    await getNotes();
   }
 
   Future<void> addNote(
@@ -125,6 +67,7 @@ class NotesHomePageViewModel {
       title = 'WTF its work!'}) async {
     final result =
         await _repository.addNote(description: description, title: title);
+
     switch (result) {
       case GoodUseCaseResult<NoteWithContentImpl>(:final data):
         {
@@ -138,11 +81,20 @@ class NotesHomePageViewModel {
     }
   }
 
+  bool isTouchDevice(BuildContext context) {
+    final platform = Theme.of(context).platform;
+    return platform == TargetPlatform.android ||
+        platform == TargetPlatform.iOS ||
+        platform == TargetPlatform.fuchsia;
+  }
+
   void onNoteDrag(int oldIndex, int newIndex) {
     if (oldIndex < newIndex) {
       newIndex--;
     }
+
     final note = notes.removeAt(oldIndex);
+
     notes.value.insert(newIndex, note);
   }
 }

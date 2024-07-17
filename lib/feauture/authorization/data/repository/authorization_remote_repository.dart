@@ -30,10 +30,9 @@ class AuthorizationRepositoryImpl
           }
         case ErrorWitchDataRestApiResult<SignInResponseModel>(
             :final errorData,
-            :final errorList
           ):
           {
-            return UseCaseResult.bad(errorList, errorData: errorData);
+            return UseCaseResult.dataBad(errorData);
           }
         case ErrorRestApiResult<SignInResponseModel>(:final errorList):
           {
@@ -67,10 +66,9 @@ class AuthorizationRepositoryImpl
           }
         case ErrorWitchDataRestApiResult<SignUpResponseModel>(
             :final errorData,
-            :final errorList
           ):
           {
-            return UseCaseResult.bad(errorList, errorData: errorData);
+            return UseCaseResult.dataBad(errorData);
           }
         case ErrorRestApiResult<SignUpResponseModel>(:final errorList):
           {

@@ -8,8 +8,8 @@ import 'package:doeves_app/feauture/authorization/presentation/verification_page
 import 'package:doeves_app/feauture/authorization/presentation/verification_page/verification_page_vm.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page_vm.dart';
-import 'package:doeves_app/feauture/main_page/data/notes_mocked_data_impl.dart';
-import 'package:doeves_app/feauture/main_page/data/notes_mocked_repository_impl.dart';
+import 'package:doeves_app/feauture/main_page/data/repository/notes_mocked_repository_impl.dart';
+import 'package:doeves_app/feauture/main_page/data/source/notes_mocked_data_impl.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/collections_of_notes_page/collections_of_notes_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/completed_notes_page/completed_notes_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/home_page/home_page.dart';

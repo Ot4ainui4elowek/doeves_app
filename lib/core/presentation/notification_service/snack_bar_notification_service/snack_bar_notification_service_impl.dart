@@ -19,19 +19,19 @@ class SnackBarNotificationServiceImpl implements NotificationService {
               message: goodUseCaseMessage,
               theme: SnackBarThemeImpl.seccess());
         }
-      case BadUseCaseResult(:final errorData, :final errorList):
+      case DataBadUseCaseResult(:final errorData):
         {
-          if (errorData != null) {
-            showNotification(
-                context: context,
-                message: errorData.content,
-                theme: SnackBarThemeImpl.error());
-          } else {
-            showNotification(
-                context: context,
-                message: errorList.first.code,
-                theme: SnackBarThemeImpl.error());
-          }
+          showNotification(
+              context: context,
+              message: errorData.content,
+              theme: SnackBarThemeImpl.error());
+        }
+      case BadUseCaseResult(:final errorList):
+        {
+          showNotification(
+              context: context,
+              message: errorList.first.code,
+              theme: SnackBarThemeImpl.error());
         }
     }
   }

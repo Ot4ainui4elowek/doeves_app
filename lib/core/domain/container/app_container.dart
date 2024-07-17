@@ -1,17 +1,19 @@
 import 'dart:developer';
 
 import 'package:doeves_app/core/data/secure_storage/secure_storage.dart';
+import 'package:doeves_app/core/data/shared_preferences/shared_preferences_service.dart';
 import 'package:doeves_app/core/domain/network_info/network_info.dart';
 import 'package:doeves_app/core/presentation/notification_service/notification_service.dart';
 import 'package:doeves_app/core/presentation/notification_service/snack_bar_notification_service/snack_bar_notification_service_impl.dart';
 import 'package:doeves_app/feauture/authorization/data/repository/authorization_remote_repository.dart';
 import 'package:doeves_app/feauture/authorization/data/repository/verification_repository_impl.dart';
 import 'package:doeves_app/feauture/authorization/data/source/authorization_client_data_source.dart';
-import 'package:doeves_app/feauture/authorization/domain/bloc/theme_bloc.dart';
+import 'package:doeves_app/feauture/authorization/domain/bloc/theme_service.dart';
 import 'package:doeves_app/feauture/authorization/domain/repository/authorization_repository.dart';
 import 'package:doeves_app/feauture/authorization/domain/repository/verification_repository.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppContainer {
   late final ServiceScope serviceScope;
@@ -45,13 +47,20 @@ class AppContainer {
 
   void _initServiceScope() async {
     try {
-      final themeService = ThemeBloc();
+      final themeService = ThemeService();
       final notificationService = SnackBarNotificationServiceImpl();
       final networkService = NetworkInfoServiceImpl();
+      final preferences = await SharedPreferences.getInstance();
+      final sharedPreferncesService = SharedPreferencesService(preferences);
+      final themeIsLight = await sharedPreferncesService.getThemeIsLight();
+      if (!themeIsLight) {
+        themeService.add(ThemeSwitchDark());
+      }
       serviceScope = ServiceScope(
         themeService: themeService,
         notificationService: notificationService,
         networkService: networkService,
+        sharedPreferencesService: sharedPreferncesService,
       );
     } catch (e, st) {
       log('Services scope has not been initialized', error: e, stackTrace: st);
@@ -61,8 +70,7 @@ class AppContainer {
   void _initReposytoryScope() async {
     try {
       final apiUrl = dotenv.env['APi_ADRESS'];
-      final authDataSource =
-          AuthorizationClientDataSource.create(apiUrl: apiUrl);
+      final authDataSource = AuthorizationClientDataSource.createAmazon();
       final authorizationRepository =
           AuthorizationRepositoryImpl(authorizationDataSourse: authDataSource);
       final verificationRepository =
@@ -84,13 +92,15 @@ class SecureScope {
 }
 
 class ServiceScope {
-  final ThemeBloc themeService;
+  final ThemeService themeService;
   final NotificationService notificationService;
   final NetworkInfoServiceImpl networkService;
+  final SharedPreferencesService sharedPreferencesService;
   const ServiceScope({
     required this.notificationService,
     required this.themeService,
     required this.networkService,
+    required this.sharedPreferencesService,
   });
 }
 

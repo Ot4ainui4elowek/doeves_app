@@ -27,10 +27,9 @@ class VerificationRepositoryImpl
           }
         case ErrorWitchDataRestApiResult<VerificationResponseModel>(
             :final errorData,
-            :final errorList
           ):
           {
-            return UseCaseResult.bad(errorList, errorData: errorData);
+            return UseCaseResult.dataBad(errorData);
           }
         case ErrorRestApiResult<VerificationResponseModel>(:final errorList):
           {
@@ -57,10 +56,9 @@ class VerificationRepositoryImpl
           }
         case ErrorWitchDataRestApiResult<VerificationResponseModel>(
             :final errorData,
-            :final errorList
           ):
           {
-            return UseCaseResult.bad(errorList, errorData: errorData);
+            return UseCaseResult.dataBad(errorData);
           }
         case ErrorRestApiResult<VerificationResponseModel>(:final errorList):
           {

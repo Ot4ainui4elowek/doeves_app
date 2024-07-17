@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:doeves_app/theme/light_colors.dart';
 import 'package:flutter/material.dart';
 
 class AppFilledButton extends StatefulWidget {
@@ -12,12 +11,15 @@ class AppFilledButton extends StatefulWidget {
 
   final double? height;
 
+  final Color? progressIndicatorColor;
+
   const AppFilledButton({
     super.key,
     this.onPressed,
     this.child,
     this.width,
     this.height,
+    this.progressIndicatorColor,
   });
 
   @override
@@ -66,8 +68,12 @@ class _AppFilledButtonState extends State<AppFilledButton> {
               ? widget.child
               : SizedBox(
                   width: _buttonHeight! - 36.0,
-                  child: const CircularProgressIndicator.adaptive(
-                    backgroundColor: AppLightColors.background,
+                  child: CircularProgressIndicator.adaptive(
+                    valueColor: AlwaysStoppedAnimation(
+                        widget.progressIndicatorColor ??
+                            Theme.of(context).colorScheme.onPrimaryContainer),
+                    backgroundColor:
+                        Theme.of(context).colorScheme.primaryContainer,
                   ),
                 ),
         ),

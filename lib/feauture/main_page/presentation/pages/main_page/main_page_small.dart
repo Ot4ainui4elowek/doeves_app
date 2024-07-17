@@ -2,6 +2,7 @@ import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/presentation/app_bars/custom_app_bar.dart';
 import 'package:doeves_app/core/presentation/hero_widgets/hero_search_widget.dart';
 import 'package:doeves_app/feauture/app_drawer/presentation/app_drawer.dart';
+import 'package:doeves_app/feauture/app_drawer/presentation/app_drawer_vm.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/add_note_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -80,7 +81,9 @@ class MainPageSmallState extends State<MainPageSmall> {
       appBar: _appBarBuilder,
       body: widget._navigationShell,
       bottomNavigationBar: _bottomNavigationBarBuilder,
-      drawer: AppDrawer(),
+      drawer: AppDrawer(
+        vm: AppDrawerViewModel(),
+      ),
       floatingActionButton: const AddNoteButton(
         elevation: 0,
         shape: CircleBorder(),

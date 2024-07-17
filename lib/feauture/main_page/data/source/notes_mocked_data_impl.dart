@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:doeves_app/core/domain/app_error/app_error.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
-import 'package:doeves_app/feauture/main_page/data/notes_mocked_data.dart';
+import 'package:doeves_app/feauture/main_page/data/source/notes_mocked_data.dart';
 import 'package:doeves_app/feauture/main_page/domain/entity/note_with_content/note_with_content_impl.dart';
 import 'package:reactive_variables/reactive_variables.dart';
 
@@ -59,16 +59,23 @@ class NotesMockedDataImpl implements NotesMockedData {
   @override
   Future<RestApiResult<List<NoteWithContentImpl>>> getAllNotes(
       {required int ofest, required int limit}) async {
-    await Future.delayed(const Duration(seconds: 2));
-    if (ofest < 0 || limit < 0 || ofest >= _notesList.length || limit > 20) {
+    await Future.delayed(const Duration(seconds: 1));
+    if (ofest < 0 || limit < 0 || ofest > _notesList.length || limit > 20) {
       return RestApiResult.error(statusCode: 411, errorList: [
         SpecificError(
             ' 	The server refuses to accept the request without a defined Content- Length.')
       ]);
     } else {
+      List<NoteWithContentImpl> data = [];
+      if (ofest + limit >= _notesList.length) {
+        limit = _notesList.length - ofest;
+      }
+      if (ofest != _notesList.length) {
+        data = _notesList.value.sublist(ofest, ofest + limit);
+      }
       return RestApiResult.data(
         statusCode: 200,
-        data: _notesList.value.sublist(ofest, ofest + limit),
+        data: data,
       );
     }
   }

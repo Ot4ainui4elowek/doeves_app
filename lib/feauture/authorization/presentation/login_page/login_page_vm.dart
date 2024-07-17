@@ -77,10 +77,7 @@ class LoginPageViewModel {
           }
           break;
         }
-      case BadUseCaseResult<SignInResponseModel>(
-          :final errorList,
-          :final errorData
-        ):
+      default:
         {
           if (context.mounted) {
             _notificationService.responseNotification(
@@ -89,15 +86,6 @@ class LoginPageViewModel {
               response: result,
             );
           }
-          if (errorData != null) {
-            debugPrint(errorData.content);
-          } else {
-            for (final error in errorList) {
-              debugPrint(error.code);
-            }
-          }
-
-          break;
         }
     }
   }

@@ -9,13 +9,13 @@ sealed class UseCaseResult<T> {
     List<AppError>? errorList,
     ErrorResponseModel? errorData,
   }) {
-    assert(((data == null) ^ (errorList == null)),
-        'Data & error list can not be the same filled!');
+    assert(((data == null) ^ (errorList == null) ^ (errorData == null)),
+        'Data & error list & error data can not be the same filled!');
     if (data != null) {
       return UseCaseResult.good(data);
     }
     if (errorList != null) {
-      return UseCaseResult.bad(errorList, errorData: errorData);
+      return UseCaseResult.bad(errorList);
     }
 
     throw Exception('Something went wrong with UseCaseResult arguments!');
@@ -23,9 +23,11 @@ sealed class UseCaseResult<T> {
 
   const factory UseCaseResult.good(T data) = GoodUseCaseResult;
 
-  factory UseCaseResult.bad(List<AppError> errorList,
-          {ErrorResponseModel? errorData}) =>
-      BadUseCaseResult(errorList: errorList, errorData: errorData);
+  factory UseCaseResult.bad(List<AppError> errorList) =>
+      BadUseCaseResult(errorList: errorList);
+
+  factory UseCaseResult.dataBad(ErrorResponseModel errorData) =>
+      DataBadUseCaseResult(errorData: errorData);
 }
 
 class GoodUseCaseResult<T> implements UseCaseResult<T> {
@@ -39,8 +41,15 @@ class GoodUseCaseResult<T> implements UseCaseResult<T> {
 
 class BadUseCaseResult<T> implements UseCaseResult<T> {
   final List<AppError> errorList;
-  final ErrorResponseModel? errorData;
-  const BadUseCaseResult({required this.errorList, this.errorData});
+  const BadUseCaseResult({required this.errorList});
+
+  @override
+  bool get isSuccess => false;
+}
+
+class DataBadUseCaseResult<T> implements UseCaseResult<T> {
+  final ErrorResponseModel errorData;
+  const DataBadUseCaseResult({required this.errorData});
 
   @override
   bool get isSuccess => false;
@@ -64,7 +73,6 @@ sealed class RestApiResult<T> {
   }) = ErrorRestApiResult;
   const factory RestApiResult.errorWitchData({
     required final int statusCode,
-    required final List<AppError> errorList,
     required final ErrorResponseModel errorData,
   }) = ErrorWitchDataRestApiResult;
 
@@ -92,11 +100,10 @@ class ErrorRestApiResult<T> extends RestApiResult<T> {
   });
 }
 
-class ErrorWitchDataRestApiResult<T> extends ErrorRestApiResult<T> {
+class ErrorWitchDataRestApiResult<T> extends RestApiResult<T> {
   final ErrorResponseModel errorData;
 
   const ErrorWitchDataRestApiResult({
-    required super.errorList,
     required super.statusCode,
     required this.errorData,
   });

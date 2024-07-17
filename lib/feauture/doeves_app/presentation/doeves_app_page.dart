@@ -1,6 +1,6 @@
 import 'package:doeves_app/core/domain/container/app_container.dart';
 import 'package:doeves_app/core/domain/router/router.dart';
-import 'package:doeves_app/feauture/authorization/domain/bloc/theme_bloc.dart';
+import 'package:doeves_app/feauture/authorization/domain/bloc/theme_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,7 +8,7 @@ class DoevesApp extends StatelessWidget {
   final AppContainer appContainer;
   const DoevesApp({super.key, required this.appContainer});
 
-  ThemeBloc get themeService => appContainer.serviceScope.themeService;
+  ThemeService get themeService => appContainer.serviceScope.themeService;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(

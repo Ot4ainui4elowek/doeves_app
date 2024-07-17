@@ -1,17 +1,18 @@
-import 'package:doeves_app/core/domain/container/app_container.dart';
 import 'package:doeves_app/core/presentation/logo/app_logo_animated.dart';
 import 'package:doeves_app/core/presentation/network_connection_widget/network_connection_widget.dart';
-import 'package:doeves_app/feauture/authorization/domain/bloc/theme_bloc.dart';
+import 'package:doeves_app/feauture/app_drawer/presentation/app_drawer_vm.dart';
+import 'package:doeves_app/feauture/authorization/domain/bloc/theme_service.dart';
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppDrawer extends StatelessWidget {
-  AppDrawer({super.key});
-  final ThemeBloc _themeBloc = AppContainer().serviceScope.themeService;
+  const AppDrawer({super.key, required this.vm});
+
+  final AppDrawerViewModel vm;
 
   Widget get _themeSwitchBuilder => BlocBuilder(
-        bloc: _themeBloc,
+        bloc: vm.themeBloc,
         builder: (context, state) => SwitchListTile(
           hoverColor: Colors.transparent,
           contentPadding: EdgeInsets.zero,
@@ -19,12 +20,8 @@ class AppDrawer extends StatelessWidget {
             'Dark theme',
             style: AppTextTheme.textBase(weight: TextWeight.medium),
           ),
-          value: _themeBloc.state is DarkTheme,
-          onChanged: (value) => _themeBloc.add(
-            _themeBloc.state is DarkTheme
-                ? ThemeSwitchLight()
-                : ThemeSwitchDark(),
-          ),
+          value: vm.themeBloc.state is DarkTheme,
+          onChanged: (value) => vm.setTheme(),
         ),
       );
   @override
