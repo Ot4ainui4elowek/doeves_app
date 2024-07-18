@@ -1,3 +1,4 @@
+import 'package:doeves_app/core/presentation/buttons/app_bar_button.dart';
 import 'package:doeves_app/core/presentation/buttons/app_elevated_button.dart';
 import 'package:doeves_app/core/presentation/logo/app_logo_animated.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/home_page/home_page_vm.dart';
@@ -17,7 +18,6 @@ class NotesHomePage extends StatefulWidget {
 
 class _NotesHomePageState extends State<NotesHomePage> {
   NotesHomePageViewModel get vm => widget.vm;
-//MediaQuery.of(context).size.width >= 540
   Widget? _refreshPageButtonBuilder() {
     if (!vm.isTouchDevice(context)) {
       return Container(
@@ -41,38 +41,52 @@ class _NotesHomePageState extends State<NotesHomePage> {
     return null;
   }
 
-  Widget get _notesLoadingIndicatorBuilder => BlocBuilder(
-        bloc: vm.notesBloc,
-        builder: (context, state) => vm.notesBloc.state.maybeWhen(
-          orElse: () => const SizedBox(height: 0),
-          loadingNotes: () => Container(
-            margin: const EdgeInsets.symmetric(vertical: 24),
-            child: const AppLogoAnimated(curve: Curves.linear, repeat: true),
-          ),
-          emptyResult: () => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 25),
-            child: Text(
-              'All notes are loaded!',
-              style: AppTextTheme.textXl(weight: TextWeight.medium),
+  Widget get _notesLoadingIndicatorBuilder => Center(
+        child: BlocBuilder(
+          bloc: vm.notesBloc,
+          builder: (context, state) => vm.notesBloc.state.maybeWhen(
+            orElse: () => const SizedBox(height: 0),
+            loadingNotes: () => Container(
+              margin: const EdgeInsets.symmetric(vertical: 24),
+              child: const AppLogoAnimated(curve: Curves.linear, repeat: true),
             ),
+            emptyResult: () => Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 25),
+              child: Text(
+                'All notes are loaded!',
+                style: AppTextTheme.textXl(weight: TextWeight.medium),
+              ),
+            ),
+            error: (error) => Text(error.code),
           ),
-          error: (error) => Text(error.code),
         ),
       );
 
   Widget get _notesListBuilder => Obs(
-        rvList: [vm.notes, vm.isLoading],
+        rvList: [
+          vm.notes,
+          vm.isLoading,
+          vm.isDeleteNotesMode,
+          vm.deleteNotesList
+        ],
         builder: (context) => ReorderableListView.builder(
+          footer: _notesLoadingIndicatorBuilder,
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           buildDefaultDragHandles: false,
           onReorder: (oldIndex, newIndex) => vm.onNoteDrag(oldIndex, newIndex),
           itemBuilder: (context, index) => ReorderableDelayedDragStartListener(
-            enabled: !vm.isLoading.value,
+            enabled: !vm.isLoading.value ^ vm.isDeleteNotesMode.value,
             key: ObjectKey(vm.notes[index]),
             index: index,
             child: NoteWithContentWidget(
+              unSelectNode: () => vm.deleteNotesList
+                  .removeWhere((id) => id == vm.notes[index].id),
+              selectNode: () => vm.deleteNotesList.add(vm.notes[index].id),
               note: vm.notes[index],
+              isDeleteNotesMode: vm.isDeleteNotesMode.value,
+              isSelected: vm.deleteNotesList.value.contains(vm.notes[index].id),
             ),
           ),
           itemCount: vm.notes.length,
@@ -99,21 +113,41 @@ class _NotesHomePageState extends State<NotesHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(vm.isTouchDevice(context).toString());
     return Scaffold(
       floatingActionButton: _refreshPageButtonBuilder(),
       body: RefreshIndicator(
         key: vm.refreshIndicatorKey,
         onRefresh: vm.refreshNotes,
         child: Center(
-          child: SingleChildScrollView(
+          child: CustomScrollView(
             controller: vm.scrollController,
-            child: Column(
-              children: [
-                _notesListBuilder,
-                _notesLoadingIndicatorBuilder,
-              ],
-            ),
+            slivers: [
+              SliverAppBar(
+                toolbarHeight: 68,
+                backgroundColor: Theme.of(context).colorScheme.surface,
+                surfaceTintColor: Colors.transparent,
+                //forceMaterialTransparency: true,
+                snap: true,
+                floating: true,
+                actions: [
+                  AppBarButton(
+                      style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll(
+                              Theme.of(context).colorScheme.surfaceContainer)),
+                      onPressed: () {
+                        if (vm.isDeleteNotesMode.value) {
+                          vm.deleteNotesList.clear();
+                        }
+                        vm.isDeleteNotesMode(!vm.isDeleteNotesMode.value);
+                      },
+                      child: const Icon(Icons.control_point_duplicate_sharp)),
+                  const SizedBox(width: 16),
+                ],
+              ),
+              SliverToBoxAdapter(
+                child: _notesListBuilder,
+              ),
+            ],
           ),
         ),
       ),

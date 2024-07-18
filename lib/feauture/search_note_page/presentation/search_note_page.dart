@@ -4,6 +4,7 @@ import 'package:doeves_app/core/presentation/buttons/app_bar_button.dart';
 import 'package:doeves_app/core/presentation/hero_widgets/hero_search_widget.dart';
 import 'package:doeves_app/feauture/search_note_page/presentation/search_note_page_vm.dart';
 import 'package:flutter/material.dart';
+import 'package:reactive_variables/reactive_variables.dart';
 
 class SearchNotePage extends StatefulWidget {
   const SearchNotePage({super.key, required this.vm});
@@ -18,13 +19,13 @@ class _SearchNotePageState extends State<SearchNotePage> {
   @override
   void initState() {
     super.initState();
-    vm.focusSearchTextField();
+    vm.init();
   }
 
 // Dispose
   @override
   void dispose() {
-    vm.focusNode.dispose();
+    vm.dispose();
     super.dispose();
   }
 
@@ -46,13 +47,17 @@ class _SearchNotePageState extends State<SearchNotePage> {
   Widget build(BuildContext context) {
     return AppWrapper(
       maxWidth: 700,
-      child: Scaffold(
-        appBar: CustomAppBar(
-          context: context,
-          titleWidget: HeroSearchWidget(
-            focusNode: vm.focusNode,
+      child: Obs(
+        rvList: [vm.searchBarIsSelected],
+        builder: (context) => Scaffold(
+          appBar: CustomAppBar(
+            isSelected: vm.searchBarIsSelected.value,
+            context: context,
+            titleWidget: HeroSearchWidget(
+              focusNode: vm.focusNode,
+            ),
+            actions: _actionsBuilder,
           ),
-          actions: _actionsBuilder,
         ),
       ),
     );

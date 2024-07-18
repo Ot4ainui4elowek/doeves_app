@@ -12,8 +12,11 @@ class NotesHomePageViewModel {
   final GlobalKey<RefreshIndicatorState> refreshIndicatorKey = GlobalKey();
 
   late final ScrollController scrollController = ScrollController();
+
+  final isDeleteNotesMode = false.rv;
+  final Rv<List<int>> deleteNotesList = Rv([]);
+
   void init() async {
-    debugPrint('init');
     notesBloc.add(NotesEvent.loadingNotes());
     await getNotes();
     notesBloc.add(NotesEvent.clearState());

@@ -7,7 +7,9 @@ class CustomAppBar extends AppBar {
   final Widget? leadeing;
   final Widget? titleWidget;
   final bool leadingIsAutomaticlySet;
+  final bool isSelected;
   CustomAppBar({
+    this.isSelected = false,
     super.key,
     required this.context,
     this.leadeing,
@@ -18,11 +20,15 @@ class CustomAppBar extends AppBar {
           forceMaterialTransparency: true,
           toolbarHeight: 70,
           automaticallyImplyLeading: false,
-          title: Container(
+          title: AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
             height: 50,
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(28)),
               color: Theme.of(context).colorScheme.surfaceContainer,
+              border: isSelected
+                  ? Border.all(color: Theme.of(context).colorScheme.primary)
+                  : null,
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
