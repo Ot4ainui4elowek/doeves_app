@@ -45,8 +45,9 @@ class AppContainer {
     }
   }
 
-  void _initServiceScope() async {
+  Future<void> _initServiceScope() async {
     try {
+      log('init service scope');
       final themeService = ThemeService();
       final notificationService = SnackBarNotificationServiceImpl();
       final networkService = NetworkInfoServiceImpl();
@@ -67,10 +68,11 @@ class AppContainer {
     }
   }
 
-  void _initReposytoryScope() async {
+  Future<void> _initReposytoryScope() async {
     try {
       final apiUrl = dotenv.env['APi_ADRESS'];
-      final authDataSource = AuthorizationClientDataSource.createAmazon();
+      final authDataSource =
+          AuthorizationClientDataSource.create(apiUrl: apiUrl);
       final authorizationRepository =
           AuthorizationRepositoryImpl(authorizationDataSourse: authDataSource);
       final verificationRepository =

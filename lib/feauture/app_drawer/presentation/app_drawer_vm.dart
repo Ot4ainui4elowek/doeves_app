@@ -1,12 +1,11 @@
-import 'package:doeves_app/core/data/shared_preferences/shared_preferences_service.dart';
 import 'package:doeves_app/core/domain/container/app_container.dart';
 import 'package:doeves_app/feauture/authorization/domain/bloc/theme_service.dart';
 
 class AppDrawerViewModel {
   AppDrawerViewModel();
 
-  final SharedPreferencesService _preferencesService =
-      AppContainer().serviceScope.sharedPreferencesService;
+  // final SharedPreferencesService _preferencesService =
+  //     AppContainer().serviceScope?.sharedPreferencesService;
 
   final ThemeService themeBloc = AppContainer().serviceScope.themeService;
 
@@ -14,6 +13,6 @@ class AppDrawerViewModel {
     themeBloc.add(
       themeBloc.state is DarkTheme ? ThemeSwitchLight() : ThemeSwitchDark(),
     );
-    _preferencesService.setTheme(themeBloc.state is DarkTheme);
+    //_preferencesService.setTheme(themeBloc.state is DarkTheme);
   }
 }

@@ -1,7 +1,7 @@
-import 'package:doeves_app/core/presentation/buttons/app_bar_button.dart';
-import 'package:doeves_app/core/presentation/buttons/app_elevated_button.dart';
+import 'package:doeves_app/core/presentation/buttons/app_elevatedButton_mini.dart';
 import 'package:doeves_app/core/presentation/logo/app_logo_animated.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/home_page/home_page_vm.dart';
+import 'package:doeves_app/feauture/main_page/presentation/widgets/draggable_selectable_container.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/notes/note_with_content_widget.dart';
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';
@@ -18,28 +18,6 @@ class NotesHomePage extends StatefulWidget {
 
 class _NotesHomePageState extends State<NotesHomePage> {
   NotesHomePageViewModel get vm => widget.vm;
-  Widget? _refreshPageButtonBuilder() {
-    if (!vm.isTouchDevice(context)) {
-      return Container(
-        margin: const EdgeInsets.only(bottom: 20),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(45), topLeft: Radius.circular(45)),
-          color: Theme.of(context).colorScheme.surface,
-        ),
-        child: AppElevatedButton(
-          width: 75,
-          onPressed: vm.refreshNotes,
-          child: Icon(
-            Icons.refresh_outlined,
-            color: Theme.of(context).colorScheme.onPrimaryContainer,
-          ),
-        ),
-      );
-    }
-    return null;
-  }
 
   Widget get _notesLoadingIndicatorBuilder => Center(
         child: BlocBuilder(
@@ -67,8 +45,8 @@ class _NotesHomePageState extends State<NotesHomePage> {
         rvList: [
           vm.notes,
           vm.isLoading,
-          vm.isDeleteNotesMode,
-          vm.deleteNotesList
+          vm.isSelectNotesMode,
+          vm.selectedNotesList
         ],
         builder: (context) => ReorderableListView.builder(
           footer: _notesLoadingIndicatorBuilder,
@@ -77,20 +55,102 @@ class _NotesHomePageState extends State<NotesHomePage> {
           buildDefaultDragHandles: false,
           onReorder: (oldIndex, newIndex) => vm.onNoteDrag(oldIndex, newIndex),
           itemBuilder: (context, index) => ReorderableDelayedDragStartListener(
-            enabled: !vm.isLoading.value ^ vm.isDeleteNotesMode.value,
+            enabled: !vm.isLoading.value ^ vm.isSelectNotesMode.value,
             key: ObjectKey(vm.notes[index]),
             index: index,
-            child: NoteWithContentWidget(
-              unSelectNode: () => vm.deleteNotesList
-                  .removeWhere((id) => id == vm.notes[index].id),
-              selectNode: () => vm.deleteNotesList.add(vm.notes[index].id),
-              note: vm.notes[index],
-              isDeleteNotesMode: vm.isDeleteNotesMode.value,
-              isSelected: vm.deleteNotesList.value.contains(vm.notes[index].id),
+            child: DraggableSelectableContainer(
+              deleteModeEnabled: vm.isSelectNotesMode.value,
+              thisItemIsSelected:
+                  vm.checkDelteNotesListContainsNote(vm.notes[index].id),
+              child: NoteWithContentWidget(
+                onPressed: () => vm.performActionOnNote(
+                  id: vm.notes[index].id,
+                  deleteNotesListContainNote:
+                      vm.checkDelteNotesListContainsNote(vm.notes[index].id),
+                ),
+                note: vm.notes[index],
+              ),
             ),
           ),
           itemCount: vm.notes.length,
         ),
+      );
+
+  Widget get _selectNoteButtonBuilder => vm.isSelectNotesMode.observer(
+        (context, value) => AppElevatedbuttonMini(
+          style: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll(
+                Theme.of(context).colorScheme.surfaceContainer),
+            side: WidgetStatePropertyAll(
+              BorderSide(
+                color: value
+                    ? Theme.of(context).colorScheme.primary
+                    : Colors.transparent,
+              ),
+            ),
+          ),
+          onPressed: () {
+            if (value) {
+              vm.selectedNotesList.clear();
+            }
+            vm.isSelectNotesMode(!value);
+          },
+          child: const Icon(Icons.control_point_duplicate_sharp),
+        ),
+      );
+
+  SliverAppBar get _appBarBuilder => SliverAppBar(
+        expandedHeight: 65,
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        surfaceTintColor: Colors.transparent,
+        snap: true,
+        floating: true,
+        title: Obs(
+          rvList: [vm.selectedNotesList, vm.isSelectNotesMode],
+          builder: (context) => Visibility(
+            visible: vm.isSelectNotesMode.value,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surfaceContainer,
+                  borderRadius: BorderRadius.circular(22)),
+              child: Text(
+                'Selected: ${vm.selectedNotesList.length}',
+                style: AppTextTheme.textBase(
+                  weight: TextWeight.regular,
+                ).copyWith(
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+              ),
+            ),
+          ),
+        ),
+        actions: [
+          vm.isSelectNotesMode.observer(
+            (context, value) => Visibility(
+              visible: value,
+              maintainState: true,
+              maintainAnimation: true,
+              child: vm.selectedNotesList.observer(
+                (context, value) => AppElevatedbuttonMini(
+                  onPressed: value.isNotEmpty ? vm.deleteSomeNotes : null,
+                  child: const Icon(Icons.delete_outline_outlined),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Visibility(
+            visible: !vm.isTouchDevice(context),
+            child: AppElevatedbuttonMini(
+              onPressed: vm.refreshNotes,
+              child: const Icon(Icons.refresh_outlined),
+            ),
+          ),
+          const SizedBox(width: 10),
+          _selectNoteButtonBuilder,
+          const SizedBox(width: 16),
+        ],
       );
 
   @override
@@ -114,36 +174,15 @@ class _NotesHomePageState extends State<NotesHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: _refreshPageButtonBuilder(),
       body: RefreshIndicator(
         key: vm.refreshIndicatorKey,
         onRefresh: vm.refreshNotes,
         child: Center(
           child: CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
             controller: vm.scrollController,
             slivers: [
-              SliverAppBar(
-                toolbarHeight: 68,
-                backgroundColor: Theme.of(context).colorScheme.surface,
-                surfaceTintColor: Colors.transparent,
-                //forceMaterialTransparency: true,
-                snap: true,
-                floating: true,
-                actions: [
-                  AppBarButton(
-                      style: ButtonStyle(
-                          backgroundColor: WidgetStatePropertyAll(
-                              Theme.of(context).colorScheme.surfaceContainer)),
-                      onPressed: () {
-                        if (vm.isDeleteNotesMode.value) {
-                          vm.deleteNotesList.clear();
-                        }
-                        vm.isDeleteNotesMode(!vm.isDeleteNotesMode.value);
-                      },
-                      child: const Icon(Icons.control_point_duplicate_sharp)),
-                  const SizedBox(width: 16),
-                ],
-              ),
+              _appBarBuilder,
               SliverToBoxAdapter(
                 child: _notesListBuilder,
               ),

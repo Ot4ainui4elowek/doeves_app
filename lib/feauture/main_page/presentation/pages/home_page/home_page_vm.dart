@@ -13,18 +13,42 @@ class NotesHomePageViewModel {
 
   late final ScrollController scrollController = ScrollController();
 
-  final isDeleteNotesMode = false.rv;
-  final Rv<List<int>> deleteNotesList = Rv([]);
+  final isSelectNotesMode = false.rv;
+  final Rv<List<int>> selectedNotesList = Rv([]);
 
   void init() async {
     notesBloc.add(NotesEvent.loadingNotes());
     await getNotes();
     notesBloc.add(NotesEvent.clearState());
     scrollController.addListener(checkScroll);
+    isSelectNotesMode.addListener(() {
+      if (!isSelectNotesMode.value) {
+        selectedNotesList.clear();
+      }
+    });
   }
 
   void dispose() {
     scrollController.removeListener(checkScroll);
+  }
+
+  bool checkDelteNotesListContainsNote(int id) {
+    return selectedNotesList.value.contains(id);
+  }
+
+  void _removeNoteInDeleteNotesList(int id) {
+    selectedNotesList.removeWhere((noteId) => id == noteId);
+  }
+
+  void _addNoteInDeleteNotesList(int id) {
+    selectedNotesList.add(id);
+  }
+
+  void performActionOnNote(
+      {required bool deleteNotesListContainNote, required int id}) {
+    deleteNotesListContainNote
+        ? _removeNoteInDeleteNotesList(id)
+        : _addNoteInDeleteNotesList(id);
   }
 
   void checkScroll() {
@@ -82,6 +106,17 @@ class NotesHomePageViewModel {
           debugPrint('bad');
         }
     }
+  }
+
+  Future<void> deleteSomeNotes() async {
+    final result =
+        await _repository.deleteMoreNotes(deletedList: selectedNotesList.value);
+    if (result is GoodUseCaseResult) {
+      notes.value
+          .removeWhere((note) => selectedNotesList.value.contains(note.id));
+      notes.refresh();
+    }
+    isSelectNotesMode(false);
   }
 
   bool isTouchDevice(BuildContext context) {

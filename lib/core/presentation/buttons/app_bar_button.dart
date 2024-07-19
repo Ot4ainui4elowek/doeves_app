@@ -8,7 +8,7 @@ class AppBarButton extends StatelessWidget {
     this.style,
   });
   final Widget child;
-  final void Function() onPressed;
+  final void Function()? onPressed;
   final ButtonStyle? style;
 
   @override

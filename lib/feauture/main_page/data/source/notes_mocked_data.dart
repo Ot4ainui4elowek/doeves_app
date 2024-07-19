@@ -7,4 +7,6 @@ abstract interface class NotesMockedData {
   Future<RestApiResult<NoteWithContentImpl>> addNote(
       {required String title, required String description});
   Future<RestApiResult<String>> deleteNote({required int id});
+  Future<RestApiResult<String>> deleteMoreNotes(
+      {required List<int> deletedList});
 }

@@ -66,4 +66,20 @@ class NotesMockedRepositoryImpl implements NotesMockedRepository {
         }
     }
   }
+
+  @override
+  Future<UseCaseResult<String>> deleteMoreNotes(
+      {required List<int> deletedList}) async {
+    final result = await _data.deleteMoreNotes(deletedList: deletedList);
+    switch (result) {
+      case DataRestApiResult<String>(:final data):
+        {
+          return GoodUseCaseResult(data);
+        }
+      default:
+        {
+          return BadUseCaseResult(errorList: [SpecificError('oops!')]);
+        }
+    }
+  }
 }

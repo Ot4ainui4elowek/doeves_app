@@ -7,4 +7,6 @@ abstract interface class NotesMockedRepository {
   Future<UseCaseResult<NoteWithContentImpl>> addNote(
       {required String title, required String description});
   Future<UseCaseResult<String>> deleteNote({required int id});
+  Future<UseCaseResult<String>> deleteMoreNotes(
+      {required List<int> deletedList});
 }

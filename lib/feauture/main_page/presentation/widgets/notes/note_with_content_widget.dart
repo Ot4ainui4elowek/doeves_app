@@ -9,16 +9,10 @@ class NoteWithContentWidget extends StatelessWidget {
   const NoteWithContentWidget({
     super.key,
     required this.note,
-    required this.isDeleteNotesMode,
-    required this.isSelected,
-    required this.selectNode,
-    required this.unSelectNode,
+    required this.onPressed,
   });
-  final bool isDeleteNotesMode;
   final NoteWithContentImpl note;
-  final bool isSelected;
-  final void Function() selectNode;
-  final void Function() unSelectNode;
+  final void Function() onPressed;
 
   Widget get _contentListViewBuilder => ListView.separated(
         shrinkWrap: true,
@@ -36,46 +30,22 @@ class NoteWithContentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      padding: isDeleteNotesMode
-          ? const EdgeInsets.symmetric(vertical: 3, horizontal: 14)
-          : const EdgeInsets.symmetric(vertical: 7, horizontal: 14),
-      margin: EdgeInsets.symmetric(
-          vertical: isDeleteNotesMode ? 10 : 7,
-          horizontal: isDeleteNotesMode ? 24 : 16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainer,
-        borderRadius: const BorderRadius.all(Radius.circular(14)),
-        border: isDeleteNotesMode
-            ? Border.all(
-                color: isSelected
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.outlineVariant,
-              )
-            : null,
+    return ListTile(
+      onTap: onPressed,
+      contentPadding: EdgeInsets.zero,
+      title: Text(
+        note.title,
+        style: AppTextTheme.textBase(weight: TextWeight.medium)
+            .copyWith(color: Theme.of(context).colorScheme.onSurface),
       ),
-      child: ListTile(
-        onTap: isDeleteNotesMode
-            ? isSelected
-                ? unSelectNode
-                : selectNode
-            : null,
-        contentPadding: EdgeInsets.zero,
-        title: Text(
-          note.title,
-          style: AppTextTheme.textBase(weight: TextWeight.medium)
-              .copyWith(color: Theme.of(context).colorScheme.onSurface),
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 10),
-            _descriptionBuilder(context),
-            const SizedBox(height: 10),
-            _contentListViewBuilder,
-          ],
-        ),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 10),
+          _descriptionBuilder(context),
+          const SizedBox(height: 10),
+          _contentListViewBuilder,
+        ],
       ),
     );
   }

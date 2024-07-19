@@ -79,4 +79,13 @@ class NotesMockedDataImpl implements NotesMockedData {
       );
     }
   }
+
+  @override
+  Future<RestApiResult<String>> deleteMoreNotes(
+      {required List<int> deletedList}) async {
+    await Future.delayed(const Duration(seconds: 2));
+    _notesList.removeWhere((note) => deletedList.contains(note.id));
+    return const RestApiResult.data(
+        statusCode: 200, data: 'notes has been deleted!');
+  }
 }
