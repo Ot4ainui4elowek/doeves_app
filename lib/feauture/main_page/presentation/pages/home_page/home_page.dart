@@ -1,3 +1,4 @@
+import 'package:doeves_app/core/presentation/animated_visibility.dart';
 import 'package:doeves_app/core/presentation/buttons/app_elevatedButton_mini.dart';
 import 'package:doeves_app/core/presentation/logo/app_logo_animated.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/home_page/home_page_vm.dart';
@@ -16,8 +17,50 @@ class NotesHomePage extends StatefulWidget {
   State<NotesHomePage> createState() => _NotesHomePageState();
 }
 
-class _NotesHomePageState extends State<NotesHomePage> {
+class _NotesHomePageState extends State<NotesHomePage>
+    with TickerProviderStateMixin {
   NotesHomePageViewModel get vm => widget.vm;
+
+  void _showActionsBottomSheet() {
+    showModalBottomSheet(
+      showDragHandle: true,
+      useRootNavigator: true,
+      context: context,
+      builder: (context) => _actionsBottomSheetBuilder,
+    );
+  }
+
+  Widget get _actionsBottomSheetBuilder => BottomSheet(
+        animationController: BottomSheet.createAnimationController(this),
+        onClosing: () {},
+        builder: (context) => Padding(
+          padding:
+              const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const SizedBox(height: 0),
+              SizedBox(
+                height: 116,
+                child: ListView.separated(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) => Container(
+                    height: 100,
+                    width: 100,
+                    color: Colors.amber,
+                  ),
+                  itemCount: 10,
+                  separatorBuilder: (context, inedx) =>
+                      const SizedBox(width: 10),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
 
   Widget get _notesLoadingIndicatorBuilder => Center(
         child: BlocBuilder(
@@ -63,11 +106,14 @@ class _NotesHomePageState extends State<NotesHomePage> {
               thisItemIsSelected:
                   vm.checkDelteNotesListContainsNote(vm.notes[index].id),
               child: NoteWithContentWidget(
-                onPressed: () => vm.performActionOnNote(
-                  id: vm.notes[index].id,
-                  deleteNotesListContainNote:
-                      vm.checkDelteNotesListContainsNote(vm.notes[index].id),
-                ),
+                onPressed: vm.isSelectNotesMode.value
+                    ? () => vm.performActionOnNote(
+                          id: vm.notes[index].id,
+                          deleteNotesListContainNote:
+                              vm.checkDelteNotesListContainsNote(
+                                  vm.notes[index].id),
+                        )
+                    : null,
                 note: vm.notes[index],
               ),
             ),
@@ -99,54 +145,57 @@ class _NotesHomePageState extends State<NotesHomePage> {
         ),
       );
 
+  Widget get _actionButtonBuilder => vm.isSelectNotesMode.observer(
+        (context, value) => AnimatedVisibility(
+          visible: value,
+          child: vm.selectedNotesList.observer(
+            (context, value) => AppElevatedbuttonMini(
+              onPressed: value.isNotEmpty ? _showActionsBottomSheet : null,
+              child: const Icon(Icons.more_vert_sharp),
+            ),
+          ),
+        ),
+      );
+
   SliverAppBar get _appBarBuilder => SliverAppBar(
         expandedHeight: 65,
         backgroundColor: Theme.of(context).colorScheme.surface,
         surfaceTintColor: Colors.transparent,
         snap: true,
         floating: true,
-        title: Obs(
-          rvList: [vm.selectedNotesList, vm.isSelectNotesMode],
-          builder: (context) => Visibility(
-            visible: vm.isSelectNotesMode.value,
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-              decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surfaceContainer,
-                  borderRadius: BorderRadius.circular(22)),
-              child: Text(
-                'Selected: ${vm.selectedNotesList.length}',
-                style: AppTextTheme.textBase(
-                  weight: TextWeight.regular,
-                ).copyWith(
-                  color: Theme.of(context).colorScheme.outline,
-                ),
-              ),
+        title: vm.isSelectNotesMode.observer(
+          (context, value) => AnimatedVisibility(
+            visible: !vm.isTouchDevice(context) && !value,
+            child: AppElevatedbuttonMini(
+              onPressed: value ? null : vm.refreshNotes,
+              child: const Icon(Icons.refresh_outlined),
             ),
           ),
         ),
         actions: [
-          vm.isSelectNotesMode.observer(
-            (context, value) => Visibility(
-              visible: value,
-              maintainState: true,
-              maintainAnimation: true,
-              child: vm.selectedNotesList.observer(
-                (context, value) => AppElevatedbuttonMini(
-                  onPressed: value.isNotEmpty ? vm.deleteSomeNotes : null,
-                  child: const Icon(Icons.delete_outline_outlined),
+          Obs(
+            rvList: [vm.selectedNotesList, vm.isSelectNotesMode],
+            builder: (context) => AnimatedVisibility(
+              visible: vm.isSelectNotesMode.value,
+              child: Container(
+                margin: const EdgeInsets.only(right: 10),
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceContainer,
+                    borderRadius: BorderRadius.circular(22)),
+                child: Center(
+                  child: Text(
+                    vm.selectedNotesList.length.toString(),
+                    style: AppTextTheme.textBase(
+                      weight: TextWeight.medium,
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
-          const SizedBox(width: 10),
-          Visibility(
-            visible: !vm.isTouchDevice(context),
-            child: AppElevatedbuttonMini(
-              onPressed: vm.refreshNotes,
-              child: const Icon(Icons.refresh_outlined),
-            ),
-          ),
+          _actionButtonBuilder,
           const SizedBox(width: 10),
           _selectNoteButtonBuilder,
           const SizedBox(width: 16),

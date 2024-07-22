@@ -12,7 +12,7 @@ class NoteWithContentWidget extends StatelessWidget {
     required this.onPressed,
   });
   final NoteWithContentImpl note;
-  final void Function() onPressed;
+  final void Function()? onPressed;
 
   Widget get _contentListViewBuilder => ListView.separated(
         shrinkWrap: true,

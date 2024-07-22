@@ -88,4 +88,31 @@ class NotesMockedDataImpl implements NotesMockedData {
     return const RestApiResult.data(
         statusCode: 200, data: 'notes has been deleted!');
   }
+
+  @override
+  Future<RestApiResult<String>> moveNote(
+      {required int oldId, required int newId}) async {
+    await Future.delayed(const Duration(seconds: 2));
+    final oldIndex = _notesList.value.indexWhere((note) => note.id == oldId);
+    int newIndex = _notesList.value.indexWhere((note) => note.id == newId);
+    if (oldIndex == newIndex) {
+      return const RestApiResult.data(statusCode: 200, data: 'old == new');
+    }
+    if (oldIndex < 0 ||
+        oldIndex >= _notesList.length ||
+        newIndex < 0 ||
+        newIndex >= _notesList.length) {
+      return RestApiResult.error(
+          statusCode: 400, errorList: [SpecificError('undefined indexes')]);
+    }
+    if (oldIndex < newIndex) {
+      newIndex--;
+    }
+
+    final note = _notesList.removeAt(oldIndex);
+
+    _notesList.value.insert(newIndex, note);
+
+    return RestApiResult.data(statusCode: 200, data: 'note move to $newIndex');
+  }
 }

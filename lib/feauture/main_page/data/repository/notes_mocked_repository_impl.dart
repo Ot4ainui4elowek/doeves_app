@@ -82,4 +82,24 @@ class NotesMockedRepositoryImpl implements NotesMockedRepository {
         }
     }
   }
+
+  @override
+  Future<UseCaseResult<String>> moveNote(
+      {required int oldId, required int newId}) async {
+    final result = await _data.moveNote(oldId: oldId, newId: newId);
+    switch (result) {
+      case DataRestApiResult<String>(:final data):
+        {
+          return GoodUseCaseResult(data);
+        }
+      case ErrorRestApiResult(:final errorList):
+        {
+          return BadUseCaseResult(errorList: errorList);
+        }
+      default:
+        {
+          return BadUseCaseResult(errorList: [SpecificError('oops!')]);
+        }
+    }
+  }
 }

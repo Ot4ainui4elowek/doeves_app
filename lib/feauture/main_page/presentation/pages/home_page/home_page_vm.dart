@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/feauture/main_page/data/repository/notes_mocked_repository_impl.dart';
 import 'package:doeves_app/feauture/main_page/domain/entity/note_with_content/note_with_content_impl.dart';
@@ -126,7 +128,10 @@ class NotesHomePageViewModel {
         platform == TargetPlatform.fuchsia;
   }
 
-  void onNoteDrag(int oldIndex, int newIndex) {
+  Future<void> onNoteDrag(int oldIndex, int newIndex) async {
+    final oldId = notes.value[oldIndex].id;
+    final newId = notes.value[newIndex].id;
+
     if (oldIndex < newIndex) {
       newIndex--;
     }
@@ -134,5 +139,22 @@ class NotesHomePageViewModel {
     final note = notes.removeAt(oldIndex);
 
     notes.value.insert(newIndex, note);
+
+    final result = await _repository.moveNote(oldId: oldId, newId: newId);
+
+    switch (result) {
+      case GoodUseCaseResult<String>(:final data):
+        {
+          log(data);
+        }
+      case BadUseCaseResult(:final errorList):
+        {
+          log(errorList[0].code);
+        }
+      default:
+        {
+          log('oops!');
+        }
+    }
   }
 }

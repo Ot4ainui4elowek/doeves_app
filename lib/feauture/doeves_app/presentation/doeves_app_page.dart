@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:doeves_app/core/domain/container/app_container.dart';
 import 'package:doeves_app/core/domain/router/router.dart';
 import 'package:doeves_app/feauture/authorization/domain/bloc/theme_service.dart';
@@ -15,6 +17,11 @@ class DoevesApp extends StatelessWidget {
       bloc: themeService,
       builder: (context, state) {
         return MaterialApp.router(
+          scrollBehavior:
+              ScrollConfiguration.of(context).copyWith(dragDevices: {
+            PointerDeviceKind.mouse,
+            PointerDeviceKind.touch,
+          }),
           debugShowCheckedModeBanner: false,
           title: 'Doeves',
           theme: themeService.state.theme,
