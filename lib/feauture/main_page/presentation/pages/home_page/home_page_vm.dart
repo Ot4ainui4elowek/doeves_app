@@ -1,10 +1,12 @@
 import 'dart:developer';
 
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
+import 'package:doeves_app/core/presentation/notification_service/snack_bar_notification_service/snack_bar_notification_service_impl.dart';
 import 'package:doeves_app/feauture/main_page/data/repository/notes_mocked_repository_impl.dart';
 import 'package:doeves_app/feauture/main_page/domain/entity/note_with_content/note_with_content_impl.dart';
 import 'package:doeves_app/feauture/main_page/domain/notes/notes_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:reactive_variables/reactive_variables.dart';
 
 class NotesHomePageViewModel {
@@ -16,22 +18,31 @@ class NotesHomePageViewModel {
   late final ScrollController scrollController = ScrollController();
 
   final isSelectNotesMode = false.rv;
+
   final Rv<List<int>> selectedNotesList = Rv([]);
+
+  final notificationService = SnackBarNotificationServiceImpl();
 
   void init() async {
     notesBloc.add(NotesEvent.loadingNotes());
     await getNotes();
     notesBloc.add(NotesEvent.clearState());
     scrollController.addListener(checkScroll);
-    isSelectNotesMode.addListener(() {
-      if (!isSelectNotesMode.value) {
-        selectedNotesList.clear();
-      }
-    });
+    isSelectNotesMode.addListener(
+      () {
+        if (!isSelectNotesMode.value) {
+          selectedNotesList.clear();
+        }
+      },
+    );
+    notes.addListener(_checkAllNotesIsSelected);
+    selectedNotesList.addListener(_checkAllNotesIsSelected);
   }
 
   void dispose() {
     scrollController.removeListener(checkScroll);
+    notes.removeListener(_checkAllNotesIsSelected);
+    selectedNotesList.removeListener(_checkAllNotesIsSelected);
   }
 
   bool checkDelteNotesListContainsNote(int id) {
@@ -44,6 +55,31 @@ class NotesHomePageViewModel {
 
   void _addNoteInDeleteNotesList(int id) {
     selectedNotesList.add(id);
+  }
+
+  void _checkAllNotesIsSelected() {
+    allNotesIsSelected(selectedNotesList.length == notes.length);
+  }
+
+  final allNotesIsSelected = false.rv;
+
+  void onPressedSelectAllNotes() {
+    if (allNotesIsSelected.value) {
+      _unselectAllNotes();
+    } else {
+      _selectAllNotes();
+    }
+  }
+
+  void _unselectAllNotes() {
+    selectedNotesList.clear();
+  }
+
+  void _selectAllNotes() {
+    if (selectedNotesList.isNotEmpty) {
+      selectedNotesList.clear();
+    }
+    selectedNotesList.addAll(notes.value.map((note) => note.id));
   }
 
   void performActionOnNote(
@@ -110,7 +146,7 @@ class NotesHomePageViewModel {
     }
   }
 
-  Future<void> deleteSomeNotes() async {
+  Future<void> deleteSomeNotes(BuildContext context) async {
     final result =
         await _repository.deleteMoreNotes(deletedList: selectedNotesList.value);
     if (result is GoodUseCaseResult) {
@@ -119,6 +155,14 @@ class NotesHomePageViewModel {
       notes.refresh();
     }
     isSelectNotesMode(false);
+    if (context.mounted && context.canPop()) {
+      notificationService.responseNotification(
+        response: result,
+        context: context,
+        goodUseCaseMessage: 'Notes have been deleted',
+      );
+      context.pop();
+    }
   }
 
   bool isTouchDevice(BuildContext context) {

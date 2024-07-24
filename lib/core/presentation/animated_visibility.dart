@@ -5,7 +5,7 @@ class AnimatedVisibility extends StatefulWidget {
   final Widget child;
   final Curve curve;
   final Duration duration;
-  final alwaysIncludeSemantics;
+  final bool alwaysIncludeSemantics;
 
   const AnimatedVisibility(
       {super.key,
@@ -16,7 +16,7 @@ class AnimatedVisibility extends StatefulWidget {
       this.alwaysIncludeSemantics = false});
 
   @override
-  _AnimatedVisibility createState() => _AnimatedVisibility();
+  State<AnimatedVisibility> createState() => _AnimatedVisibility();
 }
 
 class _AnimatedVisibility extends State<AnimatedVisibility> {

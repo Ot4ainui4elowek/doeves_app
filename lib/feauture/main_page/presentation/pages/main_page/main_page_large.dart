@@ -4,7 +4,6 @@ import 'package:doeves_app/core/presentation/app_wrapper.dart';
 import 'package:doeves_app/core/presentation/buttons/app_bar_button.dart';
 import 'package:doeves_app/core/presentation/hero_widgets/hero_search_widget.dart';
 import 'package:doeves_app/feauture/app_drawer/presentation/app_drawer.dart';
-import 'package:doeves_app/feauture/app_drawer/presentation/app_drawer_vm.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/add_note_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -70,15 +69,14 @@ class _MainPageLargeState extends State<MainPageLarge> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: AppDrawer(
-        vm: AppDrawerViewModel(),
-      ),
+      drawer: AppDrawer(),
       body: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
           _navigationBuilder,
           Expanded(
             child: AppWrapper(
+              padding: const EdgeInsets.only(right: 81),
               maxWidth: 700,
               child: Scaffold(
                 appBar: CustomAppBar(

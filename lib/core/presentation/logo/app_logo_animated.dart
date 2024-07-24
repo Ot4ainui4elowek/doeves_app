@@ -5,7 +5,7 @@ class AppLogoAnimated extends StatefulWidget {
       {super.key,
       this.width,
       this.color,
-      required this.curve,
+      this.curve = Curves.easeInOut,
       required this.repeat});
   final double? width;
   final Color? color;

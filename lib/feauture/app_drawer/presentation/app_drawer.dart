@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppDrawer extends StatelessWidget {
-  const AppDrawer({super.key, required this.vm});
+  AppDrawer({super.key});
 
-  final AppDrawerViewModel vm;
+  final AppDrawerViewModel vm = AppDrawerViewModel();
 
   Widget get _themeSwitchBuilder => BlocBuilder(
         bloc: vm.themeBloc,

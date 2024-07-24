@@ -5,18 +5,22 @@ import 'package:flutter/material.dart';
 class AppElevatedButton extends StatefulWidget {
   final Widget? child;
   final FutureOr<void> Function()? onPressed;
+  final void Function()? onLongPress;
+  final bool mini;
 
   final double? width;
-  final double? elevation;
   final Color? progressIndicatorColor;
+  final ButtonStyle? style;
 
   const AppElevatedButton({
     super.key,
     this.onPressed,
     this.child,
     this.width,
-    this.elevation,
     this.progressIndicatorColor,
+    this.style,
+    this.onLongPress,
+    this.mini = false,
   });
 
   @override
@@ -29,6 +33,7 @@ class _AppElevatedButtonState extends State<AppElevatedButton> {
   final _buttonGlobalKey = GlobalKey();
 
   double? _buttonHeight;
+  double? _buttonWidth;
 
   Future<void> _onPressed() async {
     if (_isLoading) return;
@@ -46,26 +51,41 @@ class _AppElevatedButtonState extends State<AppElevatedButton> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _buttonHeight = _buttonGlobalKey.currentContext?.size?.height;
+      _buttonWidth = _buttonGlobalKey.currentContext?.size?.width;
     });
   }
+
+  double get _verticalPadding => widget.mini ? 10 : 18;
+
+  ButtonStyle get _minStyle => ButtonStyle(
+        backgroundColor: WidgetStatePropertyAll(
+            Theme.of(context).colorScheme.surfaceContainer),
+      );
+
+  ButtonStyle get _maxStyle => ElevatedButton.styleFrom(
+        elevation: 0,
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+      );
+
+  ButtonStyle get _style =>
+      widget.style ?? (widget.mini ? _minStyle : _maxStyle);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       key: _buttonGlobalKey,
-      width: widget.width ?? double.maxFinite,
       height: _buttonHeight,
+      width: widget.mini ? _buttonWidth : widget.width ?? double.maxFinite,
       child: ElevatedButton(
-        onPressed: widget.onPressed != null ? _onPressed : null,
-        style: ElevatedButton.styleFrom(
-            elevation: widget.elevation ?? 0,
-            backgroundColor: Theme.of(context).colorScheme.primaryContainer),
+        onLongPress: widget.onLongPress,
+        style: _style,
+        onPressed: widget.onPressed == null ? null : _onPressed,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 18),
+          padding: EdgeInsets.symmetric(vertical: _verticalPadding),
           child: !_isLoading
               ? widget.child
               : SizedBox(
-                  width: _buttonHeight! - 36.0,
+                  width: _buttonHeight! - _verticalPadding * 2,
                   child: CircularProgressIndicator.adaptive(
                     valueColor: AlwaysStoppedAnimation(
                         widget.progressIndicatorColor ??

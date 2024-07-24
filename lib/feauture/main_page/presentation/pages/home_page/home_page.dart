@@ -1,7 +1,8 @@
 import 'package:doeves_app/core/presentation/animated_visibility.dart';
-import 'package:doeves_app/core/presentation/buttons/app_elevatedButton_mini.dart';
+import 'package:doeves_app/core/presentation/buttons/app_elevated_button.dart';
 import 'package:doeves_app/core/presentation/logo/app_logo_animated.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/home_page/home_page_vm.dart';
+import 'package:doeves_app/feauture/main_page/presentation/widgets/action_on_note.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/draggable_selectable_container.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/notes/note_with_content_widget.dart';
 import 'package:doeves_app/theme/text_theme.dart';
@@ -30,35 +31,67 @@ class _NotesHomePageState extends State<NotesHomePage>
     );
   }
 
+  List<ActionOnNoteButton> get _noteActionsButtonList => [
+        ActionOnNoteButton(
+          actionText: 'Delete',
+          icon: Icons.delete_outline,
+          onPressed: vm.selectedNotesList.isNotEmpty
+              ? () async => vm.deleteSomeNotes(context)
+              : null,
+        ),
+        ActionOnNoteButton(
+          actionText: 'Add folder',
+          icon: Icons.create_new_folder_outlined,
+          onPressed: vm.selectedNotesList.isNotEmpty ? () {} : null,
+        ),
+      ];
+
+  Widget get _notesActionButtonListBuilder => Container(
+        width: MediaQuery.of(context).size.width,
+        padding: const EdgeInsets.symmetric(horizontal: 8).copyWith(top: 16),
+        color: Theme.of(context).colorScheme.surfaceContainer,
+        child: vm.selectedNotesList.observer(
+          (context, value) => SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: _noteActionsButtonList,
+            ),
+          ),
+        ),
+      );
+
+  Widget get _foldersListBuilder => SingleChildScrollView(
+        child: ListView.separated(
+          separatorBuilder: (context, index) => const SizedBox(height: 10),
+          padding: const EdgeInsets.all(16),
+          shrinkWrap: true,
+          itemBuilder: (context, index) => Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: Theme.of(context).colorScheme.outline,
+              ),
+            ),
+            padding: const EdgeInsets.all(14),
+            child: Center(
+              child: Text(
+                'Folder $index',
+                style: AppTextTheme.textXl(weight: TextWeight.medium),
+              ),
+            ),
+          ),
+          itemCount: 14,
+        ),
+      );
+
   Widget get _actionsBottomSheetBuilder => BottomSheet(
         animationController: BottomSheet.createAnimationController(this),
         onClosing: () {},
-        builder: (context) => Padding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const SizedBox(height: 0),
-              SizedBox(
-                height: 116,
-                child: ListView.separated(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) => Container(
-                    height: 100,
-                    width: 100,
-                    color: Colors.amber,
-                  ),
-                  itemCount: 10,
-                  separatorBuilder: (context, inedx) =>
-                      const SizedBox(width: 10),
-                ),
-              ),
-            ],
-          ),
+        builder: (context) => Scaffold(
+          bottomNavigationBar: _notesActionButtonListBuilder,
+          body: _foldersListBuilder,
         ),
       );
 
@@ -123,7 +156,8 @@ class _NotesHomePageState extends State<NotesHomePage>
       );
 
   Widget get _selectNoteButtonBuilder => vm.isSelectNotesMode.observer(
-        (context, value) => AppElevatedbuttonMini(
+        (context, value) => AppElevatedButton(
+          mini: true,
           style: ButtonStyle(
             backgroundColor: WidgetStatePropertyAll(
                 Theme.of(context).colorScheme.surfaceContainer),
@@ -149,10 +183,59 @@ class _NotesHomePageState extends State<NotesHomePage>
         (context, value) => AnimatedVisibility(
           visible: value,
           child: vm.selectedNotesList.observer(
-            (context, value) => AppElevatedbuttonMini(
+            (context, value) => AppElevatedButton(
+              mini: true,
               onPressed: value.isNotEmpty ? _showActionsBottomSheet : null,
               child: const Icon(Icons.more_vert_sharp),
             ),
+          ),
+        ),
+      );
+
+  Widget get _refreshNotesButtonBuilder => vm.isSelectNotesMode.observer(
+        (context, value) => AnimatedVisibility(
+          visible: !vm.isTouchDevice(context) && !value,
+          child: AppElevatedButton(
+            mini: true,
+            onPressed: value ? null : vm.refreshNotes,
+            child: const Icon(Icons.refresh_outlined),
+          ),
+        ),
+      );
+
+  Widget get _selectedNotesCountBuilder => Obs(
+        rvList: [vm.selectedNotesList, vm.isSelectNotesMode],
+        builder: (context) => AnimatedVisibility(
+          visible: vm.isSelectNotesMode.value,
+          child: Container(
+            margin: const EdgeInsets.only(right: 10),
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surfaceContainer,
+                borderRadius: BorderRadius.circular(22)),
+            child: Center(
+              child: Text(
+                vm.selectedNotesList.length.toString(),
+                style: AppTextTheme.textBase(
+                  weight: TextWeight.medium,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+  Widget get _selectAllNotesButtonBuilder => Obs(
+        rvList: [vm.isSelectNotesMode, vm.allNotesIsSelected],
+        builder: (context) => AnimatedVisibility(
+          visible: vm.isSelectNotesMode.value,
+          child: AppElevatedButton(
+            mini: true,
+            onPressed: vm.onPressedSelectAllNotes,
+            child: Icon(!vm.allNotesIsSelected.value
+                ? Icons.checklist_outlined
+                : Icons.close_rounded),
           ),
         ),
       );
@@ -163,39 +246,12 @@ class _NotesHomePageState extends State<NotesHomePage>
         surfaceTintColor: Colors.transparent,
         snap: true,
         floating: true,
-        title: vm.isSelectNotesMode.observer(
-          (context, value) => AnimatedVisibility(
-            visible: !vm.isTouchDevice(context) && !value,
-            child: AppElevatedbuttonMini(
-              onPressed: value ? null : vm.refreshNotes,
-              child: const Icon(Icons.refresh_outlined),
-            ),
-          ),
-        ),
+        title: _refreshNotesButtonBuilder,
         actions: [
-          Obs(
-            rvList: [vm.selectedNotesList, vm.isSelectNotesMode],
-            builder: (context) => AnimatedVisibility(
-              visible: vm.isSelectNotesMode.value,
-              child: Container(
-                margin: const EdgeInsets.only(right: 10),
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surfaceContainer,
-                    borderRadius: BorderRadius.circular(22)),
-                child: Center(
-                  child: Text(
-                    vm.selectedNotesList.length.toString(),
-                    style: AppTextTheme.textBase(
-                      weight: TextWeight.medium,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+          _selectedNotesCountBuilder,
           _actionButtonBuilder,
+          const SizedBox(width: 10),
+          _selectAllNotesButtonBuilder,
           const SizedBox(width: 10),
           _selectNoteButtonBuilder,
           const SizedBox(width: 16),
