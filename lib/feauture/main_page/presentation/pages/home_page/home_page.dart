@@ -1,5 +1,6 @@
 import 'package:doeves_app/core/presentation/animated_visibility.dart';
 import 'package:doeves_app/core/presentation/buttons/app_elevated_button.dart';
+import 'package:doeves_app/core/presentation/counter_widget.dart';
 import 'package:doeves_app/core/presentation/logo/app_logo_animated.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/home_page/home_page_vm.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/action_on_note.dart';
@@ -205,22 +206,12 @@ class _NotesHomePageState extends State<NotesHomePage>
 
   Widget get _selectedNotesCountBuilder => Obs(
         rvList: [vm.selectedNotesList, vm.isSelectNotesMode],
-        builder: (context) => AnimatedVisibility(
-          visible: vm.isSelectNotesMode.value,
-          child: Container(
-            margin: const EdgeInsets.only(right: 10),
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceContainer,
-                borderRadius: BorderRadius.circular(22)),
-            child: Center(
-              child: Text(
-                vm.selectedNotesList.length.toString(),
-                style: AppTextTheme.textBase(
-                  weight: TextWeight.medium,
-                ),
-              ),
+        builder: (context) => Container(
+          margin: const EdgeInsets.only(right: 10),
+          child: AnimatedVisibility(
+            visible: vm.isSelectNotesMode.value,
+            child: CounterWidget(
+              count: vm.selectedNotesList.length,
             ),
           ),
         ),
