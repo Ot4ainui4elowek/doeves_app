@@ -54,7 +54,7 @@ class _NotesHomePageState extends State<NotesHomePage>
         child: vm.selectedNotesList.observer(
           (context, value) => SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.only(bottom: 24),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: _noteActionsButtonList,
@@ -65,6 +65,7 @@ class _NotesHomePageState extends State<NotesHomePage>
 
   Widget get _foldersListBuilder => SingleChildScrollView(
         child: ListView.separated(
+          physics: const NeverScrollableScrollPhysics(),
           separatorBuilder: (context, index) => const SizedBox(height: 10),
           padding: const EdgeInsets.all(16),
           shrinkWrap: true,

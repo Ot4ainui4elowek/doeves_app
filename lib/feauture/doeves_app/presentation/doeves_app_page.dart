@@ -11,6 +11,7 @@ class DoevesApp extends StatelessWidget {
   const DoevesApp({super.key, required this.appContainer});
 
   ThemeService get themeService => appContainer.serviceScope.themeService;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
