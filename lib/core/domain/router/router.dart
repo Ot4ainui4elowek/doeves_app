@@ -95,6 +95,9 @@ final router = GoRouter(
               path: AppRoutes.notesHomePage,
               builder: (context, state) => NotesHomePage(
                 vm: NotesHomePageViewModel(
+                  notesRepository:
+                      AppContainer().repositoryScope.notesRepository,
+                  storage: AppContainer().secureScope.secureStorage,
                   repository: NotesMockedRepositoryImpl(
                     data: NotesMockedDataImpl(),
                   ),

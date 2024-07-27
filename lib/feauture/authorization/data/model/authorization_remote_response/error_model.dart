@@ -7,21 +7,21 @@ part 'error_model.g.dart';
 class ErrorResponseModel implements AuthorizationRemoteResponse {
   @JsonKey(name: 'path')
   final String path;
-  @JsonKey(name: 'content')
-  final String content;
+  @JsonKey(name: 'message')
+  final String message;
   @JsonKey(name: 'status_code')
   final int statusCode;
   @JsonKey(name: 'date')
   final String date;
   ErrorResponseModel({
     required this.path,
-    required this.content,
+    required this.message,
     required this.statusCode,
     required this.date,
   });
   static bool patternMatch(Map<String, dynamic> json) {
     return json.containsKey('path') &&
-        json.containsKey('content') &&
+        json.containsKey('message') &&
         json.containsKey('status_code') &&
         json.containsKey('date');
   }

@@ -1,12 +1,14 @@
 import 'package:doeves_app/core/domain/app_error/app_error.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
-import 'package:doeves_app/feauture/main_page/domain/entity/note_with_content/note_with_content_impl.dart';
+import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'notes_bloc.freezed.dart';
 part 'notes_event.dart';
 part 'notes_state.dart';
+
+typedef NOTE = NoteResponseModel;
 
 class NotesBloc extends Bloc<NotesEvent, NotesState> {
   NotesBloc() : super(const NotesState.initial()) {
@@ -18,7 +20,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     on<FetchNotesEvent>(
       (event, emit) {
         switch (event.result) {
-          case GoodUseCaseResult<List<NoteWithContentImpl>>(:final data):
+          case GoodUseCaseResult<List<NOTE>>(:final data):
             {
               if (data.isEmpty) {
                 emit(const NotesState.emptyResult());
@@ -26,13 +28,11 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
                 emit(const NotesState.success());
               }
             }
-          case DataBadUseCaseResult<List<NoteWithContentImpl>>(
-              :final errorData
-            ):
+          case DataBadUseCaseResult<List<NOTE>>(:final errorData):
             {
-              emit(NotesState.error(SpecificError(errorData.content)));
+              emit(NotesState.error(SpecificError(errorData.message)));
             }
-          case BadUseCaseResult<List<NoteWithContentImpl>>(:final errorList):
+          case BadUseCaseResult<List<NOTE>>(:final errorList):
             {
               emit(NotesState.error(errorList[0]));
             }

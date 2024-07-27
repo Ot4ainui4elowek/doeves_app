@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$NotesEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(UseCaseResult<List<NoteWithContentImpl>> result)
+    required TResult Function(UseCaseResult<List<NoteResponseModel>> result)
         fetchNotes,
     required TResult Function() loadingNotes,
     required TResult Function() clearState,
@@ -26,7 +26,7 @@ mixin _$NotesEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(UseCaseResult<List<NoteWithContentImpl>> result)?
+    TResult? Function(UseCaseResult<List<NoteResponseModel>> result)?
         fetchNotes,
     TResult? Function()? loadingNotes,
     TResult? Function()? clearState,
@@ -34,8 +34,7 @@ mixin _$NotesEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(UseCaseResult<List<NoteWithContentImpl>> result)?
-        fetchNotes,
+    TResult Function(UseCaseResult<List<NoteResponseModel>> result)? fetchNotes,
     TResult Function()? loadingNotes,
     TResult Function()? clearState,
     required TResult orElse(),
@@ -89,7 +88,7 @@ abstract class _$$FetchNotesEventImplCopyWith<$Res> {
           $Res Function(_$FetchNotesEventImpl) then) =
       __$$FetchNotesEventImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({UseCaseResult<List<NoteWithContentImpl>> result});
+  $Res call({UseCaseResult<List<NoteResponseModel>> result});
 }
 
 /// @nodoc
@@ -109,7 +108,7 @@ class __$$FetchNotesEventImplCopyWithImpl<$Res>
       result: null == result
           ? _value.result
           : result // ignore: cast_nullable_to_non_nullable
-              as UseCaseResult<List<NoteWithContentImpl>>,
+              as UseCaseResult<List<NoteResponseModel>>,
     ));
   }
 }
@@ -120,7 +119,7 @@ class _$FetchNotesEventImpl implements FetchNotesEvent {
   _$FetchNotesEventImpl({required this.result});
 
   @override
-  final UseCaseResult<List<NoteWithContentImpl>> result;
+  final UseCaseResult<List<NoteResponseModel>> result;
 
   @override
   String toString() {
@@ -148,7 +147,7 @@ class _$FetchNotesEventImpl implements FetchNotesEvent {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(UseCaseResult<List<NoteWithContentImpl>> result)
+    required TResult Function(UseCaseResult<List<NoteResponseModel>> result)
         fetchNotes,
     required TResult Function() loadingNotes,
     required TResult Function() clearState,
@@ -159,7 +158,7 @@ class _$FetchNotesEventImpl implements FetchNotesEvent {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(UseCaseResult<List<NoteWithContentImpl>> result)?
+    TResult? Function(UseCaseResult<List<NoteResponseModel>> result)?
         fetchNotes,
     TResult? Function()? loadingNotes,
     TResult? Function()? clearState,
@@ -170,8 +169,7 @@ class _$FetchNotesEventImpl implements FetchNotesEvent {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(UseCaseResult<List<NoteWithContentImpl>> result)?
-        fetchNotes,
+    TResult Function(UseCaseResult<List<NoteResponseModel>> result)? fetchNotes,
     TResult Function()? loadingNotes,
     TResult Function()? clearState,
     required TResult orElse(),
@@ -219,10 +217,10 @@ class _$FetchNotesEventImpl implements FetchNotesEvent {
 
 abstract class FetchNotesEvent implements NotesEvent {
   factory FetchNotesEvent(
-          {required final UseCaseResult<List<NoteWithContentImpl>> result}) =
+          {required final UseCaseResult<List<NoteResponseModel>> result}) =
       _$FetchNotesEventImpl;
 
-  UseCaseResult<List<NoteWithContentImpl>> get result;
+  UseCaseResult<List<NoteResponseModel>> get result;
   @JsonKey(ignore: true)
   _$$FetchNotesEventImplCopyWith<_$FetchNotesEventImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -266,7 +264,7 @@ class _$LoadingNotesEventImpl implements LoadingNotesEvent {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(UseCaseResult<List<NoteWithContentImpl>> result)
+    required TResult Function(UseCaseResult<List<NoteResponseModel>> result)
         fetchNotes,
     required TResult Function() loadingNotes,
     required TResult Function() clearState,
@@ -277,7 +275,7 @@ class _$LoadingNotesEventImpl implements LoadingNotesEvent {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(UseCaseResult<List<NoteWithContentImpl>> result)?
+    TResult? Function(UseCaseResult<List<NoteResponseModel>> result)?
         fetchNotes,
     TResult? Function()? loadingNotes,
     TResult? Function()? clearState,
@@ -288,8 +286,7 @@ class _$LoadingNotesEventImpl implements LoadingNotesEvent {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(UseCaseResult<List<NoteWithContentImpl>> result)?
-        fetchNotes,
+    TResult Function(UseCaseResult<List<NoteResponseModel>> result)? fetchNotes,
     TResult Function()? loadingNotes,
     TResult Function()? clearState,
     required TResult orElse(),
@@ -377,7 +374,7 @@ class _$ClearStateImpl implements ClearState {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(UseCaseResult<List<NoteWithContentImpl>> result)
+    required TResult Function(UseCaseResult<List<NoteResponseModel>> result)
         fetchNotes,
     required TResult Function() loadingNotes,
     required TResult Function() clearState,
@@ -388,7 +385,7 @@ class _$ClearStateImpl implements ClearState {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(UseCaseResult<List<NoteWithContentImpl>> result)?
+    TResult? Function(UseCaseResult<List<NoteResponseModel>> result)?
         fetchNotes,
     TResult? Function()? loadingNotes,
     TResult? Function()? clearState,
@@ -399,8 +396,7 @@ class _$ClearStateImpl implements ClearState {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(UseCaseResult<List<NoteWithContentImpl>> result)?
-        fetchNotes,
+    TResult Function(UseCaseResult<List<NoteResponseModel>> result)? fetchNotes,
     TResult Function()? loadingNotes,
     TResult Function()? clearState,
     required TResult orElse(),

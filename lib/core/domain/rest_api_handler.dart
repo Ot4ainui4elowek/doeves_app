@@ -12,16 +12,27 @@ abstract mixin class RestApiHandler {
   @protected
   Future<RestApiResult<D>> request<R, D>({
     required final Future<HttpResponse<R>> Function() callback,
-    required final D Function(JsonType json) dataMapper,
+    final D Function(JsonType json)? dataMapper,
+    final D Function(List<dynamic> json)? listDataMapper,
   }) async {
+    if ((dataMapper == null) == (listDataMapper == null)) {
+      return RestApiResult.error(
+        statusCode: -1,
+        errorList: [SpecificError('data mapper error')],
+      );
+    }
+
     try {
       final HttpResponse(:response) = await callback();
       final Response(:data, :statusCode) = response;
+
       switch (statusCode!) {
         case >= 200 && < 300:
           {
+            final dataFromJson =
+                dataMapper == null ? listDataMapper!(data) : dataMapper(data);
             return RestApiResult.data(
-                statusCode: statusCode, data: dataMapper(data));
+                statusCode: statusCode, data: dataFromJson);
           }
 
         default:

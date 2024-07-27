@@ -1,7 +1,7 @@
+import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
 import 'package:doeves_app/feauture/main_page/domain/entity/note_with_content/content/content.dart';
 import 'package:doeves_app/feauture/main_page/domain/entity/note_with_content/content/image_content_impl.dart';
 import 'package:doeves_app/feauture/main_page/domain/entity/note_with_content/content/text_content_impl.dart';
-import 'package:doeves_app/feauture/main_page/domain/entity/note_with_content/note_with_content_impl.dart';
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -11,16 +11,16 @@ class NoteWithContentWidget extends StatelessWidget {
     required this.note,
     required this.onPressed,
   });
-  final NoteWithContentImpl note;
+  final NoteResponseModel note;
   final void Function()? onPressed;
 
-  Widget get _contentListViewBuilder => ListView.separated(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: note.content.length,
-        itemBuilder: (context, index) => _ContentWidget(note.content[index]),
-        separatorBuilder: (context, index) => const Divider(height: 25),
-      );
+  // Widget get _contentListViewBuilder => ListView.separated(
+  //       shrinkWrap: true,
+  //       physics: const NeverScrollableScrollPhysics(),
+  //       itemCount: note.content.length,
+  //       itemBuilder: (context, index) => _ContentWidget(note.content[index]),
+  //       separatorBuilder: (context, index) => const Divider(height: 25),
+  //     );
 
   Widget _descriptionBuilder(BuildContext context) => Text(
         note.description,
@@ -34,7 +34,7 @@ class NoteWithContentWidget extends StatelessWidget {
       onTap: onPressed,
       contentPadding: EdgeInsets.zero,
       title: Text(
-        note.title,
+        note.name,
         style: AppTextTheme.textBase(weight: TextWeight.medium)
             .copyWith(color: Theme.of(context).colorScheme.onSurface),
       ),
@@ -44,7 +44,7 @@ class NoteWithContentWidget extends StatelessWidget {
           const SizedBox(height: 10),
           _descriptionBuilder(context),
           const SizedBox(height: 10),
-          _contentListViewBuilder,
+          //_contentListViewBuilder,
         ],
       ),
     );

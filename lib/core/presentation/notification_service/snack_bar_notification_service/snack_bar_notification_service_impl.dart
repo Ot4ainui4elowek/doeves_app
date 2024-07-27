@@ -23,7 +23,7 @@ class SnackBarNotificationServiceImpl implements NotificationService {
         {
           showNotification(
               context: context,
-              message: errorData.content,
+              message: errorData.message,
               theme: SnackBarThemeImpl.error());
         }
       case BadUseCaseResult(:final errorList):

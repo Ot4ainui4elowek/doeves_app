@@ -10,6 +10,8 @@ import 'package:doeves_app/feauture/authorization/data/source/authorization_clie
 import 'package:doeves_app/feauture/authorization/domain/bloc/theme_service.dart';
 import 'package:doeves_app/feauture/authorization/domain/repository/authorization_repository.dart';
 import 'package:doeves_app/feauture/authorization/domain/repository/verification_repository.dart';
+import 'package:doeves_app/feauture/main_page/data/repository/notes_repository_impl.dart';
+import 'package:doeves_app/feauture/main_page/data/source/notes_data_source.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 
@@ -63,7 +65,10 @@ class AppContainer {
   Future<void> _initReposytoryScope() async {
     try {
       final apiUrl = dotenv.env['APi_ADRESS'];
-      final authDataSource = AuthorizationClientDataSource.createAmazon();
+      final authDataSource =
+          AuthorizationClientDataSource.create(apiUrl: apiUrl);
+      final notesDataSourse = NotesClientDataSource.create(apiUrl: apiUrl);
+      final notesRepository = NotesRepositoryImpl(data: notesDataSourse);
       final authorizationRepository =
           AuthorizationRepositoryImpl(authorizationDataSourse: authDataSource);
       final verificationRepository =
@@ -71,6 +76,7 @@ class AppContainer {
       repositoryScope = RepositoryScope(
         authorizationRepository: authorizationRepository,
         verificationRepository: verificationRepository,
+        notesRepository: notesRepository,
       );
     } catch (e, st) {
       log('Reposytory scope has not been initialized',
@@ -98,8 +104,10 @@ class ServiceScope {
 class RepositoryScope {
   final AuthorizationRepository authorizationRepository;
   final VerificationRepository verificationRepository;
+  final NotesRepositoryImpl notesRepository;
   const RepositoryScope({
     required this.authorizationRepository,
     required this.verificationRepository,
+    required this.notesRepository,
   });
 }

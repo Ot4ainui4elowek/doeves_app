@@ -60,18 +60,20 @@ class VerificationPageViewModel {
 
   Future<void> sendCodeByVerification(BuildContext context) async {
     final String? token = await _storage.readToken();
-    if (token == null && context.mounted) {
-      _notificationService.showNotification(
-          context: context,
-          message: 'User is not authorized',
-          theme: SnackBarThemeImpl.error());
+    if (token == null) {
+      if (context.mounted) {
+        _notificationService.showNotification(
+            context: context,
+            message: 'User is not authorized',
+            theme: SnackBarThemeImpl.error());
+      }
       return;
     }
 
     final response = await _verificationRepository.sendVerificationCode(
         code: int.parse(
             codeControllers.map((controller) => controller.text).join('')),
-        jwtToken: 'pidr pizda token elda chlen $token');
+        jwtToken: token);
     if (response is GoodUseCaseResult) {
       _storage.deleteAllSecure();
     }
@@ -85,16 +87,18 @@ class VerificationPageViewModel {
 
   Future<void> sendCodeByEmail(BuildContext context) async {
     final String? token = await _storage.readToken();
-    if (token == null && context.mounted) {
-      _notificationService.showNotification(
-          context: context,
-          message: 'User is not authorized',
-          theme: SnackBarThemeImpl.error());
+    if (token == null) {
+      if (context.mounted) {
+        _notificationService.showNotification(
+            context: context,
+            message: 'User is not authorized',
+            theme: SnackBarThemeImpl.error());
+      }
       return;
     }
 
-    final response = await _verificationRepository
-        .resendVerificationCode('pidr pizda token elda chlen $token');
+    final response =
+        await _verificationRepository.resendVerificationCode(token);
 
     canResendCode(false);
     Future.delayed(

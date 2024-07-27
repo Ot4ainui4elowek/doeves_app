@@ -34,7 +34,7 @@ class _AuthorizationClientDataSource implements AuthorizationClientDataSource {
     )
             .compose(
               _dio.options,
-              '/api/v1/user/login',
+              '/user/login',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -64,7 +64,7 @@ class _AuthorizationClientDataSource implements AuthorizationClientDataSource {
     )
             .compose(
               _dio.options,
-              '/api/v1/user',
+              '/user',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -96,7 +96,7 @@ class _AuthorizationClientDataSource implements AuthorizationClientDataSource {
     )
             .compose(
               _dio.options,
-              '/api/v1/user/verification',
+              '/user/verification',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -126,7 +126,7 @@ class _AuthorizationClientDataSource implements AuthorizationClientDataSource {
     )
             .compose(
               _dio.options,
-              '/api/v1/user/verification/new',
+              '/user/verification/new',
               queryParameters: queryParameters,
               data: _data,
             )

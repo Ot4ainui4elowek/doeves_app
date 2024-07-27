@@ -3,7 +3,7 @@ part of 'notes_bloc.dart';
 @freezed
 abstract class NotesEvent with _$NotesEvent {
   factory NotesEvent.fetchNotes({
-    required UseCaseResult<List<NoteWithContentImpl>> result,
+    required UseCaseResult<List<NoteResponseModel>> result,
   }) = FetchNotesEvent;
   factory NotesEvent.loadingNotes() = LoadingNotesEvent;
   factory NotesEvent.clearState() = ClearState;

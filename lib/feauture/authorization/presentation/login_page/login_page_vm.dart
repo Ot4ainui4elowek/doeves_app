@@ -93,8 +93,8 @@ class LoginPageViewModel {
   Future<void> signInWithEmail(BuildContext context) async {
     final stretegy = SignInUsingEmailStrategy(
         authorizationRepository: _authorizationRepository,
-        password: passwordTextController.text,
-        email: emailTextController.text);
+        password: passwordTextController.text.trim(),
+        email: emailTextController.text.trim());
     return await signIn(signInStrtegy: stretegy, context: context);
   }
 }

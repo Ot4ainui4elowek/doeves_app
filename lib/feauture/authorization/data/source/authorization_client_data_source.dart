@@ -15,7 +15,7 @@ abstract class AuthorizationClientDataSource {
   factory AuthorizationClientDataSource.createAmazon() =>
       AuthorizationClientDataSource(
         Dio(),
-        baseUrl: 'http://ec2-35-175-251-233.compute-1.amazonaws.com',
+        baseUrl: 'http://ec2-35-175-251-233.compute-1.amazonaws.com/api/v1',
       );
   factory AuthorizationClientDataSource.create({
     String? apiUrl,
@@ -29,21 +29,21 @@ abstract class AuthorizationClientDataSource {
     );
   }
 
-  @POST('/api/v1/user/login')
+  @POST('/user/login')
   Future<HttpResponse<SignInResponseModel>> signIn(
       @Body() SignInRequestModel data);
 
-  @POST('/api/v1/user')
+  @POST('/user')
   Future<HttpResponse<SignUpResponseModel>> signUp(
       @Body() SignUpRequestModel data);
 
-  @POST('/api/v1/user/verification')
+  @POST('/user/verification')
   Future<HttpResponse<VerificationResponseModel>> sendVerificationCode(
     @Header('Authorization') String token,
     @Query('code') int code,
   );
 
-  @POST('/api/v1/user/verification/new')
+  @POST('/user/verification/new')
   Future<HttpResponse<VerificationResponseModel>> resendVerificationCode(
     @Header('Authorization') String jwtToken,
   );

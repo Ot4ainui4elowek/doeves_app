@@ -65,10 +65,10 @@ class RegistrationPageViewModel {
   Future<void> signUpWitchEmailStrategy(BuildContext context) async {
     final signUpStrategy = SignUpUsingEmailStrategy(
       _authorizationRepository,
-      fullName: fullNameTextController.text,
-      email: emailTextController.text,
-      password: passwordTextController.text,
-      retypePassword: retypePasswordTextController.text,
+      fullName: fullNameTextController.text.trim(),
+      email: emailTextController.text.trim(),
+      password: passwordTextController.text.trim(),
+      retypePassword: retypePasswordTextController.text.trim(),
     );
     return await signUp(strategy: signUpStrategy, context: context);
   }
