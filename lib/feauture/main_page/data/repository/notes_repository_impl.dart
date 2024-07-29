@@ -8,24 +8,25 @@ import 'package:doeves_app/feauture/main_page/domain/repository/notes_repository
 
 class NotesRepositoryImpl with RestApiHandler implements NotesRepository {
   NotesRepositoryImpl({
-    required this.data,
-  });
+    required NotesClientDataSource data,
+  }) : _notesDataSourse = data;
 
-  final NotesClientDataSource data;
+  final NotesClientDataSource _notesDataSourse;
 
   List<NoteResponseModel> _noteListDataMaper(List<dynamic> json) {
     return json.map((note) => NoteResponseModel.fromJson(note)).toList();
   }
 
   @override
-  Future<UseCaseResult<List<NoteResponseModel>>> getAllNotes(
-      {required int offset,
-      required int limit,
-      required bool includingCatalogs,
-      required String jwtToken}) async {
+  Future<UseCaseResult<List<NoteResponseModel>>> getAllNotes({
+    required int offset,
+    required int limit,
+    required bool includingCatalogs,
+    required String jwtToken,
+  }) async {
     try {
-      final result = await request(
-        callback: () => data.getNotes(
+      final result = await requestWithListDataMapper(
+        callback: () => _notesDataSourse.getNotes(
             token: jwtToken,
             offset: offset,
             limit: limit,
@@ -52,5 +53,11 @@ class NotesRepositoryImpl with RestApiHandler implements NotesRepository {
       return UseCaseResult.bad(
           [SpecificError(HttpStatusAndErrors.invalidRequest.value)]);
     }
+  }
+
+  @override
+  Future<UseCaseResult<String>> deleteMultipleNotes(
+      {required List<int> deleteNotesList, required String jwtToken}) async {
+    return throw Exception();
   }
 }

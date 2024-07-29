@@ -12,6 +12,22 @@ abstract mixin class RestApiHandler {
   @protected
   Future<RestApiResult<D>> request<R, D>({
     required final Future<HttpResponse<R>> Function() callback,
+    required final D Function(JsonType json) dataMapper,
+  }) async {
+    return _request(callback: callback, dataMapper: dataMapper);
+  }
+
+  @protected
+  Future<RestApiResult<D>> requestWithListDataMapper<R, D>({
+    required final Future<HttpResponse<R>> Function() callback,
+    required final D Function(List<dynamic> json)? listDataMapper,
+  }) async {
+    return _request(callback: callback, listDataMapper: listDataMapper);
+  }
+
+  @protected
+  Future<RestApiResult<D>> _request<R, D>({
+    required final Future<HttpResponse<R>> Function() callback,
     final D Function(JsonType json)? dataMapper,
     final D Function(List<dynamic> json)? listDataMapper,
   }) async {
@@ -25,7 +41,6 @@ abstract mixin class RestApiHandler {
     try {
       final HttpResponse(:response) = await callback();
       final Response(:data, :statusCode) = response;
-
       switch (statusCode!) {
         case >= 200 && < 300:
           {

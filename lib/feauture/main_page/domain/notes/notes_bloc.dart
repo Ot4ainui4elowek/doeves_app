@@ -20,19 +20,21 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     on<FetchNotesEvent>(
       (event, emit) {
         switch (event.result) {
-          case GoodUseCaseResult<List<NOTE>>(:final data):
+          case GoodUseCaseResult(:final data):
             {
-              if (data.isEmpty) {
-                emit(const NotesState.emptyResult());
+              if (event.initialListIsEmpty && data.isEmpty) {
+                emit(const NotesState.initial());
+              } else if (!event.initialListIsEmpty && data.isEmpty) {
+                emit(const NotesState.emptyResponse());
               } else {
-                emit(const NotesState.success());
+                emit(const NotesState.emptyState());
               }
             }
-          case DataBadUseCaseResult<List<NOTE>>(:final errorData):
+          case DataBadUseCaseResult(:final errorData):
             {
               emit(NotesState.error(SpecificError(errorData.message)));
             }
-          case BadUseCaseResult<List<NOTE>>(:final errorList):
+          case BadUseCaseResult(:final errorList):
             {
               emit(NotesState.error(errorList[0]));
             }
@@ -43,8 +45,15 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
         }
       },
     );
-    on<ClearState>(
+    on<EmptyResponse>(
+      (event, emit) => emit(const NotesState.emptyResponse()),
+    );
+
+    on<ResetToInitialState>(
       (event, emit) => emit(const NotesState.initial()),
+    );
+    on<ClearState>(
+      (event, emit) => emit(const NotesState.emptyState()),
     );
   }
 }

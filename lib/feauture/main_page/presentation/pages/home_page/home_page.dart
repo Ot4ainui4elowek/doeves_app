@@ -102,11 +102,19 @@ class _NotesHomePageState extends State<NotesHomePage>
           bloc: vm.notesBloc,
           builder: (context, state) => vm.notesBloc.state.maybeWhen(
             orElse: () => const SizedBox(height: 0),
+            initial: () => Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 25),
+              child: Text(
+                'You don\'t have any notes. Add them and they will appear here.',
+                style: AppTextTheme.textXl(weight: TextWeight.medium),
+              ),
+            ),
             loadingNotes: () => Container(
               margin: const EdgeInsets.symmetric(vertical: 24),
               child: const AppLogoAnimated(curve: Curves.linear, repeat: true),
             ),
-            emptyResult: () => Padding(
+            emptyResponse: () => Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 25),
               child: Text(
@@ -114,7 +122,22 @@ class _NotesHomePageState extends State<NotesHomePage>
                 style: AppTextTheme.textXl(weight: TextWeight.medium),
               ),
             ),
-            error: (error) => Text(error.code),
+            error: (error) => Column(
+              children: [
+                const SizedBox(height: 150),
+                Icon(
+                  Icons.error_outline,
+                  color: Theme.of(context).colorScheme.error,
+                  size: 50,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  error.code,
+                  style: AppTextTheme.textXl(weight: TextWeight.medium)
+                      .copyWith(color: Theme.of(context).colorScheme.error),
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -219,12 +242,12 @@ class _NotesHomePageState extends State<NotesHomePage>
       );
 
   Widget get _selectAllNotesButtonBuilder => Obs(
-        rvList: [vm.isSelectNotesMode, vm.allNotesIsSelected],
+        rvList: [vm.isSelectNotesMode, vm.allNotesIsSelected, vm.notes],
         builder: (context) => AnimatedVisibility(
           visible: vm.isSelectNotesMode.value,
           child: AppElevatedButton(
             mini: true,
-            onPressed: vm.onPressedSelectAllNotes,
+            onPressed: vm.notes.isNotEmpty ? vm.onPressedSelectAllNotes : null,
             child: Icon(!vm.allNotesIsSelected.value
                 ? Icons.checklist_outlined
                 : Icons.close_rounded),

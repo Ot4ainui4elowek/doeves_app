@@ -8,4 +8,9 @@ abstract interface class NotesRepository {
     required bool includingCatalogs,
     required String jwtToken,
   });
+
+  Future<UseCaseResult<String>> deleteMultipleNotes({
+    required List<int> deleteNotesList,
+    required String jwtToken,
+  });
 }

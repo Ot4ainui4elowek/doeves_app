@@ -32,6 +32,12 @@ abstract class NotesClientDataSource {
     @Body() required CreateNoteRequestModel note,
   });
 
+  @DELETE('/note/{listId}')
+  Future<HttpResponse> deleteMultipleNotes({
+    @Header('Authorization') required String token,
+    @Path('listId') required String idList,
+  });
+
   @GET('/note/all')
   Future<HttpResponse<List<NoteResponseModel>>> getNotes({
     @Header('Authorization') required String token,

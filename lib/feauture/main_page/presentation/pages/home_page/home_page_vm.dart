@@ -37,7 +37,6 @@ class NotesHomePageViewModel {
   void init() async {
     notesBloc.add(NotesEvent.loadingNotes());
     await getNotes();
-    notesBloc.add(NotesEvent.clearState());
     scrollController.addListener(checkScroll);
     isSelectNotesMode.addListener(
       () {
@@ -124,26 +123,19 @@ class NotesHomePageViewModel {
     if (jwtToken == null) {
       return;
     }
+    await Future.delayed(const Duration(seconds: 2));
     final result = await _notesRepository.getAllNotes(
         offset: notes.length,
         limit: 10,
         includingCatalogs: false,
         jwtToken: jwtToken);
 
-    notesBloc.add(NotesEvent.fetchNotes(result: result));
-
     isLoading(false);
-
-    switch (result) {
-      case GoodUseCaseResult<List<NoteResponseModel>>(:final data):
-        {
-          notes.addAll(data);
-          break;
-        }
-      default:
-        {
-          return;
-        }
+    notesBloc.add(NotesEvent.fetchNotes(
+        result: result, initialListIsEmpty: notes.isEmpty));
+    if (result is GoodUseCaseResult<List<NoteResponseModel>>) {
+      final data = result.data;
+      notes.addAll(data);
     }
   }
 
@@ -151,6 +143,9 @@ class NotesHomePageViewModel {
     notesBloc.add(NotesEvent.clearState());
     notes.clear();
     await getNotes();
+    if (notes.isEmpty) {
+      notesBloc.add(NotesEvent.resetToInitialState());
+    }
   }
 
   // Future<void> addNote(
@@ -173,8 +168,14 @@ class NotesHomePageViewModel {
   // }
 
   Future<void> deleteSomeNotes(BuildContext context) async {
-    final result =
-        await _repository.deleteMoreNotes(deletedList: selectedNotesList.value);
+    final jwtToken = await _storage.readToken();
+    if (jwtToken == null) {
+      return;
+    }
+    final result = await _notesRepository.deleteMultipleNotes(
+      deleteNotesList: selectedNotesList.value,
+      jwtToken: jwtToken,
+    );
     if (result is GoodUseCaseResult) {
       notes.value
           .removeWhere((note) => selectedNotesList.value.contains(note.id));
