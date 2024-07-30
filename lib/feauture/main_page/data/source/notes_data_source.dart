@@ -33,7 +33,7 @@ abstract class NotesClientDataSource {
   });
 
   @DELETE('/note/{listId}')
-  Future<HttpResponse> deleteMultipleNotes({
+  Future<HttpResponse<String>> deleteMultipleNotes({
     @Header('Authorization') required String token,
     @Path('listId') required String idList,
   });

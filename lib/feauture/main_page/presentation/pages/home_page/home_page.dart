@@ -217,12 +217,15 @@ class _NotesHomePageState extends State<NotesHomePage>
         ),
       );
 
-  Widget get _refreshNotesButtonBuilder => vm.isSelectNotesMode.observer(
-        (context, value) => AnimatedVisibility(
-          visible: !vm.isTouchDevice(context) && !value,
+  Widget get _refreshNotesButtonBuilder => Obs(
+        rvList: [vm.isSelectNotesMode, vm.isLoading],
+        builder: (context) => AnimatedVisibility(
+          visible: !vm.isTouchDevice(context) && !vm.isSelectNotesMode.value,
           child: AppElevatedButton(
             mini: true,
-            onPressed: value ? null : vm.refreshNotes,
+            onPressed: vm.isSelectNotesMode.value || vm.isLoading.value
+                ? null
+                : vm.refreshNotes,
             child: const Icon(Icons.refresh_outlined),
           ),
         ),

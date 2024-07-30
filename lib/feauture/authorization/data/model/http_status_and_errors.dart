@@ -15,7 +15,8 @@ enum HttpStatusAndErrors implements HttpStatus {
   e500('server-exception'),
   e400('invalid data'),
   incorrectNumber('incorrectNumber'),
-  passwordMismatch('passwordMismatch');
+  passwordMismatch('passwordMismatch'),
+  emptyResult('empty-result');
 
   const HttpStatusAndErrors(this.value);
 

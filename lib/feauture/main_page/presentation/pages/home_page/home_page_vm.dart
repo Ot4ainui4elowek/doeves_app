@@ -5,8 +5,8 @@ import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/core/presentation/notification_service/snack_bar_notification_service/snack_bar_notification_service_impl.dart';
 import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
 import 'package:doeves_app/feauture/main_page/data/repository/notes_mocked_repository_impl.dart';
-import 'package:doeves_app/feauture/main_page/data/repository/notes_repository_impl.dart';
 import 'package:doeves_app/feauture/main_page/domain/notes/notes_bloc.dart';
+import 'package:doeves_app/feauture/main_page/domain/repository/notes_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reactive_variables/reactive_variables.dart';
@@ -14,7 +14,7 @@ import 'package:reactive_variables/reactive_variables.dart';
 class NotesHomePageViewModel {
   NotesHomePageViewModel({
     required NotesMockedRepositoryImpl repository,
-    required NotesRepositoryImpl notesRepository,
+    required NotesRepository notesRepository,
     required SecureStorage storage,
   })  : _storage = storage,
         _notesRepository = notesRepository,
@@ -22,7 +22,7 @@ class NotesHomePageViewModel {
 
   final SecureStorage _storage;
 
-  final NotesRepositoryImpl _notesRepository;
+  final NotesRepository _notesRepository;
 
   final GlobalKey<RefreshIndicatorState> refreshIndicatorKey = GlobalKey();
 
@@ -37,6 +37,7 @@ class NotesHomePageViewModel {
   void init() async {
     notesBloc.add(NotesEvent.loadingNotes());
     await getNotes();
+
     scrollController.addListener(checkScroll);
     isSelectNotesMode.addListener(
       () {
@@ -100,7 +101,8 @@ class NotesHomePageViewModel {
   }
 
   void checkScroll() {
-    if (!isLoading.value &&
+    if (!isSelectNotesMode.value &&
+        !isLoading.value &&
         scrollController.position.atEdge &&
         scrollController.position.pixels != 0) {
       notesBloc.add(NotesEvent.loadingNotes());
@@ -143,9 +145,6 @@ class NotesHomePageViewModel {
     notesBloc.add(NotesEvent.clearState());
     notes.clear();
     await getNotes();
-    if (notes.isEmpty) {
-      notesBloc.add(NotesEvent.resetToInitialState());
-    }
   }
 
   // Future<void> addNote(
@@ -180,6 +179,11 @@ class NotesHomePageViewModel {
       notes.value
           .removeWhere((note) => selectedNotesList.value.contains(note.id));
       notes.refresh();
+      if (notes.isNotEmpty) {
+        notesBloc.add(NotesEvent.clearState());
+      } else {
+        notesBloc.add(NotesEvent.resetToInitialState());
+      }
     }
     isSelectNotesMode(false);
     if (context.mounted && context.canPop()) {

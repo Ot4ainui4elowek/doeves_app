@@ -35,6 +35,11 @@ class VerificationRepositoryImpl
           {
             return UseCaseResult.bad(errorList);
           }
+        default:
+          {
+            return UseCaseResult.bad(
+                [SpecificError(HttpStatusAndErrors.invalidRequest.value)]);
+          }
       }
     } catch (e) {
       return UseCaseResult.bad(
@@ -63,6 +68,11 @@ class VerificationRepositoryImpl
         case ErrorRestApiResult<VerificationResponseModel>(:final errorList):
           {
             return UseCaseResult.bad(errorList);
+          }
+        default:
+          {
+            return UseCaseResult.bad(
+                [SpecificError(HttpStatusAndErrors.invalidRequest.value)]);
           }
       }
     } catch (e) {

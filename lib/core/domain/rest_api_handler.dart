@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:doeves_app/core/data/remote_response.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
@@ -9,45 +11,57 @@ import 'package:retrofit/dio.dart';
 import 'app_error/app_error.dart';
 
 abstract mixin class RestApiHandler {
+  // @protected
+  // Future<RestApiResult<D>> request<R, D>({
+  //   required final Future<HttpResponse<R>> Function() callback,
+  //   required final D Function(JsonType json) dataMapper,
+  // }) async {
+  //   return _request(callback: callback, dataMapper: dataMapper);
+  // }
+
+  // @protected
+  // Future<RestApiResult<D>> requestWithListDataMapper<R, D>({
+  //   required final Future<HttpResponse<R>> Function() callback,
+  //   required final D Function(List<dynamic> json)? listDataMapper,
+  // }) async {
+  //   return _request(callback: callback, listDataMapper: listDataMapper);
+  // }
+
   @protected
   Future<RestApiResult<D>> request<R, D>({
     required final Future<HttpResponse<R>> Function() callback,
     required final D Function(JsonType json) dataMapper,
   }) async {
-    return _request(callback: callback, dataMapper: dataMapper);
-  }
-
-  @protected
-  Future<RestApiResult<D>> requestWithListDataMapper<R, D>({
-    required final Future<HttpResponse<R>> Function() callback,
-    required final D Function(List<dynamic> json)? listDataMapper,
-  }) async {
-    return _request(callback: callback, listDataMapper: listDataMapper);
-  }
-
-  @protected
-  Future<RestApiResult<D>> _request<R, D>({
-    required final Future<HttpResponse<R>> Function() callback,
-    final D Function(JsonType json)? dataMapper,
-    final D Function(List<dynamic> json)? listDataMapper,
-  }) async {
-    if ((dataMapper == null) == (listDataMapper == null)) {
-      return RestApiResult.error(
-        statusCode: -1,
-        errorList: [SpecificError('data mapper error')],
-      );
-    }
-
+    // if ((dataMapper == null) == (listDataMapper == null)) {
+    //   return RestApiResult.error(
+    //     statusCode: -1,
+    //     errorList: [SpecificError('data mapper error')],
+    //   );
+    // }
     try {
       final HttpResponse(:response) = await callback();
       final Response(:data, :statusCode) = response;
+
       switch (statusCode!) {
         case >= 200 && < 300:
           {
-            final dataFromJson =
-                dataMapper == null ? listDataMapper!(data) : dataMapper(data);
+            if (data is List) {
+              log('data is list');
+              final resposneData = dataMapper({"list": data});
+              return RestApiResult.data(
+                statusCode: statusCode,
+                data: resposneData,
+              );
+            }
+            if (data is String) {
+              log('data is string');
+              return RestApiResult.data(
+                  statusCode: statusCode, data: dataMapper({"good": true}));
+            }
             return RestApiResult.data(
-                statusCode: statusCode, data: dataFromJson);
+              statusCode: statusCode,
+              data: dataMapper(data),
+            );
           }
 
         default:
@@ -101,6 +115,7 @@ abstract mixin class RestApiHandler {
         );
       }
     } catch (e) {
+      log(e.toString());
       return RestApiResult.error(
         statusCode: -1,
         errorList: [SpecificError(HttpStatusAndErrors.handlerException.value)],

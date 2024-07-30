@@ -3,6 +3,9 @@ import 'package:doeves_app/core/domain/rest_api_handler.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/feauture/authorization/data/model/http_status_and_errors.dart';
 import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
+import 'package:doeves_app/feauture/main_page/data/model/notes_list/notes_list_remote_response.dart';
+import 'package:doeves_app/feauture/main_page/data/model/notes_list/notes_list_response_model.dart';
+import 'package:doeves_app/feauture/main_page/data/model/remove_list_of_notes/remove_notes_remote_response.dart';
 import 'package:doeves_app/feauture/main_page/data/source/notes_data_source.dart';
 import 'package:doeves_app/feauture/main_page/domain/repository/notes_repository.dart';
 
@@ -13,9 +16,9 @@ class NotesRepositoryImpl with RestApiHandler implements NotesRepository {
 
   final NotesClientDataSource _notesDataSourse;
 
-  List<NoteResponseModel> _noteListDataMaper(List<dynamic> json) {
-    return json.map((note) => NoteResponseModel.fromJson(note)).toList();
-  }
+  // List<NoteResponseModel> _noteListDataMaper(List<dynamic> json) {
+  //   return json.map((note) => NoteResponseModel.fromJson(note)).toList();
+  // }
 
   @override
   Future<UseCaseResult<List<NoteResponseModel>>> getAllNotes({
@@ -25,26 +28,27 @@ class NotesRepositoryImpl with RestApiHandler implements NotesRepository {
     required String jwtToken,
   }) async {
     try {
-      final result = await requestWithListDataMapper(
+      final result = await request(
         callback: () => _notesDataSourse.getNotes(
             token: jwtToken,
             offset: offset,
             limit: limit,
             includingCatalogs: includingCatalogs),
-        listDataMapper: _noteListDataMaper,
+        dataMapper: NotesListRemoteResponse.fromJson,
       );
       switch (result) {
-        case DataRestApiResult<List<NoteResponseModel>>(:final data):
+        case DataRestApiResult<NotesListRemoteResponse>(:final data):
           {
-            return GoodUseCaseResult(data);
+            data as NotesListResponseModel;
+            return GoodUseCaseResult((data.list));
           }
-        case ErrorWitchDataRestApiResult<List<NoteResponseModel>>(
+        case ErrorWitchDataRestApiResult<NotesListRemoteResponse>(
             :final errorData
           ):
           {
             return DataBadUseCaseResult(errorData: errorData);
           }
-        case ErrorRestApiResult<List<NoteResponseModel>>(:final errorList):
+        case ErrorRestApiResult<NotesListRemoteResponse>(:final errorList):
           {
             return BadUseCaseResult(errorList: errorList);
           }
@@ -56,8 +60,33 @@ class NotesRepositoryImpl with RestApiHandler implements NotesRepository {
   }
 
   @override
-  Future<UseCaseResult<String>> deleteMultipleNotes(
+  Future<UseCaseResult<RemoveNotesRemoteResponse>> deleteMultipleNotes(
       {required List<int> deleteNotesList, required String jwtToken}) async {
-    return throw Exception();
+    try {
+      final result = await request(
+        callback: () => _notesDataSourse.deleteMultipleNotes(
+            token: jwtToken, idList: deleteNotesList.join(',')),
+        dataMapper: RemoveNotesRemoteResponse.fromJson,
+      );
+      switch (result) {
+        case DataRestApiResult<RemoveNotesRemoteResponse>(:final data):
+          {
+            return UseCaseResult.good(data);
+          }
+        case ErrorWitchDataRestApiResult<RemoveNotesRemoteResponse>(
+            :final errorData
+          ):
+          {
+            return UseCaseResult.dataBad(errorData);
+          }
+        case ErrorRestApiResult<RemoveNotesRemoteResponse>(:final errorList):
+          {
+            return UseCaseResult.bad(errorList);
+          }
+      }
+    } catch (e) {
+      return BadUseCaseResult(
+          errorList: [SpecificError(HttpStatusAndErrors.invalidRequest.value)]);
+    }
   }
 }
