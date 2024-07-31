@@ -35,7 +35,7 @@ class NotesHomePageViewModel {
   final notificationService = SnackBarNotificationServiceImpl();
 
   void init() async {
-    notesBloc.add(NotesEvent.loadingNotes());
+    notesBloc.add(UseCaseBlocEvent.loadingNotes());
     await getNotes();
 
     scrollController.addListener(checkScroll);
@@ -105,7 +105,7 @@ class NotesHomePageViewModel {
         !isLoading.value &&
         scrollController.position.atEdge &&
         scrollController.position.pixels != 0) {
-      notesBloc.add(NotesEvent.loadingNotes());
+      notesBloc.add(UseCaseBlocEvent.loadingNotes());
       getNotes();
     }
   }
@@ -116,7 +116,7 @@ class NotesHomePageViewModel {
 
   final Rv<List<NoteResponseModel>> notes = Rv([]);
 
-  final NotesBloc notesBloc = NotesBloc();
+  final UseCaseBloc notesBloc = UseCaseBloc();
 
   Future<void> getNotes() async {
     isLoading(true);
@@ -133,7 +133,7 @@ class NotesHomePageViewModel {
         jwtToken: jwtToken);
 
     isLoading(false);
-    notesBloc.add(NotesEvent.fetchNotes(
+    notesBloc.add(UseCaseBlocEvent.fetchNotes(
         result: result, initialListIsEmpty: notes.isEmpty));
     if (result is GoodUseCaseResult<List<NoteResponseModel>>) {
       final data = result.data;
@@ -142,7 +142,7 @@ class NotesHomePageViewModel {
   }
 
   Future<void> refreshNotes() async {
-    notesBloc.add(NotesEvent.clearState());
+    notesBloc.add(UseCaseBlocEvent.clearState());
     notes.clear();
     await getNotes();
   }
@@ -180,9 +180,9 @@ class NotesHomePageViewModel {
           .removeWhere((note) => selectedNotesList.value.contains(note.id));
       notes.refresh();
       if (notes.isNotEmpty) {
-        notesBloc.add(NotesEvent.clearState());
+        notesBloc.add(UseCaseBlocEvent.clearState());
       } else {
-        notesBloc.add(NotesEvent.resetToInitialState());
+        notesBloc.add(UseCaseBlocEvent.resetToInitialState());
       }
     }
     isSelectNotesMode(false);
@@ -196,14 +196,8 @@ class NotesHomePageViewModel {
     }
   }
 
-  bool isTouchDevice(BuildContext context) {
-    final platform = Theme.of(context).platform;
-    return platform == TargetPlatform.android ||
-        platform == TargetPlatform.iOS ||
-        platform == TargetPlatform.fuchsia;
-  }
-
   Future<void> onNoteDrag(int oldIndex, int newIndex) async {
+    return;
     final oldId = notes.value[oldIndex].id;
     final newId = notes.value[newIndex].id;
 

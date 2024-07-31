@@ -46,7 +46,6 @@ abstract mixin class RestApiHandler {
         case >= 200 && < 300:
           {
             if (data is List) {
-              log('data is list');
               final resposneData = dataMapper({"list": data});
               return RestApiResult.data(
                 statusCode: statusCode,
@@ -54,7 +53,6 @@ abstract mixin class RestApiHandler {
               );
             }
             if (data is String) {
-              log('data is string');
               return RestApiResult.data(
                   statusCode: statusCode, data: dataMapper({"good": true}));
             }

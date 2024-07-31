@@ -2,10 +2,13 @@ import 'package:doeves_app/core/presentation/animated_visibility.dart';
 import 'package:doeves_app/core/presentation/buttons/app_elevated_button.dart';
 import 'package:doeves_app/core/presentation/counter_widget.dart';
 import 'package:doeves_app/core/presentation/logo/app_logo_animated.dart';
+import 'package:doeves_app/feauture/main_page/domain/device_params.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/home_page/home_page_vm.dart';
-import 'package:doeves_app/feauture/main_page/presentation/widgets/action_on_note.dart';
-import 'package:doeves_app/feauture/main_page/presentation/widgets/draggable_selectable_container.dart';
+import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/action_on_note_button.dart';
+import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/refresh_button.dart';
+import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/select_all_button.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/notes/note_with_content_widget.dart';
+import 'package:doeves_app/feauture/main_page/presentation/widgets/selectable_container.dart';
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -98,45 +101,38 @@ class _NotesHomePageState extends State<NotesHomePage>
       );
 
   Widget get _notesLoadingIndicatorBuilder => Center(
-        child: BlocBuilder(
-          bloc: vm.notesBloc,
-          builder: (context, state) => vm.notesBloc.state.maybeWhen(
-            orElse: () => const SizedBox(height: 0),
-            initial: () => Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 25),
-              child: Text(
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+          child: BlocBuilder(
+            bloc: vm.notesBloc,
+            builder: (context, state) => vm.notesBloc.state.maybeWhen(
+              orElse: () => const SizedBox(height: 0),
+              initial: () => Text(
                 'You don\'t have any notes. Add them and they will appear here.',
                 style: AppTextTheme.textXl(weight: TextWeight.medium),
               ),
-            ),
-            loadingNotes: () => Container(
-              margin: const EdgeInsets.symmetric(vertical: 24),
-              child: const AppLogoAnimated(curve: Curves.linear, repeat: true),
-            ),
-            emptyResponse: () => Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 25),
-              child: Text(
+              loading: () =>
+                  const AppLogoAnimated(curve: Curves.linear, repeat: true),
+              emptyResponse: () => Text(
                 'All notes are loaded!',
                 style: AppTextTheme.textXl(weight: TextWeight.medium),
               ),
-            ),
-            error: (error) => Column(
-              children: [
-                const SizedBox(height: 150),
-                Icon(
-                  Icons.error_outline,
-                  color: Theme.of(context).colorScheme.error,
-                  size: 50,
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  error.code,
-                  style: AppTextTheme.textXl(weight: TextWeight.medium)
-                      .copyWith(color: Theme.of(context).colorScheme.error),
-                ),
-              ],
+              error: (error) => Column(
+                children: [
+                  const SizedBox(height: 150),
+                  Icon(
+                    Icons.error_outline,
+                    color: Theme.of(context).colorScheme.error,
+                    size: 50,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    error.code,
+                    style: AppTextTheme.textXl(weight: TextWeight.medium)
+                        .copyWith(color: Theme.of(context).colorScheme.error),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -159,8 +155,8 @@ class _NotesHomePageState extends State<NotesHomePage>
             enabled: !vm.isLoading.value ^ vm.isSelectNotesMode.value,
             key: ObjectKey(vm.notes[index]),
             index: index,
-            child: DraggableSelectableContainer(
-              deleteModeEnabled: vm.isSelectNotesMode.value,
+            child: SelectableContainer(
+              isSelectedMode: vm.isSelectNotesMode.value,
               thisItemIsSelected:
                   vm.checkDelteNotesListContainsNote(vm.notes[index].id),
               child: NoteWithContentWidget(
@@ -180,7 +176,7 @@ class _NotesHomePageState extends State<NotesHomePage>
         ),
       );
 
-  Widget get _selectNoteButtonBuilder => vm.isSelectNotesMode.observer(
+  Widget get _selectionModeButtonBuilder => vm.isSelectNotesMode.observer(
         (context, value) => AppElevatedButton(
           mini: true,
           style: ButtonStyle(
@@ -220,15 +216,13 @@ class _NotesHomePageState extends State<NotesHomePage>
   Widget get _refreshNotesButtonBuilder => Obs(
         rvList: [vm.isSelectNotesMode, vm.isLoading],
         builder: (context) => AnimatedVisibility(
-          visible: !vm.isTouchDevice(context) && !vm.isSelectNotesMode.value,
-          child: AppElevatedButton(
-            mini: true,
-            onPressed: vm.isSelectNotesMode.value || vm.isLoading.value
-                ? null
-                : vm.refreshNotes,
-            child: const Icon(Icons.refresh_outlined),
-          ),
-        ),
+            visible: !DeviceParams.checkIsTouchDevice(context) &&
+                !vm.isSelectNotesMode.value,
+            child: RefreshButton(
+              onPressed: vm.isSelectNotesMode.value || vm.isLoading.value
+                  ? null
+                  : vm.refreshNotes,
+            )),
       );
 
   Widget get _selectedNotesCountBuilder => Obs(
@@ -247,15 +241,11 @@ class _NotesHomePageState extends State<NotesHomePage>
   Widget get _selectAllNotesButtonBuilder => Obs(
         rvList: [vm.isSelectNotesMode, vm.allNotesIsSelected, vm.notes],
         builder: (context) => AnimatedVisibility(
-          visible: vm.isSelectNotesMode.value,
-          child: AppElevatedButton(
-            mini: true,
-            onPressed: vm.notes.isNotEmpty ? vm.onPressedSelectAllNotes : null,
-            child: Icon(!vm.allNotesIsSelected.value
-                ? Icons.checklist_outlined
-                : Icons.close_rounded),
-          ),
-        ),
+            visible: vm.isSelectNotesMode.value,
+            child: SelectAllButton(
+              listIsSelected: vm.allNotesIsSelected.value,
+              onPressed: vm.onPressedSelectAllNotes,
+            )),
       );
 
   SliverAppBar get _appBarBuilder => SliverAppBar(
@@ -271,7 +261,7 @@ class _NotesHomePageState extends State<NotesHomePage>
           const SizedBox(width: 10),
           _selectAllNotesButtonBuilder,
           const SizedBox(width: 10),
-          _selectNoteButtonBuilder,
+          _selectionModeButtonBuilder,
           const SizedBox(width: 16),
         ],
       );

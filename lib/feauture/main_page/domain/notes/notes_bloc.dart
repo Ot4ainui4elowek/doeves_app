@@ -8,52 +8,50 @@ part 'notes_bloc.freezed.dart';
 part 'notes_event.dart';
 part 'notes_state.dart';
 
-typedef NOTE = NoteResponseModel;
-
-class NotesBloc extends Bloc<NotesEvent, NotesState> {
-  NotesBloc() : super(const NotesState.initial()) {
-    on<LoadingNotesEvent>(
+class UseCaseBloc extends Bloc<UseCaseBlocEvent, UseCaseBlocState> {
+  UseCaseBloc() : super(const UseCaseBlocState.initial()) {
+    on<LoadingEvent>(
       (event, emit) {
-        emit(const NotesState.loadingNotes());
+        emit(const UseCaseBlocState.loading());
       },
     );
-    on<FetchNotesEvent>(
+    on<FetchDataEvent>(
       (event, emit) {
         switch (event.result) {
           case GoodUseCaseResult(:final data):
             {
               if (event.initialListIsEmpty && data.isEmpty) {
-                emit(const NotesState.initial());
+                emit(const UseCaseBlocState.initial());
               } else if (!event.initialListIsEmpty && data.isEmpty) {
-                emit(const NotesState.emptyResponse());
+                emit(const UseCaseBlocState.emptyResponse());
               } else {
-                emit(const NotesState.emptyState());
+                emit(const UseCaseBlocState.emptyState());
               }
             }
           case DataBadUseCaseResult(:final errorData):
             {
-              emit(NotesState.error(SpecificError(errorData.message)));
+              emit(UseCaseBlocState.error(SpecificError(errorData.message)));
             }
           case BadUseCaseResult(:final errorList):
             {
-              emit(NotesState.error(errorList[0]));
+              emit(UseCaseBlocState.error(errorList[0]));
             }
           default:
             {
-              emit(NotesState.error(SpecificError('Unknown error')));
+              emit(UseCaseBlocState.error(SpecificError('Unknown error')));
             }
         }
       },
     );
-    on<EmptyResponse>(
-      (event, emit) => emit(const NotesState.emptyResponse()),
+    on<EmptyResponseEvent>(
+      (event, emit) => emit(const UseCaseBlocState.emptyResponse()),
     );
 
-    on<ResetToInitialState>(
-      (event, emit) => emit(const NotesState.initial()),
+    on<ResetToInitialStateEvent>(
+      (event, emit) => emit(const UseCaseBlocState.initial()),
     );
-    on<ClearState>(
-      (event, emit) => emit(const NotesState.emptyState()),
+    on<ClearStateEvent>(
+      (event, emit) => emit(const UseCaseBlocState.emptyState()),
     );
   }
 }

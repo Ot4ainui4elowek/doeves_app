@@ -1,3 +1,4 @@
+import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/presentation/app_bars/title_app_bar.dart';
 import 'package:doeves_app/core/presentation/app_wrapper.dart';
 import 'package:doeves_app/core/presentation/buttons/app_text_icon_button.dart';
@@ -121,7 +122,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
             elevation: 0,
             hoverElevation: 0,
             shape: const CircleBorder(),
-            onPressed: () {},
+            onPressed: () => context.go(AppRoutes.notesHomePage),
             child: const Icon(Icons.check),
           ),
         ),

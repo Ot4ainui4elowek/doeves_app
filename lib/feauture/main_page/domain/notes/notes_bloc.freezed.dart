@@ -15,7 +15,7 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$NotesEvent {
+mixin _$UseCaseBlocEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(UseCaseResult<List<NoteResponseModel>> result,
@@ -52,45 +52,46 @@ mixin _$NotesEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(FetchNotesEvent value) fetchNotes,
-    required TResult Function(LoadingNotesEvent value) loadingNotes,
-    required TResult Function(EmptyResponse value) emptyResponse,
-    required TResult Function(ResetToInitialState value) resetToInitialState,
-    required TResult Function(ClearState value) clearState,
+    required TResult Function(FetchDataEvent value) fetchNotes,
+    required TResult Function(LoadingEvent value) loadingNotes,
+    required TResult Function(EmptyResponseEvent value) emptyResponse,
+    required TResult Function(ResetToInitialStateEvent value)
+        resetToInitialState,
+    required TResult Function(ClearStateEvent value) clearState,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(FetchNotesEvent value)? fetchNotes,
-    TResult? Function(LoadingNotesEvent value)? loadingNotes,
-    TResult? Function(EmptyResponse value)? emptyResponse,
-    TResult? Function(ResetToInitialState value)? resetToInitialState,
-    TResult? Function(ClearState value)? clearState,
+    TResult? Function(FetchDataEvent value)? fetchNotes,
+    TResult? Function(LoadingEvent value)? loadingNotes,
+    TResult? Function(EmptyResponseEvent value)? emptyResponse,
+    TResult? Function(ResetToInitialStateEvent value)? resetToInitialState,
+    TResult? Function(ClearStateEvent value)? clearState,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(FetchNotesEvent value)? fetchNotes,
-    TResult Function(LoadingNotesEvent value)? loadingNotes,
-    TResult Function(EmptyResponse value)? emptyResponse,
-    TResult Function(ResetToInitialState value)? resetToInitialState,
-    TResult Function(ClearState value)? clearState,
+    TResult Function(FetchDataEvent value)? fetchNotes,
+    TResult Function(LoadingEvent value)? loadingNotes,
+    TResult Function(EmptyResponseEvent value)? emptyResponse,
+    TResult Function(ResetToInitialStateEvent value)? resetToInitialState,
+    TResult Function(ClearStateEvent value)? clearState,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $NotesEventCopyWith<$Res> {
-  factory $NotesEventCopyWith(
-          NotesEvent value, $Res Function(NotesEvent) then) =
-      _$NotesEventCopyWithImpl<$Res, NotesEvent>;
+abstract class $UseCaseBlocEventCopyWith<$Res> {
+  factory $UseCaseBlocEventCopyWith(
+          UseCaseBlocEvent value, $Res Function(UseCaseBlocEvent) then) =
+      _$UseCaseBlocEventCopyWithImpl<$Res, UseCaseBlocEvent>;
 }
 
 /// @nodoc
-class _$NotesEventCopyWithImpl<$Res, $Val extends NotesEvent>
-    implements $NotesEventCopyWith<$Res> {
-  _$NotesEventCopyWithImpl(this._value, this._then);
+class _$UseCaseBlocEventCopyWithImpl<$Res, $Val extends UseCaseBlocEvent>
+    implements $UseCaseBlocEventCopyWith<$Res> {
+  _$UseCaseBlocEventCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -99,21 +100,21 @@ class _$NotesEventCopyWithImpl<$Res, $Val extends NotesEvent>
 }
 
 /// @nodoc
-abstract class _$$FetchNotesEventImplCopyWith<$Res> {
-  factory _$$FetchNotesEventImplCopyWith(_$FetchNotesEventImpl value,
-          $Res Function(_$FetchNotesEventImpl) then) =
-      __$$FetchNotesEventImplCopyWithImpl<$Res>;
+abstract class _$$FetchDataEventImplCopyWith<$Res> {
+  factory _$$FetchDataEventImplCopyWith(_$FetchDataEventImpl value,
+          $Res Function(_$FetchDataEventImpl) then) =
+      __$$FetchDataEventImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {UseCaseResult<List<NoteResponseModel>> result, bool initialListIsEmpty});
 }
 
 /// @nodoc
-class __$$FetchNotesEventImplCopyWithImpl<$Res>
-    extends _$NotesEventCopyWithImpl<$Res, _$FetchNotesEventImpl>
-    implements _$$FetchNotesEventImplCopyWith<$Res> {
-  __$$FetchNotesEventImplCopyWithImpl(
-      _$FetchNotesEventImpl _value, $Res Function(_$FetchNotesEventImpl) _then)
+class __$$FetchDataEventImplCopyWithImpl<$Res>
+    extends _$UseCaseBlocEventCopyWithImpl<$Res, _$FetchDataEventImpl>
+    implements _$$FetchDataEventImplCopyWith<$Res> {
+  __$$FetchDataEventImplCopyWithImpl(
+      _$FetchDataEventImpl _value, $Res Function(_$FetchDataEventImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -122,7 +123,7 @@ class __$$FetchNotesEventImplCopyWithImpl<$Res>
     Object? result = null,
     Object? initialListIsEmpty = null,
   }) {
-    return _then(_$FetchNotesEventImpl(
+    return _then(_$FetchDataEventImpl(
       result: null == result
           ? _value.result
           : result // ignore: cast_nullable_to_non_nullable
@@ -137,8 +138,8 @@ class __$$FetchNotesEventImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$FetchNotesEventImpl implements FetchNotesEvent {
-  _$FetchNotesEventImpl(
+class _$FetchDataEventImpl implements FetchDataEvent {
+  _$FetchDataEventImpl(
       {required this.result, required this.initialListIsEmpty});
 
   @override
@@ -148,14 +149,14 @@ class _$FetchNotesEventImpl implements FetchNotesEvent {
 
   @override
   String toString() {
-    return 'NotesEvent.fetchNotes(result: $result, initialListIsEmpty: $initialListIsEmpty)';
+    return 'UseCaseBlocEvent.fetchNotes(result: $result, initialListIsEmpty: $initialListIsEmpty)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$FetchNotesEventImpl &&
+            other is _$FetchDataEventImpl &&
             (identical(other.result, result) || other.result == result) &&
             (identical(other.initialListIsEmpty, initialListIsEmpty) ||
                 other.initialListIsEmpty == initialListIsEmpty));
@@ -167,8 +168,8 @@ class _$FetchNotesEventImpl implements FetchNotesEvent {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$FetchNotesEventImplCopyWith<_$FetchNotesEventImpl> get copyWith =>
-      __$$FetchNotesEventImplCopyWithImpl<_$FetchNotesEventImpl>(
+  _$$FetchDataEventImplCopyWith<_$FetchDataEventImpl> get copyWith =>
+      __$$FetchDataEventImplCopyWithImpl<_$FetchDataEventImpl>(
           this, _$identity);
 
   @override
@@ -220,11 +221,12 @@ class _$FetchNotesEventImpl implements FetchNotesEvent {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(FetchNotesEvent value) fetchNotes,
-    required TResult Function(LoadingNotesEvent value) loadingNotes,
-    required TResult Function(EmptyResponse value) emptyResponse,
-    required TResult Function(ResetToInitialState value) resetToInitialState,
-    required TResult Function(ClearState value) clearState,
+    required TResult Function(FetchDataEvent value) fetchNotes,
+    required TResult Function(LoadingEvent value) loadingNotes,
+    required TResult Function(EmptyResponseEvent value) emptyResponse,
+    required TResult Function(ResetToInitialStateEvent value)
+        resetToInitialState,
+    required TResult Function(ClearStateEvent value) clearState,
   }) {
     return fetchNotes(this);
   }
@@ -232,11 +234,11 @@ class _$FetchNotesEventImpl implements FetchNotesEvent {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(FetchNotesEvent value)? fetchNotes,
-    TResult? Function(LoadingNotesEvent value)? loadingNotes,
-    TResult? Function(EmptyResponse value)? emptyResponse,
-    TResult? Function(ResetToInitialState value)? resetToInitialState,
-    TResult? Function(ClearState value)? clearState,
+    TResult? Function(FetchDataEvent value)? fetchNotes,
+    TResult? Function(LoadingEvent value)? loadingNotes,
+    TResult? Function(EmptyResponseEvent value)? emptyResponse,
+    TResult? Function(ResetToInitialStateEvent value)? resetToInitialState,
+    TResult? Function(ClearStateEvent value)? clearState,
   }) {
     return fetchNotes?.call(this);
   }
@@ -244,11 +246,11 @@ class _$FetchNotesEventImpl implements FetchNotesEvent {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(FetchNotesEvent value)? fetchNotes,
-    TResult Function(LoadingNotesEvent value)? loadingNotes,
-    TResult Function(EmptyResponse value)? emptyResponse,
-    TResult Function(ResetToInitialState value)? resetToInitialState,
-    TResult Function(ClearState value)? clearState,
+    TResult Function(FetchDataEvent value)? fetchNotes,
+    TResult Function(LoadingEvent value)? loadingNotes,
+    TResult Function(EmptyResponseEvent value)? emptyResponse,
+    TResult Function(ResetToInitialStateEvent value)? resetToInitialState,
+    TResult Function(ClearStateEvent value)? clearState,
     required TResult orElse(),
   }) {
     if (fetchNotes != null) {
@@ -258,48 +260,48 @@ class _$FetchNotesEventImpl implements FetchNotesEvent {
   }
 }
 
-abstract class FetchNotesEvent implements NotesEvent {
-  factory FetchNotesEvent(
+abstract class FetchDataEvent implements UseCaseBlocEvent {
+  factory FetchDataEvent(
       {required final UseCaseResult<List<NoteResponseModel>> result,
-      required final bool initialListIsEmpty}) = _$FetchNotesEventImpl;
+      required final bool initialListIsEmpty}) = _$FetchDataEventImpl;
 
   UseCaseResult<List<NoteResponseModel>> get result;
   bool get initialListIsEmpty;
   @JsonKey(ignore: true)
-  _$$FetchNotesEventImplCopyWith<_$FetchNotesEventImpl> get copyWith =>
+  _$$FetchDataEventImplCopyWith<_$FetchDataEventImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$LoadingNotesEventImplCopyWith<$Res> {
-  factory _$$LoadingNotesEventImplCopyWith(_$LoadingNotesEventImpl value,
-          $Res Function(_$LoadingNotesEventImpl) then) =
-      __$$LoadingNotesEventImplCopyWithImpl<$Res>;
+abstract class _$$LoadingEventImplCopyWith<$Res> {
+  factory _$$LoadingEventImplCopyWith(
+          _$LoadingEventImpl value, $Res Function(_$LoadingEventImpl) then) =
+      __$$LoadingEventImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$LoadingNotesEventImplCopyWithImpl<$Res>
-    extends _$NotesEventCopyWithImpl<$Res, _$LoadingNotesEventImpl>
-    implements _$$LoadingNotesEventImplCopyWith<$Res> {
-  __$$LoadingNotesEventImplCopyWithImpl(_$LoadingNotesEventImpl _value,
-      $Res Function(_$LoadingNotesEventImpl) _then)
+class __$$LoadingEventImplCopyWithImpl<$Res>
+    extends _$UseCaseBlocEventCopyWithImpl<$Res, _$LoadingEventImpl>
+    implements _$$LoadingEventImplCopyWith<$Res> {
+  __$$LoadingEventImplCopyWithImpl(
+      _$LoadingEventImpl _value, $Res Function(_$LoadingEventImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$LoadingNotesEventImpl implements LoadingNotesEvent {
-  _$LoadingNotesEventImpl();
+class _$LoadingEventImpl implements LoadingEvent {
+  _$LoadingEventImpl();
 
   @override
   String toString() {
-    return 'NotesEvent.loadingNotes()';
+    return 'UseCaseBlocEvent.loadingNotes()';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LoadingNotesEventImpl);
+        (other.runtimeType == runtimeType && other is _$LoadingEventImpl);
   }
 
   @override
@@ -354,11 +356,12 @@ class _$LoadingNotesEventImpl implements LoadingNotesEvent {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(FetchNotesEvent value) fetchNotes,
-    required TResult Function(LoadingNotesEvent value) loadingNotes,
-    required TResult Function(EmptyResponse value) emptyResponse,
-    required TResult Function(ResetToInitialState value) resetToInitialState,
-    required TResult Function(ClearState value) clearState,
+    required TResult Function(FetchDataEvent value) fetchNotes,
+    required TResult Function(LoadingEvent value) loadingNotes,
+    required TResult Function(EmptyResponseEvent value) emptyResponse,
+    required TResult Function(ResetToInitialStateEvent value)
+        resetToInitialState,
+    required TResult Function(ClearStateEvent value) clearState,
   }) {
     return loadingNotes(this);
   }
@@ -366,11 +369,11 @@ class _$LoadingNotesEventImpl implements LoadingNotesEvent {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(FetchNotesEvent value)? fetchNotes,
-    TResult? Function(LoadingNotesEvent value)? loadingNotes,
-    TResult? Function(EmptyResponse value)? emptyResponse,
-    TResult? Function(ResetToInitialState value)? resetToInitialState,
-    TResult? Function(ClearState value)? clearState,
+    TResult? Function(FetchDataEvent value)? fetchNotes,
+    TResult? Function(LoadingEvent value)? loadingNotes,
+    TResult? Function(EmptyResponseEvent value)? emptyResponse,
+    TResult? Function(ResetToInitialStateEvent value)? resetToInitialState,
+    TResult? Function(ClearStateEvent value)? clearState,
   }) {
     return loadingNotes?.call(this);
   }
@@ -378,11 +381,11 @@ class _$LoadingNotesEventImpl implements LoadingNotesEvent {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(FetchNotesEvent value)? fetchNotes,
-    TResult Function(LoadingNotesEvent value)? loadingNotes,
-    TResult Function(EmptyResponse value)? emptyResponse,
-    TResult Function(ResetToInitialState value)? resetToInitialState,
-    TResult Function(ClearState value)? clearState,
+    TResult Function(FetchDataEvent value)? fetchNotes,
+    TResult Function(LoadingEvent value)? loadingNotes,
+    TResult Function(EmptyResponseEvent value)? emptyResponse,
+    TResult Function(ResetToInitialStateEvent value)? resetToInitialState,
+    TResult Function(ClearStateEvent value)? clearState,
     required TResult orElse(),
   }) {
     if (loadingNotes != null) {
@@ -392,40 +395,40 @@ class _$LoadingNotesEventImpl implements LoadingNotesEvent {
   }
 }
 
-abstract class LoadingNotesEvent implements NotesEvent {
-  factory LoadingNotesEvent() = _$LoadingNotesEventImpl;
+abstract class LoadingEvent implements UseCaseBlocEvent {
+  factory LoadingEvent() = _$LoadingEventImpl;
 }
 
 /// @nodoc
-abstract class _$$EmptyResponseImplCopyWith<$Res> {
-  factory _$$EmptyResponseImplCopyWith(
-          _$EmptyResponseImpl value, $Res Function(_$EmptyResponseImpl) then) =
-      __$$EmptyResponseImplCopyWithImpl<$Res>;
+abstract class _$$EmptyResponseEventImplCopyWith<$Res> {
+  factory _$$EmptyResponseEventImplCopyWith(_$EmptyResponseEventImpl value,
+          $Res Function(_$EmptyResponseEventImpl) then) =
+      __$$EmptyResponseEventImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$EmptyResponseImplCopyWithImpl<$Res>
-    extends _$NotesEventCopyWithImpl<$Res, _$EmptyResponseImpl>
-    implements _$$EmptyResponseImplCopyWith<$Res> {
-  __$$EmptyResponseImplCopyWithImpl(
-      _$EmptyResponseImpl _value, $Res Function(_$EmptyResponseImpl) _then)
+class __$$EmptyResponseEventImplCopyWithImpl<$Res>
+    extends _$UseCaseBlocEventCopyWithImpl<$Res, _$EmptyResponseEventImpl>
+    implements _$$EmptyResponseEventImplCopyWith<$Res> {
+  __$$EmptyResponseEventImplCopyWithImpl(_$EmptyResponseEventImpl _value,
+      $Res Function(_$EmptyResponseEventImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$EmptyResponseImpl implements EmptyResponse {
-  _$EmptyResponseImpl();
+class _$EmptyResponseEventImpl implements EmptyResponseEvent {
+  _$EmptyResponseEventImpl();
 
   @override
   String toString() {
-    return 'NotesEvent.emptyResponse()';
+    return 'UseCaseBlocEvent.emptyResponse()';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$EmptyResponseImpl);
+        (other.runtimeType == runtimeType && other is _$EmptyResponseEventImpl);
   }
 
   @override
@@ -480,11 +483,12 @@ class _$EmptyResponseImpl implements EmptyResponse {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(FetchNotesEvent value) fetchNotes,
-    required TResult Function(LoadingNotesEvent value) loadingNotes,
-    required TResult Function(EmptyResponse value) emptyResponse,
-    required TResult Function(ResetToInitialState value) resetToInitialState,
-    required TResult Function(ClearState value) clearState,
+    required TResult Function(FetchDataEvent value) fetchNotes,
+    required TResult Function(LoadingEvent value) loadingNotes,
+    required TResult Function(EmptyResponseEvent value) emptyResponse,
+    required TResult Function(ResetToInitialStateEvent value)
+        resetToInitialState,
+    required TResult Function(ClearStateEvent value) clearState,
   }) {
     return emptyResponse(this);
   }
@@ -492,11 +496,11 @@ class _$EmptyResponseImpl implements EmptyResponse {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(FetchNotesEvent value)? fetchNotes,
-    TResult? Function(LoadingNotesEvent value)? loadingNotes,
-    TResult? Function(EmptyResponse value)? emptyResponse,
-    TResult? Function(ResetToInitialState value)? resetToInitialState,
-    TResult? Function(ClearState value)? clearState,
+    TResult? Function(FetchDataEvent value)? fetchNotes,
+    TResult? Function(LoadingEvent value)? loadingNotes,
+    TResult? Function(EmptyResponseEvent value)? emptyResponse,
+    TResult? Function(ResetToInitialStateEvent value)? resetToInitialState,
+    TResult? Function(ClearStateEvent value)? clearState,
   }) {
     return emptyResponse?.call(this);
   }
@@ -504,11 +508,11 @@ class _$EmptyResponseImpl implements EmptyResponse {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(FetchNotesEvent value)? fetchNotes,
-    TResult Function(LoadingNotesEvent value)? loadingNotes,
-    TResult Function(EmptyResponse value)? emptyResponse,
-    TResult Function(ResetToInitialState value)? resetToInitialState,
-    TResult Function(ClearState value)? clearState,
+    TResult Function(FetchDataEvent value)? fetchNotes,
+    TResult Function(LoadingEvent value)? loadingNotes,
+    TResult Function(EmptyResponseEvent value)? emptyResponse,
+    TResult Function(ResetToInitialStateEvent value)? resetToInitialState,
+    TResult Function(ClearStateEvent value)? clearState,
     required TResult orElse(),
   }) {
     if (emptyResponse != null) {
@@ -518,41 +522,43 @@ class _$EmptyResponseImpl implements EmptyResponse {
   }
 }
 
-abstract class EmptyResponse implements NotesEvent {
-  factory EmptyResponse() = _$EmptyResponseImpl;
+abstract class EmptyResponseEvent implements UseCaseBlocEvent {
+  factory EmptyResponseEvent() = _$EmptyResponseEventImpl;
 }
 
 /// @nodoc
-abstract class _$$ResetToInitialStateImplCopyWith<$Res> {
-  factory _$$ResetToInitialStateImplCopyWith(_$ResetToInitialStateImpl value,
-          $Res Function(_$ResetToInitialStateImpl) then) =
-      __$$ResetToInitialStateImplCopyWithImpl<$Res>;
+abstract class _$$ResetToInitialStateEventImplCopyWith<$Res> {
+  factory _$$ResetToInitialStateEventImplCopyWith(
+          _$ResetToInitialStateEventImpl value,
+          $Res Function(_$ResetToInitialStateEventImpl) then) =
+      __$$ResetToInitialStateEventImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ResetToInitialStateImplCopyWithImpl<$Res>
-    extends _$NotesEventCopyWithImpl<$Res, _$ResetToInitialStateImpl>
-    implements _$$ResetToInitialStateImplCopyWith<$Res> {
-  __$$ResetToInitialStateImplCopyWithImpl(_$ResetToInitialStateImpl _value,
-      $Res Function(_$ResetToInitialStateImpl) _then)
+class __$$ResetToInitialStateEventImplCopyWithImpl<$Res>
+    extends _$UseCaseBlocEventCopyWithImpl<$Res, _$ResetToInitialStateEventImpl>
+    implements _$$ResetToInitialStateEventImplCopyWith<$Res> {
+  __$$ResetToInitialStateEventImplCopyWithImpl(
+      _$ResetToInitialStateEventImpl _value,
+      $Res Function(_$ResetToInitialStateEventImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$ResetToInitialStateImpl implements ResetToInitialState {
-  _$ResetToInitialStateImpl();
+class _$ResetToInitialStateEventImpl implements ResetToInitialStateEvent {
+  _$ResetToInitialStateEventImpl();
 
   @override
   String toString() {
-    return 'NotesEvent.resetToInitialState()';
+    return 'UseCaseBlocEvent.resetToInitialState()';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ResetToInitialStateImpl);
+            other is _$ResetToInitialStateEventImpl);
   }
 
   @override
@@ -607,11 +613,12 @@ class _$ResetToInitialStateImpl implements ResetToInitialState {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(FetchNotesEvent value) fetchNotes,
-    required TResult Function(LoadingNotesEvent value) loadingNotes,
-    required TResult Function(EmptyResponse value) emptyResponse,
-    required TResult Function(ResetToInitialState value) resetToInitialState,
-    required TResult Function(ClearState value) clearState,
+    required TResult Function(FetchDataEvent value) fetchNotes,
+    required TResult Function(LoadingEvent value) loadingNotes,
+    required TResult Function(EmptyResponseEvent value) emptyResponse,
+    required TResult Function(ResetToInitialStateEvent value)
+        resetToInitialState,
+    required TResult Function(ClearStateEvent value) clearState,
   }) {
     return resetToInitialState(this);
   }
@@ -619,11 +626,11 @@ class _$ResetToInitialStateImpl implements ResetToInitialState {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(FetchNotesEvent value)? fetchNotes,
-    TResult? Function(LoadingNotesEvent value)? loadingNotes,
-    TResult? Function(EmptyResponse value)? emptyResponse,
-    TResult? Function(ResetToInitialState value)? resetToInitialState,
-    TResult? Function(ClearState value)? clearState,
+    TResult? Function(FetchDataEvent value)? fetchNotes,
+    TResult? Function(LoadingEvent value)? loadingNotes,
+    TResult? Function(EmptyResponseEvent value)? emptyResponse,
+    TResult? Function(ResetToInitialStateEvent value)? resetToInitialState,
+    TResult? Function(ClearStateEvent value)? clearState,
   }) {
     return resetToInitialState?.call(this);
   }
@@ -631,11 +638,11 @@ class _$ResetToInitialStateImpl implements ResetToInitialState {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(FetchNotesEvent value)? fetchNotes,
-    TResult Function(LoadingNotesEvent value)? loadingNotes,
-    TResult Function(EmptyResponse value)? emptyResponse,
-    TResult Function(ResetToInitialState value)? resetToInitialState,
-    TResult Function(ClearState value)? clearState,
+    TResult Function(FetchDataEvent value)? fetchNotes,
+    TResult Function(LoadingEvent value)? loadingNotes,
+    TResult Function(EmptyResponseEvent value)? emptyResponse,
+    TResult Function(ResetToInitialStateEvent value)? resetToInitialState,
+    TResult Function(ClearStateEvent value)? clearState,
     required TResult orElse(),
   }) {
     if (resetToInitialState != null) {
@@ -645,40 +652,40 @@ class _$ResetToInitialStateImpl implements ResetToInitialState {
   }
 }
 
-abstract class ResetToInitialState implements NotesEvent {
-  factory ResetToInitialState() = _$ResetToInitialStateImpl;
+abstract class ResetToInitialStateEvent implements UseCaseBlocEvent {
+  factory ResetToInitialStateEvent() = _$ResetToInitialStateEventImpl;
 }
 
 /// @nodoc
-abstract class _$$ClearStateImplCopyWith<$Res> {
-  factory _$$ClearStateImplCopyWith(
-          _$ClearStateImpl value, $Res Function(_$ClearStateImpl) then) =
-      __$$ClearStateImplCopyWithImpl<$Res>;
+abstract class _$$ClearStateEventImplCopyWith<$Res> {
+  factory _$$ClearStateEventImplCopyWith(_$ClearStateEventImpl value,
+          $Res Function(_$ClearStateEventImpl) then) =
+      __$$ClearStateEventImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ClearStateImplCopyWithImpl<$Res>
-    extends _$NotesEventCopyWithImpl<$Res, _$ClearStateImpl>
-    implements _$$ClearStateImplCopyWith<$Res> {
-  __$$ClearStateImplCopyWithImpl(
-      _$ClearStateImpl _value, $Res Function(_$ClearStateImpl) _then)
+class __$$ClearStateEventImplCopyWithImpl<$Res>
+    extends _$UseCaseBlocEventCopyWithImpl<$Res, _$ClearStateEventImpl>
+    implements _$$ClearStateEventImplCopyWith<$Res> {
+  __$$ClearStateEventImplCopyWithImpl(
+      _$ClearStateEventImpl _value, $Res Function(_$ClearStateEventImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$ClearStateImpl implements ClearState {
-  _$ClearStateImpl();
+class _$ClearStateEventImpl implements ClearStateEvent {
+  _$ClearStateEventImpl();
 
   @override
   String toString() {
-    return 'NotesEvent.clearState()';
+    return 'UseCaseBlocEvent.clearState()';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$ClearStateImpl);
+        (other.runtimeType == runtimeType && other is _$ClearStateEventImpl);
   }
 
   @override
@@ -733,11 +740,12 @@ class _$ClearStateImpl implements ClearState {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(FetchNotesEvent value) fetchNotes,
-    required TResult Function(LoadingNotesEvent value) loadingNotes,
-    required TResult Function(EmptyResponse value) emptyResponse,
-    required TResult Function(ResetToInitialState value) resetToInitialState,
-    required TResult Function(ClearState value) clearState,
+    required TResult Function(FetchDataEvent value) fetchNotes,
+    required TResult Function(LoadingEvent value) loadingNotes,
+    required TResult Function(EmptyResponseEvent value) emptyResponse,
+    required TResult Function(ResetToInitialStateEvent value)
+        resetToInitialState,
+    required TResult Function(ClearStateEvent value) clearState,
   }) {
     return clearState(this);
   }
@@ -745,11 +753,11 @@ class _$ClearStateImpl implements ClearState {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(FetchNotesEvent value)? fetchNotes,
-    TResult? Function(LoadingNotesEvent value)? loadingNotes,
-    TResult? Function(EmptyResponse value)? emptyResponse,
-    TResult? Function(ResetToInitialState value)? resetToInitialState,
-    TResult? Function(ClearState value)? clearState,
+    TResult? Function(FetchDataEvent value)? fetchNotes,
+    TResult? Function(LoadingEvent value)? loadingNotes,
+    TResult? Function(EmptyResponseEvent value)? emptyResponse,
+    TResult? Function(ResetToInitialStateEvent value)? resetToInitialState,
+    TResult? Function(ClearStateEvent value)? clearState,
   }) {
     return clearState?.call(this);
   }
@@ -757,11 +765,11 @@ class _$ClearStateImpl implements ClearState {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(FetchNotesEvent value)? fetchNotes,
-    TResult Function(LoadingNotesEvent value)? loadingNotes,
-    TResult Function(EmptyResponse value)? emptyResponse,
-    TResult Function(ResetToInitialState value)? resetToInitialState,
-    TResult Function(ClearState value)? clearState,
+    TResult Function(FetchDataEvent value)? fetchNotes,
+    TResult Function(LoadingEvent value)? loadingNotes,
+    TResult Function(EmptyResponseEvent value)? emptyResponse,
+    TResult Function(ResetToInitialStateEvent value)? resetToInitialState,
+    TResult Function(ClearStateEvent value)? clearState,
     required TResult orElse(),
   }) {
     if (clearState != null) {
@@ -771,16 +779,16 @@ class _$ClearStateImpl implements ClearState {
   }
 }
 
-abstract class ClearState implements NotesEvent {
-  factory ClearState() = _$ClearStateImpl;
+abstract class ClearStateEvent implements UseCaseBlocEvent {
+  factory ClearStateEvent() = _$ClearStateEventImpl;
 }
 
 /// @nodoc
-mixin _$NotesState {
+mixin _$UseCaseBlocState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loadingNotes,
+    required TResult Function() loading,
     required TResult Function() emptyState,
     required TResult Function(AppError error) error,
     required TResult Function() emptyResponse,
@@ -789,7 +797,7 @@ mixin _$NotesState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loadingNotes,
+    TResult? Function()? loading,
     TResult? Function()? emptyState,
     TResult? Function(AppError error)? error,
     TResult? Function()? emptyResponse,
@@ -798,7 +806,7 @@ mixin _$NotesState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loadingNotes,
+    TResult Function()? loading,
     TResult Function()? emptyState,
     TResult Function(AppError error)? error,
     TResult Function()? emptyResponse,
@@ -808,7 +816,7 @@ mixin _$NotesState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(_LoadingNotes value) loadingNotes,
+    required TResult Function(_Loading value) loading,
     required TResult Function(_EmptyState value) emptyState,
     required TResult Function(_Error value) error,
     required TResult Function(_EmptyResult value) emptyResponse,
@@ -817,7 +825,7 @@ mixin _$NotesState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_LoadingNotes value)? loadingNotes,
+    TResult? Function(_Loading value)? loading,
     TResult? Function(_EmptyState value)? emptyState,
     TResult? Function(_Error value)? error,
     TResult? Function(_EmptyResult value)? emptyResponse,
@@ -826,7 +834,7 @@ mixin _$NotesState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_LoadingNotes value)? loadingNotes,
+    TResult Function(_Loading value)? loading,
     TResult Function(_EmptyState value)? emptyState,
     TResult Function(_Error value)? error,
     TResult Function(_EmptyResult value)? emptyResponse,
@@ -836,16 +844,16 @@ mixin _$NotesState {
 }
 
 /// @nodoc
-abstract class $NotesStateCopyWith<$Res> {
-  factory $NotesStateCopyWith(
-          NotesState value, $Res Function(NotesState) then) =
-      _$NotesStateCopyWithImpl<$Res, NotesState>;
+abstract class $UseCaseBlocStateCopyWith<$Res> {
+  factory $UseCaseBlocStateCopyWith(
+          UseCaseBlocState value, $Res Function(UseCaseBlocState) then) =
+      _$UseCaseBlocStateCopyWithImpl<$Res, UseCaseBlocState>;
 }
 
 /// @nodoc
-class _$NotesStateCopyWithImpl<$Res, $Val extends NotesState>
-    implements $NotesStateCopyWith<$Res> {
-  _$NotesStateCopyWithImpl(this._value, this._then);
+class _$UseCaseBlocStateCopyWithImpl<$Res, $Val extends UseCaseBlocState>
+    implements $UseCaseBlocStateCopyWith<$Res> {
+  _$UseCaseBlocStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -862,7 +870,7 @@ abstract class _$$InitialImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$InitialImplCopyWithImpl<$Res>
-    extends _$NotesStateCopyWithImpl<$Res, _$InitialImpl>
+    extends _$UseCaseBlocStateCopyWithImpl<$Res, _$InitialImpl>
     implements _$$InitialImplCopyWith<$Res> {
   __$$InitialImplCopyWithImpl(
       _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
@@ -876,7 +884,7 @@ class _$InitialImpl implements _Initial {
 
   @override
   String toString() {
-    return 'NotesState.initial()';
+    return 'UseCaseBlocState.initial()';
   }
 
   @override
@@ -892,7 +900,7 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loadingNotes,
+    required TResult Function() loading,
     required TResult Function() emptyState,
     required TResult Function(AppError error) error,
     required TResult Function() emptyResponse,
@@ -904,7 +912,7 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loadingNotes,
+    TResult? Function()? loading,
     TResult? Function()? emptyState,
     TResult? Function(AppError error)? error,
     TResult? Function()? emptyResponse,
@@ -916,7 +924,7 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loadingNotes,
+    TResult Function()? loading,
     TResult Function()? emptyState,
     TResult Function(AppError error)? error,
     TResult Function()? emptyResponse,
@@ -932,7 +940,7 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(_LoadingNotes value) loadingNotes,
+    required TResult Function(_Loading value) loading,
     required TResult Function(_EmptyState value) emptyState,
     required TResult Function(_Error value) error,
     required TResult Function(_EmptyResult value) emptyResponse,
@@ -944,7 +952,7 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_LoadingNotes value)? loadingNotes,
+    TResult? Function(_Loading value)? loading,
     TResult? Function(_EmptyState value)? emptyState,
     TResult? Function(_Error value)? error,
     TResult? Function(_EmptyResult value)? emptyResponse,
@@ -956,7 +964,7 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_LoadingNotes value)? loadingNotes,
+    TResult Function(_Loading value)? loading,
     TResult Function(_EmptyState value)? emptyState,
     TResult Function(_Error value)? error,
     TResult Function(_EmptyResult value)? emptyResponse,
@@ -969,40 +977,40 @@ class _$InitialImpl implements _Initial {
   }
 }
 
-abstract class _Initial implements NotesState {
+abstract class _Initial implements UseCaseBlocState {
   const factory _Initial() = _$InitialImpl;
 }
 
 /// @nodoc
-abstract class _$$LoadingNotesImplCopyWith<$Res> {
-  factory _$$LoadingNotesImplCopyWith(
-          _$LoadingNotesImpl value, $Res Function(_$LoadingNotesImpl) then) =
-      __$$LoadingNotesImplCopyWithImpl<$Res>;
+abstract class _$$LoadingImplCopyWith<$Res> {
+  factory _$$LoadingImplCopyWith(
+          _$LoadingImpl value, $Res Function(_$LoadingImpl) then) =
+      __$$LoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$LoadingNotesImplCopyWithImpl<$Res>
-    extends _$NotesStateCopyWithImpl<$Res, _$LoadingNotesImpl>
-    implements _$$LoadingNotesImplCopyWith<$Res> {
-  __$$LoadingNotesImplCopyWithImpl(
-      _$LoadingNotesImpl _value, $Res Function(_$LoadingNotesImpl) _then)
+class __$$LoadingImplCopyWithImpl<$Res>
+    extends _$UseCaseBlocStateCopyWithImpl<$Res, _$LoadingImpl>
+    implements _$$LoadingImplCopyWith<$Res> {
+  __$$LoadingImplCopyWithImpl(
+      _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$LoadingNotesImpl implements _LoadingNotes {
-  const _$LoadingNotesImpl();
+class _$LoadingImpl implements _Loading {
+  const _$LoadingImpl();
 
   @override
   String toString() {
-    return 'NotesState.loadingNotes()';
+    return 'UseCaseBlocState.loading()';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LoadingNotesImpl);
+        (other.runtimeType == runtimeType && other is _$LoadingImpl);
   }
 
   @override
@@ -1012,38 +1020,38 @@ class _$LoadingNotesImpl implements _LoadingNotes {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loadingNotes,
+    required TResult Function() loading,
     required TResult Function() emptyState,
     required TResult Function(AppError error) error,
     required TResult Function() emptyResponse,
   }) {
-    return loadingNotes();
+    return loading();
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loadingNotes,
+    TResult? Function()? loading,
     TResult? Function()? emptyState,
     TResult? Function(AppError error)? error,
     TResult? Function()? emptyResponse,
   }) {
-    return loadingNotes?.call();
+    return loading?.call();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loadingNotes,
+    TResult Function()? loading,
     TResult Function()? emptyState,
     TResult Function(AppError error)? error,
     TResult Function()? emptyResponse,
     required TResult orElse(),
   }) {
-    if (loadingNotes != null) {
-      return loadingNotes();
+    if (loading != null) {
+      return loading();
     }
     return orElse();
   }
@@ -1052,45 +1060,45 @@ class _$LoadingNotesImpl implements _LoadingNotes {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(_LoadingNotes value) loadingNotes,
+    required TResult Function(_Loading value) loading,
     required TResult Function(_EmptyState value) emptyState,
     required TResult Function(_Error value) error,
     required TResult Function(_EmptyResult value) emptyResponse,
   }) {
-    return loadingNotes(this);
+    return loading(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_LoadingNotes value)? loadingNotes,
+    TResult? Function(_Loading value)? loading,
     TResult? Function(_EmptyState value)? emptyState,
     TResult? Function(_Error value)? error,
     TResult? Function(_EmptyResult value)? emptyResponse,
   }) {
-    return loadingNotes?.call(this);
+    return loading?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_LoadingNotes value)? loadingNotes,
+    TResult Function(_Loading value)? loading,
     TResult Function(_EmptyState value)? emptyState,
     TResult Function(_Error value)? error,
     TResult Function(_EmptyResult value)? emptyResponse,
     required TResult orElse(),
   }) {
-    if (loadingNotes != null) {
-      return loadingNotes(this);
+    if (loading != null) {
+      return loading(this);
     }
     return orElse();
   }
 }
 
-abstract class _LoadingNotes implements NotesState {
-  const factory _LoadingNotes() = _$LoadingNotesImpl;
+abstract class _Loading implements UseCaseBlocState {
+  const factory _Loading() = _$LoadingImpl;
 }
 
 /// @nodoc
@@ -1102,7 +1110,7 @@ abstract class _$$EmptyStateImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$EmptyStateImplCopyWithImpl<$Res>
-    extends _$NotesStateCopyWithImpl<$Res, _$EmptyStateImpl>
+    extends _$UseCaseBlocStateCopyWithImpl<$Res, _$EmptyStateImpl>
     implements _$$EmptyStateImplCopyWith<$Res> {
   __$$EmptyStateImplCopyWithImpl(
       _$EmptyStateImpl _value, $Res Function(_$EmptyStateImpl) _then)
@@ -1116,7 +1124,7 @@ class _$EmptyStateImpl implements _EmptyState {
 
   @override
   String toString() {
-    return 'NotesState.emptyState()';
+    return 'UseCaseBlocState.emptyState()';
   }
 
   @override
@@ -1132,7 +1140,7 @@ class _$EmptyStateImpl implements _EmptyState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loadingNotes,
+    required TResult Function() loading,
     required TResult Function() emptyState,
     required TResult Function(AppError error) error,
     required TResult Function() emptyResponse,
@@ -1144,7 +1152,7 @@ class _$EmptyStateImpl implements _EmptyState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loadingNotes,
+    TResult? Function()? loading,
     TResult? Function()? emptyState,
     TResult? Function(AppError error)? error,
     TResult? Function()? emptyResponse,
@@ -1156,7 +1164,7 @@ class _$EmptyStateImpl implements _EmptyState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loadingNotes,
+    TResult Function()? loading,
     TResult Function()? emptyState,
     TResult Function(AppError error)? error,
     TResult Function()? emptyResponse,
@@ -1172,7 +1180,7 @@ class _$EmptyStateImpl implements _EmptyState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(_LoadingNotes value) loadingNotes,
+    required TResult Function(_Loading value) loading,
     required TResult Function(_EmptyState value) emptyState,
     required TResult Function(_Error value) error,
     required TResult Function(_EmptyResult value) emptyResponse,
@@ -1184,7 +1192,7 @@ class _$EmptyStateImpl implements _EmptyState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_LoadingNotes value)? loadingNotes,
+    TResult? Function(_Loading value)? loading,
     TResult? Function(_EmptyState value)? emptyState,
     TResult? Function(_Error value)? error,
     TResult? Function(_EmptyResult value)? emptyResponse,
@@ -1196,7 +1204,7 @@ class _$EmptyStateImpl implements _EmptyState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_LoadingNotes value)? loadingNotes,
+    TResult Function(_Loading value)? loading,
     TResult Function(_EmptyState value)? emptyState,
     TResult Function(_Error value)? error,
     TResult Function(_EmptyResult value)? emptyResponse,
@@ -1209,7 +1217,7 @@ class _$EmptyStateImpl implements _EmptyState {
   }
 }
 
-abstract class _EmptyState implements NotesState {
+abstract class _EmptyState implements UseCaseBlocState {
   const factory _EmptyState() = _$EmptyStateImpl;
 }
 
@@ -1224,7 +1232,7 @@ abstract class _$$ErrorImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$ErrorImplCopyWithImpl<$Res>
-    extends _$NotesStateCopyWithImpl<$Res, _$ErrorImpl>
+    extends _$UseCaseBlocStateCopyWithImpl<$Res, _$ErrorImpl>
     implements _$$ErrorImplCopyWith<$Res> {
   __$$ErrorImplCopyWithImpl(
       _$ErrorImpl _value, $Res Function(_$ErrorImpl) _then)
@@ -1254,7 +1262,7 @@ class _$ErrorImpl implements _Error {
 
   @override
   String toString() {
-    return 'NotesState.error(error: $error)';
+    return 'UseCaseBlocState.error(error: $error)';
   }
 
   @override
@@ -1278,7 +1286,7 @@ class _$ErrorImpl implements _Error {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loadingNotes,
+    required TResult Function() loading,
     required TResult Function() emptyState,
     required TResult Function(AppError error) error,
     required TResult Function() emptyResponse,
@@ -1290,7 +1298,7 @@ class _$ErrorImpl implements _Error {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loadingNotes,
+    TResult? Function()? loading,
     TResult? Function()? emptyState,
     TResult? Function(AppError error)? error,
     TResult? Function()? emptyResponse,
@@ -1302,7 +1310,7 @@ class _$ErrorImpl implements _Error {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loadingNotes,
+    TResult Function()? loading,
     TResult Function()? emptyState,
     TResult Function(AppError error)? error,
     TResult Function()? emptyResponse,
@@ -1318,7 +1326,7 @@ class _$ErrorImpl implements _Error {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(_LoadingNotes value) loadingNotes,
+    required TResult Function(_Loading value) loading,
     required TResult Function(_EmptyState value) emptyState,
     required TResult Function(_Error value) error,
     required TResult Function(_EmptyResult value) emptyResponse,
@@ -1330,7 +1338,7 @@ class _$ErrorImpl implements _Error {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_LoadingNotes value)? loadingNotes,
+    TResult? Function(_Loading value)? loading,
     TResult? Function(_EmptyState value)? emptyState,
     TResult? Function(_Error value)? error,
     TResult? Function(_EmptyResult value)? emptyResponse,
@@ -1342,7 +1350,7 @@ class _$ErrorImpl implements _Error {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_LoadingNotes value)? loadingNotes,
+    TResult Function(_Loading value)? loading,
     TResult Function(_EmptyState value)? emptyState,
     TResult Function(_Error value)? error,
     TResult Function(_EmptyResult value)? emptyResponse,
@@ -1355,7 +1363,7 @@ class _$ErrorImpl implements _Error {
   }
 }
 
-abstract class _Error implements NotesState {
+abstract class _Error implements UseCaseBlocState {
   const factory _Error(final AppError error) = _$ErrorImpl;
 
   AppError get error;
@@ -1373,7 +1381,7 @@ abstract class _$$EmptyResultImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$EmptyResultImplCopyWithImpl<$Res>
-    extends _$NotesStateCopyWithImpl<$Res, _$EmptyResultImpl>
+    extends _$UseCaseBlocStateCopyWithImpl<$Res, _$EmptyResultImpl>
     implements _$$EmptyResultImplCopyWith<$Res> {
   __$$EmptyResultImplCopyWithImpl(
       _$EmptyResultImpl _value, $Res Function(_$EmptyResultImpl) _then)
@@ -1387,7 +1395,7 @@ class _$EmptyResultImpl implements _EmptyResult {
 
   @override
   String toString() {
-    return 'NotesState.emptyResponse()';
+    return 'UseCaseBlocState.emptyResponse()';
   }
 
   @override
@@ -1403,7 +1411,7 @@ class _$EmptyResultImpl implements _EmptyResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loadingNotes,
+    required TResult Function() loading,
     required TResult Function() emptyState,
     required TResult Function(AppError error) error,
     required TResult Function() emptyResponse,
@@ -1415,7 +1423,7 @@ class _$EmptyResultImpl implements _EmptyResult {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loadingNotes,
+    TResult? Function()? loading,
     TResult? Function()? emptyState,
     TResult? Function(AppError error)? error,
     TResult? Function()? emptyResponse,
@@ -1427,7 +1435,7 @@ class _$EmptyResultImpl implements _EmptyResult {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loadingNotes,
+    TResult Function()? loading,
     TResult Function()? emptyState,
     TResult Function(AppError error)? error,
     TResult Function()? emptyResponse,
@@ -1443,7 +1451,7 @@ class _$EmptyResultImpl implements _EmptyResult {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(_LoadingNotes value) loadingNotes,
+    required TResult Function(_Loading value) loading,
     required TResult Function(_EmptyState value) emptyState,
     required TResult Function(_Error value) error,
     required TResult Function(_EmptyResult value) emptyResponse,
@@ -1455,7 +1463,7 @@ class _$EmptyResultImpl implements _EmptyResult {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
-    TResult? Function(_LoadingNotes value)? loadingNotes,
+    TResult? Function(_Loading value)? loading,
     TResult? Function(_EmptyState value)? emptyState,
     TResult? Function(_Error value)? error,
     TResult? Function(_EmptyResult value)? emptyResponse,
@@ -1467,7 +1475,7 @@ class _$EmptyResultImpl implements _EmptyResult {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_LoadingNotes value)? loadingNotes,
+    TResult Function(_Loading value)? loading,
     TResult Function(_EmptyState value)? emptyState,
     TResult Function(_Error value)? error,
     TResult Function(_EmptyResult value)? emptyResponse,
@@ -1480,6 +1488,6 @@ class _$EmptyResultImpl implements _EmptyResult {
   }
 }
 
-abstract class _EmptyResult implements NotesState {
+abstract class _EmptyResult implements UseCaseBlocState {
   const factory _EmptyResult() = _$EmptyResultImpl;
 }

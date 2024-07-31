@@ -1,10 +1,10 @@
 part of 'notes_bloc.dart';
 
 @freezed
-abstract class NotesState with _$NotesState {
-  const factory NotesState.initial() = _Initial;
-  const factory NotesState.loadingNotes() = _LoadingNotes;
-  const factory NotesState.emptyState() = _EmptyState;
-  const factory NotesState.error(AppError error) = _Error;
-  const factory NotesState.emptyResponse() = _EmptyResult;
+abstract class UseCaseBlocState with _$UseCaseBlocState {
+  const factory UseCaseBlocState.initial() = _Initial;
+  const factory UseCaseBlocState.loading() = _Loading;
+  const factory UseCaseBlocState.emptyState() = _EmptyState;
+  const factory UseCaseBlocState.error(AppError error) = _Error;
+  const factory UseCaseBlocState.emptyResponse() = _EmptyResult;
 }

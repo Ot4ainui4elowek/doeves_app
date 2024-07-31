@@ -1,13 +1,13 @@
 part of 'notes_bloc.dart';
 
 @freezed
-abstract class NotesEvent with _$NotesEvent {
-  factory NotesEvent.fetchNotes({
+abstract class UseCaseBlocEvent with _$UseCaseBlocEvent {
+  factory UseCaseBlocEvent.fetchNotes({
     required UseCaseResult<List<NoteResponseModel>> result,
     required bool initialListIsEmpty,
-  }) = FetchNotesEvent;
-  factory NotesEvent.loadingNotes() = LoadingNotesEvent;
-  factory NotesEvent.emptyResponse() = EmptyResponse;
-  factory NotesEvent.resetToInitialState() = ResetToInitialState;
-  factory NotesEvent.clearState() = ClearState;
+  }) = FetchDataEvent;
+  factory UseCaseBlocEvent.loadingNotes() = LoadingEvent;
+  factory UseCaseBlocEvent.emptyResponse() = EmptyResponseEvent;
+  factory UseCaseBlocEvent.resetToInitialState() = ResetToInitialStateEvent;
+  factory UseCaseBlocEvent.clearState() = ClearStateEvent;
 }

@@ -2,7 +2,7 @@ import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/presentation/app_bars/custom_app_bar.dart';
 import 'package:doeves_app/core/presentation/hero_widgets/hero_search_widget.dart';
 import 'package:doeves_app/feauture/app_drawer/presentation/app_drawer.dart';
-import 'package:doeves_app/feauture/main_page/presentation/widgets/add_note_button.dart';
+import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/add_note_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -38,7 +38,7 @@ class MainPageSmallState extends State<MainPageSmall> {
         NavigationDestination(
           selectedIcon: Icon(Icons.collections_bookmark),
           icon: Icon(Icons.collections_bookmark_outlined),
-          label: 'Collections',
+          label: 'Folders',
         ),
       ];
 

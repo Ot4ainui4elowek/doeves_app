@@ -1,7 +1,4 @@
 import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
-import 'package:doeves_app/feauture/main_page/domain/entity/note_with_content/content/content.dart';
-import 'package:doeves_app/feauture/main_page/domain/entity/note_with_content/content/image_content_impl.dart';
-import 'package:doeves_app/feauture/main_page/domain/entity/note_with_content/content/text_content_impl.dart';
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -81,28 +78,28 @@ class _ImageContent extends StatelessWidget {
   }
 }
 
-class _ContentWidget extends StatelessWidget {
-  const _ContentWidget(this.content);
-  final Content content;
-  @override
-  Widget build(BuildContext context) {
-    switch (content) {
-      case TextContentImpl(:final text):
-        {
-          return Text(
-            text,
-            style: AppTextTheme.textSm(weight: TextWeight.regular),
-          );
-        }
-      case ImageContentImpl(:final imageRef):
-        {
-          return _ImageContent(imageRef);
-        }
-      default:
-        {
-          debugPrint('Content builder exception');
-          return const SizedBox(height: 0);
-        }
-    }
-  }
-}
+// class _ContentWidget extends StatelessWidget {
+//   const _ContentWidget(this.content);
+//   final Content content;
+//   @override
+//   Widget build(BuildContext context) {
+//     switch (content) {
+//       case TextContentImpl(:final text):
+//         {
+//           return Text(
+//             text,
+//             style: AppTextTheme.textSm(weight: TextWeight.regular),
+//           );
+//         }
+//       case ImageContentImpl(:final imageRef):
+//         {
+//           return _ImageContent(imageRef);
+//         }
+//       default:
+//         {
+//           debugPrint('Content builder exception');
+//           return const SizedBox(height: 0);
+//         }
+//     }
+//   }
+// }
