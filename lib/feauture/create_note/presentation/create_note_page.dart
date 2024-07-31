@@ -1,25 +1,26 @@
-import 'package:doeves_app/core/domain/router/doeves_routes.dart';
+import 'package:doeves_app/core/presentation/animated_visibility.dart';
 import 'package:doeves_app/core/presentation/app_bars/title_app_bar.dart';
 import 'package:doeves_app/core/presentation/app_wrapper.dart';
-import 'package:doeves_app/core/presentation/buttons/app_text_icon_button.dart';
+import 'package:doeves_app/core/presentation/logo/app_logo_animated.dart';
 import 'package:doeves_app/core/presentation/text_fields/clear_text_field.dart';
-import 'package:doeves_app/core/presentation/text_fields/controllers/app_text_editing_controller.dart';
-import 'package:doeves_app/feauture/create_note/domain/entity/add_content_button_widget_entity.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/create_content_entity.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/tasks_list/create_task_list_impl.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/text/create_text_content_impl.dart';
+import 'package:doeves_app/feauture/create_note/domain/note_data_transfer_object.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page_vm.dart';
 import 'package:doeves_app/feauture/create_note/presentation/widgets/content_widget.dart';
 import 'package:doeves_app/feauture/create_note/presentation/widgets/tasks_list/tasks_list_widget.dart';
 import 'package:doeves_app/feauture/create_note/presentation/widgets/text_content_widget.dart';
+import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/action_on_note_button.dart';
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reactive_variables/reactive_variables.dart';
 
 class CreateNotePage extends StatefulWidget {
-  const CreateNotePage({super.key, required this.vm});
+  const CreateNotePage({super.key, required this.vm, this.notesData});
   final CreateNotePageViewModel vm;
+  final NoteDataTransferObject? notesData;
   @override
   State<CreateNotePage> createState() => _CreateNotePageState();
 }
@@ -35,7 +36,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
         const SizedBox(height: 24),
         ClearTextField(
           context: context,
-          controller: AppTextEditingController(),
+          controller: vm.titleTextController,
           hintText: 'My New Idea!',
           textStyle: textStyle,
         ),
@@ -51,7 +52,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
       children: [
         ClearTextField(
           context: context,
-          controller: AppTextEditingController(),
+          controller: vm.descriptionTextController,
           hintText: "I'll do something...",
           textStyle: textStyle,
         ),
@@ -106,6 +107,40 @@ class _CreateNotePageState extends State<CreateNotePage> {
         ),
       );
 
+  bool get checkNotesDataIsNotNull => widget.notesData != null;
+
+  @override
+  void initState() {
+    vm.init(isEditedNote: checkNotesDataIsNotNull);
+    if (checkNotesDataIsNotNull) {
+      vm.getNote(id: widget.notesData!.id, context: context);
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    vm.dispose(isEditedNote: checkNotesDataIsNotNull);
+    super.dispose();
+  }
+
+  Widget? get _addNoteButtonBuilder => !checkNotesDataIsNotNull
+      ? vm.noteIsValid.observer(
+          (context, value) => FilledButton(
+            // elevation: 0,
+            // hoverElevation: 0,
+            // shape: const CircleBorder(),
+            style: const ButtonStyle(
+              padding: WidgetStatePropertyAll(
+                EdgeInsets.symmetric(vertical: 22),
+              ),
+            ),
+            onPressed: value ? () => vm.createNote(context) : null,
+            child: const Icon(Icons.check),
+          ),
+        )
+      : null;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,16 +150,20 @@ class _CreateNotePageState extends State<CreateNotePage> {
       body: AppWrapper(
         maxWidth: 700,
         child: Scaffold(
-          body: _bodyBuilder,
-          bottomNavigationBar: _BottomBar(vm.contentWidgetDatatList),
-          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-          floatingActionButton: FloatingActionButton(
-            elevation: 0,
-            hoverElevation: 0,
-            shape: const CircleBorder(),
-            onPressed: () => context.go(AppRoutes.notesHomePage),
-            child: const Icon(Icons.check),
+          body: vm.isLoading.observer(
+            (context, value) => value
+                ? const Center(child: AppLogoAnimated(repeat: true))
+                : _bodyBuilder,
           ),
+          bottomNavigationBar: _BottomBar(
+            contentWidgetDatatList: vm.getAddContentList,
+            deleteNote: checkNotesDataIsNotNull
+                ? () =>
+                    vm.deleteNote(context: context, id: widget.notesData!.id)
+                : null,
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+          floatingActionButton: _addNoteButtonBuilder,
         ),
       ),
     );
@@ -168,8 +207,12 @@ class _ContentFactoryWidget extends StatelessWidget {
 }
 
 class _BottomBar extends StatelessWidget {
-  const _BottomBar(this._contentWidgetDatatList);
-  final List<AddContentButtonWidgetEntity> _contentWidgetDatatList;
+  const _BottomBar(
+      {required Map<CreateContentEnum, void Function()> contentWidgetDatatList,
+      this.deleteNote})
+      : _contentWidgetDatatList = contentWidgetDatatList;
+  final Map<CreateContentEnum, void Function()> _contentWidgetDatatList;
+  final Future<void> Function()? deleteNote;
 
   void _showNavigationBar(BuildContext context) {
     if (FocusScope.of(context).hasFocus) {
@@ -179,14 +222,74 @@ class _BottomBar extends StatelessWidget {
       showDragHandle: true,
       context: context,
       builder: (context) => Container(
+        width: double.maxFinite,
         padding: const EdgeInsets.all(16).copyWith(top: 0),
-        child: ListView.separated(
-          shrinkWrap: true,
-          itemBuilder: (context, index) =>
-              _AddContentButtonWidget(_contentWidgetDatatList[index]),
-          separatorBuilder: (context, index) => const SizedBox(height: 10),
-          itemCount: _contentWidgetDatatList.length,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ActionOnNoteButton(
+                actionText: 'Add text',
+                icon: Icons.text_fields_rounded,
+                onPressed: _contentWidgetDatatList[CreateContentEnum.text],
+              ),
+              ActionOnNoteButton(
+                actionText: 'Add task list',
+                icon: Icons.list_rounded,
+                onPressed: _contentWidgetDatatList[CreateContentEnum.taskList],
+              ),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  void _showDeleteDialogBuilder(BuildContext context) {
+    if (deleteNote == null) {
+      return;
+    }
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        actionsPadding: const EdgeInsets.all(8),
+        title: Text(
+          'Do you want to delete the note?',
+          style: AppTextTheme.textXl(weight: TextWeight.regular),
+        ),
+        actionsAlignment: MainAxisAlignment.spaceBetween,
+        actions: [
+          TextButton(
+            onPressed: context.pop,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                'Cancell',
+                style:
+                    AppTextTheme.textBase(weight: TextWeight.medium).copyWith(
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              deleteNote!();
+              context.pop();
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                'Delete',
+                style:
+                    AppTextTheme.textBase(weight: TextWeight.medium).copyWith(
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -210,41 +313,25 @@ class _BottomBar extends StatelessWidget {
         notchMargin: 5,
         color: Theme.of(context).colorScheme.surfaceContainer,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            FloatingActionButton(
-              onPressed: () => _showNavigationBar(context),
-              heroTag: 'create new note button',
-              child: const Icon(Icons.add),
+            // Container(
+            //   margin: const EdgeInsets.only(right: 10),
+            //   child: FloatingActionButton(
+            //     onPressed: () => _showNavigationBar(context),
+            //     heroTag: UniqueKey(),
+            //     child: const Icon(Icons.add),
+            //   ),
+            // ),
+            AnimatedVisibility(
+              visible: deleteNote != null,
+              child: FloatingActionButton(
+                onPressed: () => _showDeleteDialogBuilder(context),
+                heroTag: UniqueKey(),
+                child: const Icon(Icons.delete_outline),
+              ),
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _AddContentButtonWidget extends StatelessWidget {
-  const _AddContentButtonWidget(this.content);
-  final AddContentButtonWidgetEntity content;
-  @override
-  Widget build(BuildContext context) {
-    return AppTextIconButton(
-      onPressed: content.canPopOnTap
-          ? () {
-              content.onPressed();
-              context.pop();
-            }
-          : content.onPressed,
-      icon: Icon(
-        content.icon,
-        color: Theme.of(context).colorScheme.onSurface,
-      ),
-      text: Text(
-        content.title,
-        style: AppTextTheme.textBase(
-          weight: TextWeight.medium,
-        ).copyWith(color: Theme.of(context).colorScheme.onSurface),
       ),
     );
   }

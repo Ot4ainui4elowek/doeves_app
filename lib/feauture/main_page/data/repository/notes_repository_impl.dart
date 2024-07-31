@@ -3,7 +3,7 @@ import 'package:doeves_app/core/domain/rest_api_handler.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/feauture/authorization/data/model/http_status_and_errors.dart';
 import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
-import 'package:doeves_app/feauture/main_page/data/model/notes_list/get_nptes_remote_response.dart';
+import 'package:doeves_app/feauture/main_page/data/model/notes_list/get_notes_remote_response.dart';
 import 'package:doeves_app/feauture/main_page/data/model/notes_list/notes_list_response_model.dart';
 import 'package:doeves_app/feauture/main_page/data/model/remove_list_of_notes/remove_notes_remote_response.dart';
 import 'package:doeves_app/feauture/main_page/data/source/notes_data_source.dart';

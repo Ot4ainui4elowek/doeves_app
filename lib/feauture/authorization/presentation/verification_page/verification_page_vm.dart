@@ -1,6 +1,7 @@
 import 'package:doeves_app/core/data/secure_storage/secure_storage.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/core/presentation/notification_service/notification_service.dart';
+import 'package:doeves_app/core/presentation/notification_service/snack_bar_notification_service/snack_bar_notification_service_impl.dart';
 import 'package:doeves_app/core/presentation/notification_service/snack_bar_notification_service/snack_bar_theme.dart';
 import 'package:doeves_app/core/presentation/text_fields/controllers/app_text_editing_controller.dart';
 import 'package:doeves_app/feauture/authorization/domain/repository/verification_repository.dart';
@@ -10,15 +11,14 @@ import 'package:reactive_variables/reactive_variables.dart';
 class VerificationPageViewModel {
   VerificationPageViewModel({
     required VerificationRepository verificationRepository,
-    required NotificationService notificationService,
     required SecureStorage secureStorage,
   })  : _verificationRepository = verificationRepository,
-        _notificationService = notificationService,
         _storage = secureStorage;
 
   final SecureStorage _storage;
 
-  final NotificationService _notificationService;
+  final NotificationService _notificationService =
+      SnackBarNotificationServiceImpl();
 
   final VerificationRepository _verificationRepository;
 

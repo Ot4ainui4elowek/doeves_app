@@ -6,6 +6,7 @@ import 'package:doeves_app/core/data/secure_storage/secure_storage.dart';
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/core/presentation/notification_service/notification_service.dart';
+import 'package:doeves_app/core/presentation/notification_service/snack_bar_notification_service/snack_bar_notification_service_impl.dart';
 import 'package:doeves_app/core/presentation/text_fields/controllers/app_text_editing_controller.dart';
 import 'package:doeves_app/core/presentation/text_fields/controllers/password_text_editing_controller.dart';
 import 'package:doeves_app/feauture/authorization/data/model/sign_in_response_model.dart';
@@ -19,17 +20,16 @@ import 'package:reactive_variables/reactive_variables.dart';
 class LoginPageViewModel {
   LoginPageViewModel({
     required AuthorizationRepository authorizationRepository,
-    required NotificationService notificationService,
     required SecureStorage storage,
-  })  : _notificationService = notificationService,
-        _authorizationRepository = authorizationRepository,
+  })  : _authorizationRepository = authorizationRepository,
         _storage = storage;
   final emailTextController = AppTextEditingController();
   final passwordTextController = PasswordTextEditingController();
   final authorizationIsValid = false.rv;
   final AuthorizationRepository _authorizationRepository;
   final SecureStorage _storage;
-  final NotificationService _notificationService;
+  final NotificationService _notificationService =
+      SnackBarNotificationServiceImpl();
   void init() {
     emailTextController.addListener(checkFormIsValid);
     passwordTextController.addListener(checkFormIsValid);

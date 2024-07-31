@@ -10,10 +10,10 @@ part 'notes_data_source.g.dart';
 abstract class NotesClientDataSource {
   factory NotesClientDataSource(Dio dio, {String baseUrl}) =
       _NotesClientDataSource;
-  factory NotesClientDataSource.createAmazon() => NotesClientDataSource(
-        Dio(),
-        baseUrl: 'http://ec2-35-175-251-233.compute-1.amazonaws.com/api/v1',
-      );
+  // factory NotesClientDataSource.createAmazon(String? apiUrl) => NotesClientDataSource(
+  //       Dio(),
+  //       baseUrl: 'http://ec2-35-175-251-233.compute-1.amazonaws.com/api/v1',
+  //     );
   factory NotesClientDataSource.create({
     String? apiUrl,
   }) {
@@ -30,6 +30,12 @@ abstract class NotesClientDataSource {
   Future<HttpResponse<CreateNoteResponseModel>> createNote({
     @Header('Authorization') required String token,
     @Body() required CreateNoteRequestModel note,
+  });
+
+  @GET('/note/{id}')
+  Future<HttpResponse<CreateNoteResponseModel>> getNote({
+    @Header('Authorization') required String token,
+    @Path('id') required int id,
   });
 
   @DELETE('/note/{listId}')

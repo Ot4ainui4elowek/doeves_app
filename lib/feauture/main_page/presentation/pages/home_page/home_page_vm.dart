@@ -1,24 +1,23 @@
-import 'dart:developer';
+import 'dart:async';
 
 import 'package:doeves_app/core/data/secure_storage/secure_storage.dart';
+import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/core/presentation/notification_service/snack_bar_notification_service/snack_bar_notification_service_impl.dart';
+import 'package:doeves_app/feauture/create_note/domain/note_data_transfer_object.dart';
 import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
-import 'package:doeves_app/feauture/main_page/data/repository/notes_mocked_repository_impl.dart';
-import 'package:doeves_app/feauture/main_page/domain/notes/notes_bloc.dart';
 import 'package:doeves_app/feauture/main_page/domain/repository/notes_repository.dart';
+import 'package:doeves_app/feauture/main_page/domain/response_bloc/response_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reactive_variables/reactive_variables.dart';
 
 class NotesHomePageViewModel {
   NotesHomePageViewModel({
-    required NotesMockedRepositoryImpl repository,
     required NotesRepository notesRepository,
     required SecureStorage storage,
   })  : _storage = storage,
-        _notesRepository = notesRepository,
-        _repository = repository;
+        _notesRepository = notesRepository;
 
   final SecureStorage _storage;
 
@@ -35,7 +34,7 @@ class NotesHomePageViewModel {
   final notificationService = SnackBarNotificationServiceImpl();
 
   void init() async {
-    notesBloc.add(UseCaseBlocEvent.loadingNotes());
+    notesBloc.add(ResponseBlocEvent.loadingNotes());
     await getNotes();
 
     scrollController.addListener(checkScroll);
@@ -105,18 +104,16 @@ class NotesHomePageViewModel {
         !isLoading.value &&
         scrollController.position.atEdge &&
         scrollController.position.pixels != 0) {
-      notesBloc.add(UseCaseBlocEvent.loadingNotes());
+      notesBloc.add(ResponseBlocEvent.loadingNotes());
       getNotes();
     }
   }
 
   final isLoading = false.rv;
 
-  final NotesMockedRepositoryImpl _repository;
-
   final Rv<List<NoteResponseModel>> notes = Rv([]);
 
-  final UseCaseBloc notesBloc = UseCaseBloc();
+  final ResponseBloc notesBloc = ResponseBloc();
 
   Future<void> getNotes() async {
     isLoading(true);
@@ -133,7 +130,7 @@ class NotesHomePageViewModel {
         jwtToken: jwtToken);
 
     isLoading(false);
-    notesBloc.add(UseCaseBlocEvent.fetchNotes(
+    notesBloc.add(ResponseBlocEvent.fetchNotes(
         result: result, initialListIsEmpty: notes.isEmpty));
     if (result is GoodUseCaseResult<List<NoteResponseModel>>) {
       final data = result.data;
@@ -142,7 +139,7 @@ class NotesHomePageViewModel {
   }
 
   Future<void> refreshNotes() async {
-    notesBloc.add(UseCaseBlocEvent.clearState());
+    notesBloc.add(ResponseBlocEvent.clearState());
     notes.clear();
     await getNotes();
   }
@@ -166,6 +163,22 @@ class NotesHomePageViewModel {
   //   }
   // }
 
+  FutureOr<void> onPressedNote(
+      {required int index, required BuildContext context}) {
+    if (isSelectNotesMode.value) {
+      performActionOnNote(
+        id: notes[index].id,
+        deleteNotesListContainNote:
+            checkDelteNotesListContainsNote(notes[index].id),
+      );
+    } else {
+      context.pushNamed(AppRoutes.createNotePage,
+          extra: NoteDataTransferObject(
+            id: notes[index].id,
+          ));
+    }
+  }
+
   Future<void> deleteSomeNotes(BuildContext context) async {
     final jwtToken = await _storage.readToken();
     if (jwtToken == null) {
@@ -180,9 +193,9 @@ class NotesHomePageViewModel {
           .removeWhere((note) => selectedNotesList.value.contains(note.id));
       notes.refresh();
       if (notes.isNotEmpty) {
-        notesBloc.add(UseCaseBlocEvent.clearState());
+        notesBloc.add(ResponseBlocEvent.clearState());
       } else {
-        notesBloc.add(UseCaseBlocEvent.resetToInitialState());
+        notesBloc.add(ResponseBlocEvent.resetToInitialState());
       }
     }
     isSelectNotesMode(false);
@@ -198,32 +211,32 @@ class NotesHomePageViewModel {
 
   Future<void> onNoteDrag(int oldIndex, int newIndex) async {
     return;
-    final oldId = notes.value[oldIndex].id;
-    final newId = notes.value[newIndex].id;
+    // final oldId = notes.value[oldIndex].id;
+    // final newId = notes.value[newIndex].id;
 
-    if (oldIndex < newIndex) {
-      newIndex--;
-    }
+    // if (oldIndex < newIndex) {
+    //   newIndex--;
+    // }
 
-    final note = notes.removeAt(oldIndex);
+    // final note = notes.removeAt(oldIndex);
 
-    notes.value.insert(newIndex, note);
+    // notes.value.insert(newIndex, note);
 
-    final result = await _repository.moveNote(oldId: oldId, newId: newId);
+    // final result = await _repository.moveNote(oldId: oldId, newId: newId);
 
-    switch (result) {
-      case GoodUseCaseResult<String>(:final data):
-        {
-          log(data);
-        }
-      case BadUseCaseResult(:final errorList):
-        {
-          log(errorList[0].code);
-        }
-      default:
-        {
-          log('oops!');
-        }
-    }
+    // switch (result) {
+    //   case GoodUseCaseResult<String>(:final data):
+    //     {
+    //       log(data);
+    //     }
+    //   case BadUseCaseResult(:final errorList):
+    //     {
+    //       log(errorList[0].code);
+    //     }
+    //   default:
+    //     {
+    //       log('oops!');
+    //     }
+    // }
   }
 }

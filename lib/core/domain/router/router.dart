@@ -6,12 +6,12 @@ import 'package:doeves_app/feauture/authorization/presentation/registration_page
 import 'package:doeves_app/feauture/authorization/presentation/registration_page/registration_page_vm.dart';
 import 'package:doeves_app/feauture/authorization/presentation/verification_page/verification_page.dart';
 import 'package:doeves_app/feauture/authorization/presentation/verification_page/verification_page_vm.dart';
+import 'package:doeves_app/feauture/create_note/domain/note_data_transfer_object.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page_vm.dart';
-import 'package:doeves_app/feauture/main_page/data/repository/notes_mocked_repository_impl.dart';
-import 'package:doeves_app/feauture/main_page/data/source/notes_mocked_data_impl.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/completed_notes_page/completed_notes_page.dart';
-import 'package:doeves_app/feauture/main_page/presentation/pages/folders_with_notes_page/folders_of_notes_page.dart';
+import 'package:doeves_app/feauture/main_page/presentation/pages/folders_with_notes_page/folders_with_notes_page.dart';
+import 'package:doeves_app/feauture/main_page/presentation/pages/folders_with_notes_page/folders_with_notes_page_vm.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/home_page/home_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/home_page/home_page_vm.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/main_page/main_page_large.dart';
@@ -40,8 +40,6 @@ final router = GoRouter(
         path: AppRoutes.loginPage,
         builder: (context, state) => LoginPage(
               vm: LoginPageViewModel(
-                  notificationService:
-                      AppContainer().serviceScope.notificationService,
                   storage: AppContainer().secureScope.secureStorage,
                   authorizationRepository:
                       AppContainer().repositoryScope.authorizationRepository),
@@ -53,8 +51,6 @@ final router = GoRouter(
             builder: (context, state) {
               return VerificationPage(
                 vm: VerificationPageViewModel(
-                  notificationService:
-                      AppContainer().serviceScope.notificationService,
                   secureStorage: AppContainer().secureScope.secureStorage,
                   verificationRepository:
                       AppContainer().repositoryScope.verificationRepository,
@@ -98,9 +94,6 @@ final router = GoRouter(
                   notesRepository:
                       AppContainer().repositoryScope.notesRepository,
                   storage: AppContainer().secureScope.secureStorage,
-                  repository: NotesMockedRepositoryImpl(
-                    data: NotesMockedDataImpl(),
-                  ),
                 ),
               ),
             ),
@@ -118,7 +111,9 @@ final router = GoRouter(
           routes: [
             GoRoute(
               path: AppRoutes.foldersWithNotesPage,
-              builder: (context, state) => const FolderWithNotesPage(),
+              builder: (context, state) => FolderWithNotesPage(
+                vm: FoldersWithNotesPageVm(),
+              ),
             ),
           ],
         ),
@@ -140,27 +135,35 @@ final router = GoRouter(
       ),
     ),
     GoRoute(
-      path: AppRoutes.createNotePage,
-      pageBuilder: (context, state) => CustomTransitionPage(
-        child: CreateNotePage(
-          vm: CreateNotePageViewModel(),
-        ),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-            SlideTransition(
-          position: animation
-              .drive(Tween(begin: const Offset(1, 0), end: Offset.zero)),
-          //opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
-          child: child,
-        ),
-      ),
-    ),
+        path: AppRoutes.createNotePage,
+        name: AppRoutes.createNotePage,
+        pageBuilder: (context, state) {
+          final notesData = state.extra;
+          final isValid = notesData is NoteDataTransferObject;
+          return CustomTransitionPage(
+            child: CreateNotePage(
+              notesData: isValid ? notesData : null,
+              vm: CreateNotePageViewModel(
+                secureStorage: AppContainer().secureScope.secureStorage,
+                createNoteRepository:
+                    AppContainer().repositoryScope.createNoteRepository,
+              ),
+            ),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) =>
+                    SlideTransition(
+              position: animation
+                  .drive(Tween(begin: const Offset(1, 0), end: Offset.zero)),
+              //opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+              child: child,
+            ),
+          );
+        }),
     GoRoute(
       path: AppRoutes.registrationPage,
       pageBuilder: (context, state) => CustomTransitionPage(
         child: RegistrationPage(
           vm: RegistrationPageViewModel(
-              notificationService:
-                  AppContainer().serviceScope.notificationService,
               authorizationRepository:
                   AppContainer().repositoryScope.authorizationRepository),
         ),

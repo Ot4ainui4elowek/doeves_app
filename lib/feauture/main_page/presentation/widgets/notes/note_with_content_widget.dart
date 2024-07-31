@@ -19,29 +19,33 @@ class NoteWithContentWidget extends StatelessWidget {
   //       separatorBuilder: (context, index) => const Divider(height: 25),
   //     );
 
-  Widget _descriptionBuilder(BuildContext context) => Text(
-        note.description,
-        style: AppTextTheme.textBase(weight: TextWeight.regular)
-            .copyWith(color: Theme.of(context).colorScheme.outline),
-      );
+  Widget _descriptionBuilder(BuildContext context) =>
+      note.description.isNotEmpty
+          ? Text(
+              note.description,
+              style: AppTextTheme.textBase(weight: TextWeight.regular)
+                  .copyWith(color: Theme.of(context).colorScheme.outline),
+            )
+          : const SizedBox(height: 0);
+
+  Widget _titleBuilder(BuildContext context) => note.name.isNotEmpty
+      ? Text(
+          note.name,
+          style: AppTextTheme.textBase(weight: TextWeight.medium)
+              .copyWith(color: Theme.of(context).colorScheme.onSurface),
+        )
+      : const SizedBox(height: 0);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onPressed,
       contentPadding: EdgeInsets.zero,
-      title: Text(
-        note.name,
-        style: AppTextTheme.textBase(weight: TextWeight.medium)
-            .copyWith(color: Theme.of(context).colorScheme.onSurface),
-      ),
-      subtitle: Column(
+      title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 10),
+          _titleBuilder(context),
           _descriptionBuilder(context),
-          const SizedBox(height: 10),
-          //_contentListViewBuilder,
         ],
       ),
     );

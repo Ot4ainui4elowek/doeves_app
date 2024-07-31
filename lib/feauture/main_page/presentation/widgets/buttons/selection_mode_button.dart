@@ -10,6 +10,7 @@ class SelectionModeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppElevatedButton(
+      key: key,
       mini: true,
       style: ButtonStyle(
         backgroundColor: WidgetStatePropertyAll(

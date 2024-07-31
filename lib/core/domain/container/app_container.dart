@@ -2,14 +2,14 @@ import 'dart:developer';
 
 import 'package:doeves_app/core/data/secure_storage/secure_storage.dart';
 import 'package:doeves_app/core/domain/network_info/network_info.dart';
-import 'package:doeves_app/core/presentation/notification_service/notification_service.dart';
-import 'package:doeves_app/core/presentation/notification_service/snack_bar_notification_service/snack_bar_notification_service_impl.dart';
 import 'package:doeves_app/feauture/authorization/data/repository/authorization_remote_repository.dart';
 import 'package:doeves_app/feauture/authorization/data/repository/verification_repository_impl.dart';
 import 'package:doeves_app/feauture/authorization/data/source/authorization_client_data_source.dart';
 import 'package:doeves_app/feauture/authorization/domain/bloc/theme_service.dart';
 import 'package:doeves_app/feauture/authorization/domain/repository/authorization_repository.dart';
 import 'package:doeves_app/feauture/authorization/domain/repository/verification_repository.dart';
+import 'package:doeves_app/feauture/create_note/data/create_note_repository_impl.dart';
+import 'package:doeves_app/feauture/create_note/domain/create_note_repository.dart';
 import 'package:doeves_app/feauture/main_page/data/repository/notes_repository_impl.dart';
 import 'package:doeves_app/feauture/main_page/data/source/notes_data_source.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -36,7 +36,7 @@ class AppContainer {
         secureStorage: secureStorage,
       );
       _initServiceScope();
-      _initReposytoryScope();
+      _initReposytoryScope(initLocalApi: true);
       log('App Container is initialized');
       return true;
     } catch (e, st) {
@@ -49,12 +49,10 @@ class AppContainer {
     try {
       log('init service scope');
       final themeService = ThemeService();
-      final notificationService = SnackBarNotificationServiceImpl();
       final networkService = NetworkInfoServiceImpl();
 
       serviceScope = ServiceScope(
         themeService: themeService,
-        notificationService: notificationService,
         networkService: networkService,
       );
     } catch (e, st) {
@@ -62,18 +60,35 @@ class AppContainer {
     }
   }
 
-  Future<void> _initReposytoryScope() async {
+  Future<void> _initReposytoryScope({required bool initLocalApi}) async {
     try {
-      final apiUrl = dotenv.env['APi_ADRESS'];
+      late final String? apiUrl;
+      if (initLocalApi) {
+        apiUrl = dotenv.env['APi_ADRESS'];
+      } else {
+        apiUrl = dotenv.env['AMAZON_ADRESS'];
+      }
+
+      log('Api uel: $apiUrl');
+
       final authDataSource =
           AuthorizationClientDataSource.create(apiUrl: apiUrl);
+
       final notesDataSourse = NotesClientDataSource.create(apiUrl: apiUrl);
+
       final notesRepository = NotesRepositoryImpl(data: notesDataSourse);
+
+      final createNoteRepository =
+          CreateNoteRepositoryImpl(data: notesDataSourse);
+
       final authorizationRepository =
           AuthorizationRepositoryImpl(authorizationDataSourse: authDataSource);
+
       final verificationRepository =
           VerificationRepositoryImpl(dataSourse: authDataSource);
+
       repositoryScope = RepositoryScope(
+        createNoteRepository: createNoteRepository,
         authorizationRepository: authorizationRepository,
         verificationRepository: verificationRepository,
         notesRepository: notesRepository,
@@ -92,10 +107,8 @@ class SecureScope {
 
 class ServiceScope {
   final ThemeService themeService;
-  final NotificationService notificationService;
   final NetworkInfoServiceImpl networkService;
   const ServiceScope({
-    required this.notificationService,
     required this.themeService,
     required this.networkService,
   });
@@ -105,9 +118,11 @@ class RepositoryScope {
   final AuthorizationRepository authorizationRepository;
   final VerificationRepository verificationRepository;
   final NotesRepositoryImpl notesRepository;
+  final CreateNoteRepository createNoteRepository;
   const RepositoryScope({
     required this.authorizationRepository,
     required this.verificationRepository,
     required this.notesRepository,
+    required this.createNoteRepository,
   });
 }

@@ -7,6 +7,7 @@ import 'package:doeves_app/feauture/main_page/presentation/pages/home_page/home_
 import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/action_on_note_button.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/refresh_button.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/select_all_button.dart';
+import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/selection_mode_button.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/notes/note_with_content_widget.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/selectable_container.dart';
 import 'package:doeves_app/theme/text_theme.dart';
@@ -160,14 +161,8 @@ class _NotesHomePageState extends State<NotesHomePage>
               thisItemIsSelected:
                   vm.checkDelteNotesListContainsNote(vm.notes[index].id),
               child: NoteWithContentWidget(
-                onPressed: vm.isSelectNotesMode.value
-                    ? () => vm.performActionOnNote(
-                          id: vm.notes[index].id,
-                          deleteNotesListContainNote:
-                              vm.checkDelteNotesListContainsNote(
-                                  vm.notes[index].id),
-                        )
-                    : null,
+                onPressed: () =>
+                    vm.onPressedNote(context: context, index: index),
                 note: vm.notes[index],
               ),
             ),
@@ -176,29 +171,16 @@ class _NotesHomePageState extends State<NotesHomePage>
         ),
       );
 
-  Widget get _selectionModeButtonBuilder => vm.isSelectNotesMode.observer(
-        (context, value) => AppElevatedButton(
-          mini: true,
-          style: ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll(
-                Theme.of(context).colorScheme.surfaceContainer),
-            side: WidgetStatePropertyAll(
-              BorderSide(
-                color: value
-                    ? Theme.of(context).colorScheme.primary
-                    : Colors.transparent,
-              ),
-            ),
-          ),
-          onPressed: () {
-            if (value) {
-              vm.selectedNotesList.clear();
-            }
-            vm.isSelectNotesMode(!value);
-          },
-          child: const Icon(Icons.control_point_duplicate_sharp),
-        ),
-      );
+  Widget get _selectionModeButtonBuilder =>
+      vm.isSelectNotesMode.observer((context, value) => SelectionModeButton(
+            isSelectedMode: value,
+            onPressed: () {
+              if (value) {
+                vm.selectedNotesList.clear();
+              }
+              vm.isSelectNotesMode(!value);
+            },
+          ));
 
   Widget get _actionButtonBuilder => vm.isSelectNotesMode.observer(
         (context, value) => AnimatedVisibility(
@@ -290,17 +272,15 @@ class _NotesHomePageState extends State<NotesHomePage>
       body: RefreshIndicator(
         key: vm.refreshIndicatorKey,
         onRefresh: vm.refreshNotes,
-        child: Center(
-          child: CustomScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            controller: vm.scrollController,
-            slivers: [
-              _appBarBuilder,
-              SliverToBoxAdapter(
-                child: _notesListBuilder,
-              ),
-            ],
-          ),
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          controller: vm.scrollController,
+          slivers: [
+            _appBarBuilder,
+            SliverToBoxAdapter(
+              child: _notesListBuilder,
+            ),
+          ],
         ),
       ),
     );

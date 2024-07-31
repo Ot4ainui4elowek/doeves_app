@@ -1,4 +1,5 @@
 import 'package:doeves_app/core/presentation/notification_service/notification_service.dart';
+import 'package:doeves_app/core/presentation/notification_service/snack_bar_notification_service/snack_bar_notification_service_impl.dart';
 import 'package:doeves_app/core/presentation/text_fields/controllers/app_text_editing_controller.dart';
 import 'package:doeves_app/core/presentation/text_fields/controllers/password_text_editing_controller.dart';
 import 'package:doeves_app/feauture/authorization/domain/authorization_strategy/strategy.dart';
@@ -14,14 +15,13 @@ class RegistrationPageViewModel {
   final retypePasswordTextController = PasswordTextEditingController();
   final registrationFormIsValid = false.rv;
   final AuthorizationRepository _authorizationRepository;
-  final NotificationService _notificationService;
+  final NotificationService _notificationService =
+      SnackBarNotificationServiceImpl();
 
   final emailFocusNode = FocusNode();
   RegistrationPageViewModel({
     required AuthorizationRepository authorizationRepository,
-    required NotificationService notificationService,
-  })  : _notificationService = notificationService,
-        _authorizationRepository = authorizationRepository;
+  }) : _authorizationRepository = authorizationRepository;
   void init() {
     for (TextEditingController controller in <TextEditingController>[
       fullNameTextController,
