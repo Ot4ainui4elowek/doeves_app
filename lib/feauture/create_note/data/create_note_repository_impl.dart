@@ -48,7 +48,7 @@ class CreateNoteRepositoryImpl
   }
 
   @override
-  Future<UseCaseResult<RemoveNotesRemoteResponse>> deleteNote({
+  Future<UseCaseResult<RemoveNoteRemoteResponse>> deleteNote({
     required int id,
     required String jwtToken,
   }) async {
@@ -58,20 +58,20 @@ class CreateNoteRepositoryImpl
           token: jwtToken,
           idList: id.toString(),
         ),
-        dataMapper: RemoveNotesRemoteResponse.fromJson,
+        dataMapper: RemoveNoteRemoteResponse.fromJson,
       );
       switch (result) {
-        case DataRestApiResult<RemoveNotesRemoteResponse>(:final data):
+        case DataRestApiResult<RemoveNoteRemoteResponse>(:final data):
           {
             return UseCaseResult.good(data);
           }
-        case ErrorWitchDataRestApiResult<RemoveNotesRemoteResponse>(
+        case ErrorWitchDataRestApiResult<RemoveNoteRemoteResponse>(
             :final errorData
           ):
           {
             return UseCaseResult.dataBad(errorData);
           }
-        case ErrorRestApiResult<RemoveNotesRemoteResponse>(:final errorList):
+        case ErrorRestApiResult<RemoveNoteRemoteResponse>(:final errorList):
           {
             return UseCaseResult.bad(errorList);
           }

@@ -52,35 +52,35 @@ class NoteWithContentWidget extends StatelessWidget {
   }
 }
 
-class _ImageContent extends StatelessWidget {
-  const _ImageContent(this.imageRef);
-  final String imageRef;
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Image:',
-          style: AppTextTheme.textSm(weight: TextWeight.regular),
-        ),
-        Container(
-          width: 75,
-          height: 50,
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: Image.network(
-            imageRef,
-            fit: BoxFit.cover,
-          ),
-        ),
-      ],
-    );
-  }
-}
+// class _ImageContent extends StatelessWidget {
+//   const _ImageContent(this.imageRef);
+//   final String imageRef;
+//   @override
+//   Widget build(BuildContext context) {
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         Text(
+//           'Image:',
+//           style: AppTextTheme.textSm(weight: TextWeight.regular),
+//         ),
+//         Container(
+//           width: 75,
+//           height: 50,
+//           decoration: const BoxDecoration(
+//             borderRadius: BorderRadius.all(Radius.circular(5)),
+//           ),
+//           clipBehavior: Clip.antiAlias,
+//           child: Image.network(
+//             imageRef,
+//             fit: BoxFit.cover,
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
 
 // class _ContentWidget extends StatelessWidget {
 //   const _ContentWidget(this.content);

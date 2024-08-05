@@ -56,26 +56,26 @@ class NotesRepositoryImpl with RestApiHandler implements NotesRepository {
   }
 
   @override
-  Future<UseCaseResult<RemoveNotesRemoteResponse>> deleteMultipleNotes(
+  Future<UseCaseResult<RemoveNoteRemoteResponse>> deleteMultipleNotes(
       {required List<int> deleteNotesList, required String jwtToken}) async {
     try {
       final result = await request(
         callback: () => _notesDataSourse.deleteMultipleNotes(
             token: jwtToken, idList: deleteNotesList.join(',')),
-        dataMapper: RemoveNotesRemoteResponse.fromJson,
+        dataMapper: RemoveNoteRemoteResponse.fromJson,
       );
       switch (result) {
-        case DataRestApiResult<RemoveNotesRemoteResponse>(:final data):
+        case DataRestApiResult<RemoveNoteRemoteResponse>(:final data):
           {
             return UseCaseResult.good(data);
           }
-        case ErrorWitchDataRestApiResult<RemoveNotesRemoteResponse>(
+        case ErrorWitchDataRestApiResult<RemoveNoteRemoteResponse>(
             :final errorData
           ):
           {
             return UseCaseResult.dataBad(errorData);
           }
-        case ErrorRestApiResult<RemoveNotesRemoteResponse>(:final errorList):
+        case ErrorRestApiResult<RemoveNoteRemoteResponse>(:final errorList):
           {
             return UseCaseResult.bad(errorList);
           }

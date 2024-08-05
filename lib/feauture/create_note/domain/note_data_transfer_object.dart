@@ -1,5 +1,11 @@
-class NoteDataTransferObject {
-  const NoteDataTransferObject({required this.id, this.catalogId});
-  final int id;
-  final int? catalogId;
+abstract class CreateNotePageTransferObject {}
+
+class CreateNoteInFolderTransferObject implements CreateNotePageTransferObject {
+  const CreateNoteInFolderTransferObject(this.folderId);
+  final int folderId;
+}
+
+class OpenNoteTransferObject implements CreateNotePageTransferObject {
+  const OpenNoteTransferObject(this.noteId);
+  final int noteId;
 }

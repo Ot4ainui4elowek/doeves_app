@@ -10,7 +10,7 @@ abstract interface class NotesRepository {
     required String jwtToken,
   });
 
-  Future<UseCaseResult<RemoveNotesRemoteResponse>> deleteMultipleNotes({
+  Future<UseCaseResult<RemoveNoteRemoteResponse>> deleteMultipleNotes({
     required List<int> deleteNotesList,
     required String jwtToken,
   });

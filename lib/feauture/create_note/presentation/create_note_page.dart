@@ -6,8 +6,8 @@ import 'package:doeves_app/core/presentation/text_fields/clear_text_field.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/create_content_entity.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/tasks_list/create_task_list_impl.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/text/create_text_content_impl.dart';
-import 'package:doeves_app/feauture/create_note/domain/note_data_transfer_object.dart';
-import 'package:doeves_app/feauture/create_note/presentation/create_note_page_vm.dart';
+import 'package:doeves_app/feauture/create_note/presentation/create_note_page_controller.dart';
+import 'package:doeves_app/feauture/create_note/presentation/view_models/create_note_page_vm.dart';
 import 'package:doeves_app/feauture/create_note/presentation/widgets/content_widget.dart';
 import 'package:doeves_app/feauture/create_note/presentation/widgets/tasks_list/tasks_list_widget.dart';
 import 'package:doeves_app/feauture/create_note/presentation/widgets/text_content_widget.dart';
@@ -18,15 +18,19 @@ import 'package:go_router/go_router.dart';
 import 'package:reactive_variables/reactive_variables.dart';
 
 class CreateNotePage extends StatefulWidget {
-  const CreateNotePage({super.key, required this.vm, this.notesData});
+  const CreateNotePage({
+    super.key,
+    required this.vm,
+  });
   final CreateNotePageViewModel vm;
-  final NoteDataTransferObject? notesData;
+
   @override
   State<CreateNotePage> createState() => _CreateNotePageState();
 }
 
 class _CreateNotePageState extends State<CreateNotePage> {
   CreateNotePageViewModel get vm => widget.vm;
+  CreateNotePageController get controller => vm.controller;
   Widget get _titleBuilder {
     final textStyle = AppTextTheme.text2Xl(weight: TextWeight.bold).copyWith(
       color: Theme.of(context).colorScheme.onSurface,
@@ -36,7 +40,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
         const SizedBox(height: 24),
         ClearTextField(
           context: context,
-          controller: vm.titleTextController,
+          controller: controller.titleTextController,
           hintText: 'My New Idea!',
           textStyle: textStyle,
         ),
@@ -52,7 +56,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
       children: [
         ClearTextField(
           context: context,
-          controller: vm.descriptionTextController,
+          controller: controller.descriptionTextController,
           hintText: "I'll do something...",
           textStyle: textStyle,
         ),
@@ -60,11 +64,11 @@ class _CreateNotePageState extends State<CreateNotePage> {
     );
   }
 
-  Widget get _contentListBuilder => vm.contentList.observer(
+  Widget get _contentListBuilder => controller.contentList.observer(
         (context, value) => ReorderableListView.builder(
           anchor: 0,
           buildDefaultDragHandles: false,
-          onReorder: (oldIndex, newIndex) => vm.onContentDrag(
+          onReorder: (oldIndex, newIndex) => controller.onContentDrag(
             oldIndex: oldIndex,
             newIndex: newIndex,
             context: context,
@@ -78,10 +82,10 @@ class _CreateNotePageState extends State<CreateNotePage> {
             child: _ContentFactoryWidget(
               index: index,
               content: value[index],
-              deleteContent: vm.deleteContent,
+              deleteContent: controller.deleteContent,
             ),
           ),
-          itemCount: vm.contentList.length,
+          itemCount: controller.contentList.length,
         ),
       );
 
@@ -107,39 +111,36 @@ class _CreateNotePageState extends State<CreateNotePage> {
         ),
       );
 
-  bool get checkNotesDataIsNotNull => widget.notesData != null;
+  // bool get checkNotesDataIsNotNull => widget.notesData != null;
 
   @override
   void initState() {
-    vm.init(isEditedNote: checkNotesDataIsNotNull);
-    if (checkNotesDataIsNotNull) {
-      vm.getNote(id: widget.notesData!.id, context: context);
-    }
+    vm.init();
+    // vm.init(isEditedNote: checkNotesDataIsNotNull);
+    // if (checkNotesDataIsNotNull) {
+    //   vm.getNote(id: widget.notesData!.id, context: context);
+    // }
     super.initState();
   }
 
   @override
   void dispose() {
-    vm.dispose(isEditedNote: checkNotesDataIsNotNull);
+    //vm.dispose(isEditedNote: checkNotesDataIsNotNull);
     super.dispose();
   }
 
-  Widget? get _addNoteButtonBuilder => !checkNotesDataIsNotNull
-      ? vm.noteIsValid.observer(
-          (context, value) => FilledButton(
-            // elevation: 0,
-            // hoverElevation: 0,
-            // shape: const CircleBorder(),
-            style: const ButtonStyle(
-              padding: WidgetStatePropertyAll(
-                EdgeInsets.symmetric(vertical: 22),
-              ),
-            ),
-            onPressed: value ? () => vm.createNote(context) : null,
-            child: const Icon(Icons.check),
+  Widget? get _addNoteButtonBuilder => FilledButton(
+        // elevation: 0,
+        // hoverElevation: 0,
+        // shape: const CircleBorder(),
+        style: const ButtonStyle(
+          padding: WidgetStatePropertyAll(
+            EdgeInsets.symmetric(vertical: 22),
           ),
-        )
-      : null;
+        ),
+        onPressed: () => controller.createNote(),
+        child: const Icon(Icons.check),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -150,17 +151,13 @@ class _CreateNotePageState extends State<CreateNotePage> {
       body: AppWrapper(
         maxWidth: 700,
         child: Scaffold(
-          body: vm.isLoading.observer(
+          body: controller.isLoading.observer(
             (context, value) => value
                 ? const Center(child: AppLogoAnimated(repeat: true))
                 : _bodyBuilder,
           ),
           bottomNavigationBar: _BottomBar(
-            contentWidgetDatatList: vm.getAddContentList,
-            deleteNote: checkNotesDataIsNotNull
-                ? () =>
-                    vm.deleteNote(context: context, id: widget.notesData!.id)
-                : null,
+            contentWidgetDatatList: controller.getAddContentList,
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           floatingActionButton: _addNoteButtonBuilder,

@@ -15,6 +15,15 @@ import 'package:doeves_app/feauture/main_page/data/source/notes_data_source.dart
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 
+enum APIAsdress {
+  localhost('API_ADRESS'),
+  amazon('AMAZON_ADRESS'),
+  myPc('MY_PC_ADRESS');
+
+  final String url;
+  const APIAsdress(this.url);
+}
+
 class AppContainer {
   late final ServiceScope serviceScope;
   late final RepositoryScope repositoryScope;
@@ -62,12 +71,9 @@ class AppContainer {
 
   Future<void> _initReposytoryScope({required bool initLocalApi}) async {
     try {
-      late final String? apiUrl;
-      if (initLocalApi) {
-        apiUrl = dotenv.env['APi_ADRESS'];
-      } else {
-        apiUrl = dotenv.env['AMAZON_ADRESS'];
-      }
+      const APIAsdress apiAdress = APIAsdress.localhost;
+
+      final String? apiUrl = dotenv.env[apiAdress.url];
 
       log('Api uel: $apiUrl');
 

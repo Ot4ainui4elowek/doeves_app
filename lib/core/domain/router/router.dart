@@ -8,7 +8,8 @@ import 'package:doeves_app/feauture/authorization/presentation/verification_page
 import 'package:doeves_app/feauture/authorization/presentation/verification_page/verification_page_vm.dart';
 import 'package:doeves_app/feauture/create_note/domain/note_data_transfer_object.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page.dart';
-import 'package:doeves_app/feauture/create_note/presentation/create_note_page_vm.dart';
+import 'package:doeves_app/feauture/create_note/presentation/create_note_page_controller.dart';
+import 'package:doeves_app/feauture/create_note/presentation/view_models/create_note_page_vm.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/completed_notes_page/completed_notes_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/folders_with_notes_page/folders_with_notes_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/folders_with_notes_page/folders_with_notes_page_vm.dart';
@@ -139,14 +140,16 @@ final router = GoRouter(
         name: AppRoutes.createNotePage,
         pageBuilder: (context, state) {
           final notesData = state.extra;
-          final isValid = notesData is NoteDataTransferObject;
+          final isValid = notesData is CreateNotePageTransferObject;
           return CustomTransitionPage(
             child: CreateNotePage(
-              notesData: isValid ? notesData : null,
-              vm: CreateNotePageViewModel(
-                secureStorage: AppContainer().secureScope.secureStorage,
-                createNoteRepository:
-                    AppContainer().repositoryScope.createNoteRepository,
+              vm: CreateNotePageViewModel.createVM(
+                notesData: isValid ? notesData : null,
+                controller: CreateNotePageController(
+                  secureStorage: AppContainer().secureScope.secureStorage,
+                  createNoteRepository:
+                      AppContainer().repositoryScope.createNoteRepository,
+                ),
               ),
             ),
             transitionsBuilder:

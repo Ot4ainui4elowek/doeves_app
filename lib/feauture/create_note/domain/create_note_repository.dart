@@ -9,7 +9,7 @@ abstract interface class CreateNoteRepository {
     required String jwtToken,
   });
 
-  Future<UseCaseResult<RemoveNotesRemoteResponse>> deleteNote({
+  Future<UseCaseResult<RemoveNoteRemoteResponse>> deleteNote({
     required int id,
     required String jwtToken,
   });

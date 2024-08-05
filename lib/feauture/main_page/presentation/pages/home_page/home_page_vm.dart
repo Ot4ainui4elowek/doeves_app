@@ -172,10 +172,12 @@ class NotesHomePageViewModel {
             checkDelteNotesListContainsNote(notes[index].id),
       );
     } else {
-      context.pushNamed(AppRoutes.createNotePage,
-          extra: NoteDataTransferObject(
-            id: notes[index].id,
-          ));
+      context.pushNamed(
+        AppRoutes.createNotePage,
+        extra: OpenNoteTransferObject(
+          notes[index].id,
+        ),
+      );
     }
   }
 

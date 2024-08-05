@@ -5,7 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'empty_good_response.g.dart';
 
 @JsonSerializable()
-class EmptyGoodResponse implements RemoveNotesRemoteResponse {
+class EmptyGoodResponse implements RemoveNoteRemoteResponse {
   const EmptyGoodResponse(this.good);
 
   factory EmptyGoodResponse.fromJson(JsonType json) =>
