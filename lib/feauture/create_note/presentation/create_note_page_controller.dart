@@ -1,17 +1,15 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:doeves_app/core/data/secure_storage/secure_storage.dart';
 import 'package:doeves_app/core/domain/app_error/app_error.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/core/presentation/text_fields/controllers/app_text_editing_controller.dart';
+import 'package:doeves_app/feauture/create_note/domain/create_note/create_note_bloc.dart';
 import 'package:doeves_app/feauture/create_note/domain/create_note_repository.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/create_content_entity.dart';
-import 'package:doeves_app/feauture/create_note/domain/entity/content/tasks_list/create_task_list_impl.dart';
-import 'package:doeves_app/feauture/create_note/domain/entity/content/tasks_list/task_list_item.dart';
-import 'package:doeves_app/feauture/create_note/domain/entity/content/text/create_text_content_impl.dart';
 import 'package:doeves_app/feauture/main_page/data/model/create_note_request_model.dart';
 import 'package:doeves_app/feauture/main_page/data/model/create_note_response_model.dart';
+import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
 import 'package:doeves_app/feauture/main_page/data/model/remove_list_of_notes/remove_notes_remote_response.dart';
 import 'package:flutter/material.dart';
 import 'package:reactive_variables/reactive_variables.dart';
@@ -27,7 +25,7 @@ class CreateNotePageController {
     required CreateNoteRepository createNoteRepository,
   })  : _secureStorage = secureStorage,
         _createNoteRepository = createNoteRepository;
-
+  final titleAndDescriptionBloc = CreateNoteBloc();
   // void init({required bool isEditedNote}) {
   //   if (isEditedNote) {
   //     _initEditedNote();
@@ -69,7 +67,7 @@ class CreateNotePageController {
   //       descriptionTextController.text.isNotEmpty);
   // }
 
-  // final noteIsLoadedSucessfully = false.rv;
+  final noteIsLoadedSucessfully = false.rv;
 
   // Timer? t;
   // void listenDescription() {
@@ -96,27 +94,28 @@ class CreateNotePageController {
 
   final isLoading = false.rv;
 
-  Map<CreateContentEnum, void Function()> get getAddContentList => {
-        CreateContentEnum.text: addTextContent,
-        CreateContentEnum.taskList: addTaskListContent,
-      };
-
-  Future<UseCaseResult<CreateNoteResponseModel>> getNote(
+  Future<UseCaseResult<NoteResponseModel>> getNote(
       {required int id, BuildContext? context}) async {
-    isLoading(true);
+    titleAndDescriptionBloc.add(const CreateNoteEvent.loading());
+
     await Future.delayed(const Duration(seconds: 2));
+
     final jwt = await _secureStorage.readToken();
 
     if (jwt == null) {
-      isLoading(false);
-      return UseCaseResult.bad(
+      final UseCaseResult<NoteResponseModel> result = UseCaseResult.bad(
         [
           SpecificError('undefined jwt token'),
         ],
       );
+      titleAndDescriptionBloc.add(CreateNoteEvent.fetch(result: result));
+      return result;
     }
-    isLoading(false);
-    return await _createNoteRepository.getNote(id: id, jwtToken: jwt);
+    final result = await _createNoteRepository.getNote(id: id, jwtToken: jwt);
+
+    titleAndDescriptionBloc.add(CreateNoteEvent.fetch(result: result));
+
+    return result;
     // if (context.mounted && result is! GoodUseCaseResult) {
     //   _notificationService.responseNotification(
     //       response: result,
@@ -146,7 +145,9 @@ class CreateNotePageController {
     return await _createNoteRepository.deleteNote(id: id, jwtToken: jwt);
   }
 
-  Future<UseCaseResult<CreateNoteResponseModel>> createNote() async {
+  Future<UseCaseResult<CreateNoteResponseModel>> createNote({
+    int? catalogId,
+  }) async {
     isLoading(true);
     final jwt = await _secureStorage.readToken();
     if (jwt == null) {
@@ -160,22 +161,11 @@ class CreateNotePageController {
     isLoading(false);
     return await _createNoteRepository.createNote(
         note: CreateNoteRequestModel(
-            description: descriptionTextController.text,
-            name: titleTextController.text),
+          description: descriptionTextController.text,
+          name: titleTextController.text,
+          catalogId: catalogId,
+        ),
         jwtToken: jwt);
-  }
-
-  void addTextContent() {
-    contentList.add(CreateTextContentImpl());
-  }
-
-  void addTaskListContent() {
-    contentList
-        .add(CreateTasksListImpl([TaskListItem(id: Random().nextInt(10000))]));
-  }
-
-  void deleteContent(int id) {
-    contentList.removeWhere((content) => content.id == id);
   }
 
   final Rv<List<CreateContentEntity>> contentList = Rv([]);

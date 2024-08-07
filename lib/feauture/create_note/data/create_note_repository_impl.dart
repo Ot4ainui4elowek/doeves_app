@@ -5,6 +5,7 @@ import 'package:doeves_app/feauture/authorization/data/model/http_status_and_err
 import 'package:doeves_app/feauture/create_note/domain/create_note_repository.dart';
 import 'package:doeves_app/feauture/main_page/data/model/create_note_request_model.dart';
 import 'package:doeves_app/feauture/main_page/data/model/create_note_response_model.dart';
+import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
 import 'package:doeves_app/feauture/main_page/data/model/remove_list_of_notes/remove_notes_remote_response.dart';
 import 'package:doeves_app/feauture/main_page/data/source/notes_data_source.dart';
 
@@ -83,26 +84,24 @@ class CreateNoteRepositoryImpl
   }
 
   @override
-  Future<UseCaseResult<CreateNoteResponseModel>> getNote(
+  Future<UseCaseResult<NoteResponseModel>> getNote(
       {required int id, required String jwtToken}) async {
     try {
       final result = await request(
         callback: () => _data.getNote(token: jwtToken, id: id),
-        dataMapper: CreateNoteResponseModel.fromJson,
+        dataMapper: NoteResponseModel.fromJson,
       );
 
       switch (result) {
-        case DataRestApiResult<CreateNoteResponseModel>(:final data):
+        case DataRestApiResult<NoteResponseModel>(:final data):
           {
             return UseCaseResult.good(data);
           }
-        case ErrorRestApiResult<CreateNoteResponseModel>(:final errorList):
+        case ErrorRestApiResult<NoteResponseModel>(:final errorList):
           {
             return UseCaseResult.bad(errorList);
           }
-        case ErrorWitchDataRestApiResult<CreateNoteResponseModel>(
-            :final errorData
-          ):
+        case ErrorWitchDataRestApiResult<NoteResponseModel>(:final errorData):
           {
             return UseCaseResult.dataBad(errorData);
           }

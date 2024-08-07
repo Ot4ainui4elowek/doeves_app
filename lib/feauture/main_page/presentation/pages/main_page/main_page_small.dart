@@ -2,6 +2,7 @@ import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/presentation/app_bars/custom_app_bar.dart';
 import 'package:doeves_app/core/presentation/hero_widgets/hero_search_widget.dart';
 import 'package:doeves_app/feauture/app_drawer/presentation/app_drawer.dart';
+import 'package:doeves_app/feauture/main_page/presentation/pages/main_page/pages_enum.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/add_note_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -24,21 +25,21 @@ class MainPageSmallState extends State<MainPageSmall> {
   }
 
   List<NavigationDestination> get _navigationDestinitionBuilder =>
-      const <NavigationDestination>[
+      <NavigationDestination>[
         NavigationDestination(
-          selectedIcon: Icon(Icons.home),
-          icon: Icon(Icons.home_outlined),
-          label: 'Home',
+          selectedIcon: const Icon(Icons.home),
+          icon: const Icon(Icons.home_outlined),
+          label: PagesEnum.homePage.pageName,
         ),
         NavigationDestination(
-          selectedIcon: Icon(Icons.bookmark_added),
-          icon: Icon(Icons.bookmark_added_outlined),
-          label: 'Finished',
+          selectedIcon: const Icon(Icons.bookmark_added),
+          icon: const Icon(Icons.bookmark_added_outlined),
+          label: PagesEnum.completedPage.pageName,
         ),
         NavigationDestination(
-          selectedIcon: Icon(Icons.collections_bookmark),
-          icon: Icon(Icons.collections_bookmark_outlined),
-          label: 'Folders',
+          selectedIcon: const Icon(Icons.collections_bookmark),
+          icon: const Icon(Icons.collections_bookmark_outlined),
+          label: PagesEnum.catalogPage.pageName,
         ),
       ];
 

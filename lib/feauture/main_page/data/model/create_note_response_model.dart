@@ -6,9 +6,6 @@ part 'create_note_response_model.g.dart';
 class CreateNoteResponseModel {
   CreateNoteResponseModel({
     required this.id,
-    required this.name,
-    required this.description,
-    required this.dateOfCreate,
   });
 
   factory CreateNoteResponseModel.fromJson(Map<String, dynamic> json) =>
@@ -18,13 +15,4 @@ class CreateNoteResponseModel {
 
   @JsonKey(name: 'id')
   final int id;
-
-  @JsonKey(name: 'name')
-  final String name;
-
-  @JsonKey(name: 'description')
-  final String description;
-
-  @JsonKey(name: 'dateOfCreate')
-  final DateTime dateOfCreate;
 }

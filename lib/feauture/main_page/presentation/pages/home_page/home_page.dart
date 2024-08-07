@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:doeves_app/core/presentation/animated_visibility.dart';
 import 'package:doeves_app/core/presentation/buttons/app_elevated_button.dart';
 import 'package:doeves_app/core/presentation/counter_widget.dart';
@@ -101,38 +103,47 @@ class _NotesHomePageState extends State<NotesHomePage>
         ),
       );
 
-  Widget get _notesLoadingIndicatorBuilder => Center(
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-          child: BlocBuilder(
-            bloc: vm.notesBloc,
-            builder: (context, state) => vm.notesBloc.state.maybeWhen(
-              orElse: () => const SizedBox(height: 0),
-              initial: () => Text(
-                'You don\'t have any notes. Add them and they will appear here.',
-                style: AppTextTheme.textXl(weight: TextWeight.medium),
-              ),
-              loading: () =>
-                  const AppLogoAnimated(curve: Curves.linear, repeat: true),
-              emptyResponse: () => Text(
-                'All notes are loaded!',
-                style: AppTextTheme.textXl(weight: TextWeight.medium),
-              ),
-              error: (error) => Column(
-                children: [
-                  const SizedBox(height: 150),
-                  Icon(
-                    Icons.error_outline,
-                    color: Theme.of(context).colorScheme.error,
-                    size: 50,
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    error.code,
-                    style: AppTextTheme.textXl(weight: TextWeight.medium)
-                        .copyWith(color: Theme.of(context).colorScheme.error),
-                  ),
-                ],
+  Widget get _notesLoadingIndicatorBuilder => Container(
+        constraints: BoxConstraints(
+            minHeight: vm.notes.isEmpty
+                ? MediaQuery.of(context).size.height - 300
+                : 0),
+        child: Center(
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+            child: BlocBuilder(
+              bloc: vm.notesBloc,
+              builder: (context, state) => vm.notesBloc.state.maybeWhen(
+                orElse: () => const SizedBox(height: 0),
+                initial: () => Text(
+                  'You don\'t have any notes. Add them and they will appear here.',
+                  style: AppTextTheme.textXl(weight: TextWeight.medium),
+                ),
+                loading: () => AppLogoAnimated(
+                  curve: Curves.linear,
+                  repeat: true,
+                  width: min(MediaQuery.of(context).size.width, 200),
+                ),
+                emptyResponse: () => Text(
+                  'All notes are loaded!',
+                  style: AppTextTheme.textXl(weight: TextWeight.medium),
+                ),
+                error: (error) => Column(
+                  children: [
+                    Icon(
+                      Icons.error_outline,
+                      color: Theme.of(context).colorScheme.error,
+                      size: 50,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      error.code,
+                      textAlign: TextAlign.center,
+                      style: AppTextTheme.textXl(weight: TextWeight.medium)
+                          .copyWith(color: Theme.of(context).colorScheme.error),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -226,7 +237,8 @@ class _NotesHomePageState extends State<NotesHomePage>
             visible: vm.isSelectNotesMode.value,
             child: SelectAllButton(
               listIsSelected: vm.allNotesIsSelected.value,
-              onPressed: vm.onPressedSelectAllNotes,
+              onPressed:
+                  vm.notes.isNotEmpty ? vm.onPressedSelectAllNotes : null,
             )),
       );
 

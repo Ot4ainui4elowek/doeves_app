@@ -11,7 +11,7 @@ CreateNoteRequestModel _$CreateNoteRequestModelFromJson(
     CreateNoteRequestModel(
       name: json['name'] as String,
       description: json['description'] as String,
-      catalogId: json['catalog_id'] as String?,
+      catalogId: (json['catalog_id'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$CreateNoteRequestModelToJson(

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:doeves_app/core/presentation/animated_visibility.dart';
 import 'package:doeves_app/core/presentation/app_bars/title_app_bar.dart';
 import 'package:doeves_app/core/presentation/app_wrapper.dart';
@@ -11,11 +13,10 @@ import 'package:doeves_app/feauture/create_note/presentation/view_models/create_
 import 'package:doeves_app/feauture/create_note/presentation/widgets/content_widget.dart';
 import 'package:doeves_app/feauture/create_note/presentation/widgets/tasks_list/tasks_list_widget.dart';
 import 'package:doeves_app/feauture/create_note/presentation/widgets/text_content_widget.dart';
-import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/action_on_note_button.dart';
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:reactive_variables/reactive_variables.dart';
 
 class CreateNotePage extends StatefulWidget {
   const CreateNotePage({
@@ -64,28 +65,69 @@ class _CreateNotePageState extends State<CreateNotePage> {
     );
   }
 
-  Widget get _contentListBuilder => controller.contentList.observer(
-        (context, value) => ReorderableListView.builder(
-          anchor: 0,
-          buildDefaultDragHandles: false,
-          onReorder: (oldIndex, newIndex) => controller.onContentDrag(
-            oldIndex: oldIndex,
-            newIndex: newIndex,
-            context: context,
-          ),
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) => ReorderableDragStartListener(
-            enabled: false,
-            key: ValueKey(value[index]),
-            index: index,
-            child: _ContentFactoryWidget(
-              index: index,
-              content: value[index],
-              deleteContent: controller.deleteContent,
+  // Widget get _contentListBuilder => controller.contentList.observer(
+  //       (context, value) => ReorderableListView.builder(
+  //         anchor: 0,
+  //         buildDefaultDragHandles: false,
+  //         onReorder: (oldIndex, newIndex) => controller.onContentDrag(
+  //           oldIndex: oldIndex,
+  //           newIndex: newIndex,
+  //           context: context,
+  //         ),
+  //         shrinkWrap: true,
+  //         physics: const NeverScrollableScrollPhysics(),
+  //         itemBuilder: (context, index) => ReorderableDragStartListener(
+  //           enabled: false,
+  //           key: ValueKey(value[index]),
+  //           index: index,
+  //           child: _ContentFactoryWidget(
+  //             index: index,
+  //             content: value[index],
+  //             deleteContent: controller.deleteContent,
+  //           ),
+  //         ),
+  //         itemCount: controller.contentList.length,
+  //       ),
+  //     );
+
+  Widget _titleAndDescriptionBlocBuilder(Widget child) => Container(
+        constraints:
+            BoxConstraints(minHeight: MediaQuery.of(context).size.height - 100),
+        child: BlocBuilder(
+          bloc: vm.controller.titleAndDescriptionBloc,
+          builder: (context, state) =>
+              vm.controller.titleAndDescriptionBloc.state.maybeWhen(
+            orElse: () => const SizedBox(height: 0),
+            initial: () => child,
+            loading: () => Center(
+              child: AppLogoAnimated(
+                curve: Curves.linear,
+                repeat: true,
+                width: min(double.maxFinite, 200),
+              ),
+            ),
+            error: (message) => Center(
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.error_outline,
+                      color: Theme.of(context).colorScheme.error,
+                      size: 50,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      message,
+                      textAlign: TextAlign.center,
+                      style: AppTextTheme.textXl(weight: TextWeight.medium)
+                          .copyWith(color: Theme.of(context).colorScheme.error),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
-          itemCount: controller.contentList.length,
         ),
       );
 
@@ -95,16 +137,18 @@ class _CreateNotePageState extends State<CreateNotePage> {
           decoration: const BoxDecoration(),
           child: Column(
             children: [
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  children: [
-                    _titleBuilder,
-                    _descriptionBuilder,
-                  ],
+              _titleAndDescriptionBlocBuilder(
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    children: [
+                      _titleBuilder,
+                      _descriptionBuilder,
+                    ],
+                  ),
                 ),
               ),
-              _contentListBuilder,
+              //_contentListBuilder,
               const SizedBox(height: 50),
             ],
           ),
@@ -125,14 +169,12 @@ class _CreateNotePageState extends State<CreateNotePage> {
 
   @override
   void dispose() {
+    vm.dispose();
     //vm.dispose(isEditedNote: checkNotesDataIsNotNull);
     super.dispose();
   }
 
   Widget? get _addNoteButtonBuilder => FilledButton(
-        // elevation: 0,
-        // hoverElevation: 0,
-        // shape: const CircleBorder(),
         style: const ButtonStyle(
           padding: WidgetStatePropertyAll(
             EdgeInsets.symmetric(vertical: 22),
@@ -151,14 +193,10 @@ class _CreateNotePageState extends State<CreateNotePage> {
       body: AppWrapper(
         maxWidth: 700,
         child: Scaffold(
-          body: controller.isLoading.observer(
-            (context, value) => value
-                ? const Center(child: AppLogoAnimated(repeat: true))
-                : _bodyBuilder,
-          ),
-          bottomNavigationBar: _BottomBar(
-            contentWidgetDatatList: controller.getAddContentList,
-          ),
+          body: _bodyBuilder,
+          bottomNavigationBar: const _BottomBar(
+              // contentWidgetDatatList: controller.getAddContentList,
+              ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           floatingActionButton: _addNoteButtonBuilder,
         ),
@@ -205,43 +243,44 @@ class _ContentFactoryWidget extends StatelessWidget {
 
 class _BottomBar extends StatelessWidget {
   const _BottomBar(
-      {required Map<CreateContentEnum, void Function()> contentWidgetDatatList,
-      this.deleteNote})
-      : _contentWidgetDatatList = contentWidgetDatatList;
-  final Map<CreateContentEnum, void Function()> _contentWidgetDatatList;
+      {
+      //required Map<CreateContentEnum, void Function()> contentWidgetDatatList,
+      this.deleteNote});
+  //   : _contentWidgetDatatList = contentWidgetDatatList;
+  // final Map<CreateContentEnum, void Function()> _contentWidgetDatatList;
   final Future<void> Function()? deleteNote;
 
-  void _showNavigationBar(BuildContext context) {
-    if (FocusScope.of(context).hasFocus) {
-      FocusScope.of(context).unfocus();
-    }
-    showModalBottomSheet(
-      showDragHandle: true,
-      context: context,
-      builder: (context) => Container(
-        width: double.maxFinite,
-        padding: const EdgeInsets.all(16).copyWith(top: 0),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ActionOnNoteButton(
-                actionText: 'Add text',
-                icon: Icons.text_fields_rounded,
-                onPressed: _contentWidgetDatatList[CreateContentEnum.text],
-              ),
-              ActionOnNoteButton(
-                actionText: 'Add task list',
-                icon: Icons.list_rounded,
-                onPressed: _contentWidgetDatatList[CreateContentEnum.taskList],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  // void _showNavigationBar(BuildContext context) {
+  //   if (FocusScope.of(context).hasFocus) {
+  //     FocusScope.of(context).unfocus();
+  //   }
+  //   showModalBottomSheet(
+  //     showDragHandle: true,
+  //     context: context,
+  //     builder: (context) => Container(
+  //       width: double.maxFinite,
+  //       padding: const EdgeInsets.all(16).copyWith(top: 0),
+  //       child: SingleChildScrollView(
+  //         scrollDirection: Axis.horizontal,
+  //         child: Row(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             ActionOnNoteButton(
+  //               actionText: 'Add text',
+  //               icon: Icons.text_fields_rounded,
+  //               onPressed: _contentWidgetDatatList[CreateContentEnum.text],
+  //             ),
+  //             ActionOnNoteButton(
+  //               actionText: 'Add task list',
+  //               icon: Icons.list_rounded,
+  //               onPressed: _contentWidgetDatatList[CreateContentEnum.taskList],
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   void _showDeleteDialogBuilder(BuildContext context) {
     if (deleteNote == null) {

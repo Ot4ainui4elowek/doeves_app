@@ -68,7 +68,8 @@ class NotesHomePageViewModel {
   }
 
   void _checkAllNotesIsSelected() {
-    allNotesIsSelected(selectedNotesList.length == notes.length);
+    allNotesIsSelected(
+        selectedNotesList.length == notes.length && notes.isNotEmpty);
   }
 
   final allNotesIsSelected = false.rv;

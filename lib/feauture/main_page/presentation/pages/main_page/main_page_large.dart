@@ -4,6 +4,7 @@ import 'package:doeves_app/core/presentation/app_wrapper.dart';
 import 'package:doeves_app/core/presentation/buttons/app_bar_button.dart';
 import 'package:doeves_app/core/presentation/hero_widgets/hero_search_widget.dart';
 import 'package:doeves_app/feauture/app_drawer/presentation/app_drawer.dart';
+import 'package:doeves_app/feauture/main_page/presentation/pages/main_page/pages_enum.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/add_note_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -26,20 +27,20 @@ class _MainPageLargeState extends State<MainPageLarge> {
   }
 
   List<NavigationRailDestination> get _navigationItemsBuilder => [
-        const NavigationRailDestination(
-          selectedIcon: Icon(Icons.home),
-          icon: Icon(Icons.home_outlined),
-          label: Text('Home'),
+        NavigationRailDestination(
+          selectedIcon: const Icon(Icons.home),
+          icon: const Icon(Icons.home_outlined),
+          label: Text(PagesEnum.homePage.pageName),
         ),
-        const NavigationRailDestination(
-          selectedIcon: Icon(Icons.bookmark_added),
-          icon: Icon(Icons.bookmark_added_outlined),
-          label: Text('Finished'),
+        NavigationRailDestination(
+          selectedIcon: const Icon(Icons.bookmark_added),
+          icon: const Icon(Icons.bookmark_added_outlined),
+          label: Text(PagesEnum.completedPage.pageName),
         ),
-        const NavigationRailDestination(
-          selectedIcon: Icon(Icons.collections_bookmark),
-          icon: Icon(Icons.collections_bookmark_outlined),
-          label: Text('Folders'),
+        NavigationRailDestination(
+          selectedIcon: const Icon(Icons.collections_bookmark),
+          icon: const Icon(Icons.collections_bookmark_outlined),
+          label: Text(PagesEnum.catalogPage.pageName),
         ),
       ];
 

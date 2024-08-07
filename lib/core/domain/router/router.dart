@@ -10,9 +10,9 @@ import 'package:doeves_app/feauture/create_note/domain/note_data_transfer_object
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page_controller.dart';
 import 'package:doeves_app/feauture/create_note/presentation/view_models/create_note_page_vm.dart';
+import 'package:doeves_app/feauture/main_page/presentation/pages/catalogs_with_notes_page/catalogs_page.dart';
+import 'package:doeves_app/feauture/main_page/presentation/pages/catalogs_with_notes_page/catalogs_page_vm.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/completed_notes_page/completed_notes_page.dart';
-import 'package:doeves_app/feauture/main_page/presentation/pages/folders_with_notes_page/folders_with_notes_page.dart';
-import 'package:doeves_app/feauture/main_page/presentation/pages/folders_with_notes_page/folders_with_notes_page_vm.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/home_page/home_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/home_page/home_page_vm.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/main_page/main_page_large.dart';
@@ -111,9 +111,9 @@ final router = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: AppRoutes.foldersWithNotesPage,
-              builder: (context, state) => FolderWithNotesPage(
-                vm: FoldersWithNotesPageVm(),
+              path: AppRoutes.catalogsPage,
+              builder: (context, state) => CatalogsPage(
+                vm: CatalogsPageViewModel(),
               ),
             ),
           ],

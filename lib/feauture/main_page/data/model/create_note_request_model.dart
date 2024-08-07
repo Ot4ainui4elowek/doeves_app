@@ -19,5 +19,5 @@ class CreateNoteRequestModel {
   @JsonKey(name: 'description')
   final String description;
   @JsonKey(name: 'catalog_id')
-  final String? catalogId;
+  final int? catalogId;
 }

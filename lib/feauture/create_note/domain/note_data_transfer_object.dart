@@ -1,8 +1,8 @@
 abstract class CreateNotePageTransferObject {}
 
-class CreateNoteInFolderTransferObject implements CreateNotePageTransferObject {
-  const CreateNoteInFolderTransferObject(this.folderId);
-  final int folderId;
+class CreateNoteTransferObject implements CreateNotePageTransferObject {
+  const CreateNoteTransferObject(this.folderId);
+  final int? folderId;
 }
 
 class OpenNoteTransferObject implements CreateNotePageTransferObject {
