@@ -1,11 +1,14 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:doeves_app/core/data/secure_storage/secure_storage.dart';
+import 'package:doeves_app/core/domain/app_error/app_error.dart';
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/core/presentation/notification_service/snack_bar_notification_service/snack_bar_notification_service_impl.dart';
-import 'package:doeves_app/feauture/create_note/domain/note_data_transfer_object.dart';
+import 'package:doeves_app/feauture/create_note/domain/create_note_transfer_object.dart';
 import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
+import 'package:doeves_app/feauture/main_page/domain/note_transfer_object.dart';
 import 'package:doeves_app/feauture/main_page/domain/repository/notes_repository.dart';
 import 'package:doeves_app/feauture/main_page/domain/response_bloc/response_bloc.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +19,12 @@ class NotesHomePageViewModel {
   NotesHomePageViewModel({
     required NotesRepository notesRepository,
     required SecureStorage storage,
+    NoteTransferObject? noteTransferObject,
   })  : _storage = storage,
-        _notesRepository = notesRepository;
+        _notesRepository = notesRepository,
+        _noteTransferObject = noteTransferObject;
+
+  final NoteTransferObject? _noteTransferObject;
 
   final SecureStorage _storage;
 
@@ -34,6 +41,9 @@ class NotesHomePageViewModel {
   final notificationService = SnackBarNotificationServiceImpl();
 
   void init() async {
+    if (_noteTransferObject != null) {
+      log('transfer object');
+    }
     notesBloc.add(ResponseBlocEvent.loadingNotes());
     await getNotes();
 
@@ -145,25 +155,6 @@ class NotesHomePageViewModel {
     await getNotes();
   }
 
-  // Future<void> addNote(
-  //     {String description = 'This is added note',
-  //     title = 'WTF its work!'}) async {
-  //   final result =
-  //       await _repository.addNote(description: description, title: title);
-
-  //   switch (result) {
-  //     case GoodUseCaseResult<NoteWithContentImpl>(:final data):
-  //       {
-  //         notes.value.insert(0, data);
-  //         notes.refresh();
-  //       }
-  //     default:
-  //       {
-  //         debugPrint('bad');
-  //       }
-  //   }
-  // }
-
   FutureOr<void> onPressedNote(
       {required int index, required BuildContext context}) {
     if (isSelectNotesMode.value) {
@@ -182,13 +173,13 @@ class NotesHomePageViewModel {
     }
   }
 
-  Future<void> deleteSomeNotes(BuildContext context) async {
+  Future<UseCaseResult> _deleteSomeNotes(List<int> idList) async {
     final jwtToken = await _storage.readToken();
     if (jwtToken == null) {
-      return;
+      return BadUseCaseResult(errorList: [SpecificError('undefined jwt')]);
     }
     final result = await _notesRepository.deleteMultipleNotes(
-      deleteNotesList: selectedNotesList.value,
+      deleteNotesList: idList,
       jwtToken: jwtToken,
     );
     if (result is GoodUseCaseResult) {
@@ -201,6 +192,11 @@ class NotesHomePageViewModel {
         notesBloc.add(ResponseBlocEvent.resetToInitialState());
       }
     }
+    return result;
+  }
+
+  Future<void> deleteNotesOnPressed(BuildContext context) async {
+    final result = await _deleteSomeNotes(selectedNotesList.value);
     isSelectNotesMode(false);
     if (context.mounted && context.canPop()) {
       notificationService.responseNotification(

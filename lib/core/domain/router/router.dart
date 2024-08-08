@@ -6,10 +6,11 @@ import 'package:doeves_app/feauture/authorization/presentation/registration_page
 import 'package:doeves_app/feauture/authorization/presentation/registration_page/registration_page_vm.dart';
 import 'package:doeves_app/feauture/authorization/presentation/verification_page/verification_page.dart';
 import 'package:doeves_app/feauture/authorization/presentation/verification_page/verification_page_vm.dart';
-import 'package:doeves_app/feauture/create_note/domain/note_data_transfer_object.dart';
+import 'package:doeves_app/feauture/create_note/domain/create_note_transfer_object.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page_controller.dart';
 import 'package:doeves_app/feauture/create_note/presentation/view_models/create_note_page_vm.dart';
+import 'package:doeves_app/feauture/main_page/domain/note_transfer_object.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/catalogs_with_notes_page/catalogs_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/catalogs_with_notes_page/catalogs_page_vm.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/completed_notes_page/completed_notes_page.dart';
@@ -89,15 +90,20 @@ final router = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: AppRoutes.notesHomePage,
-              builder: (context, state) => NotesHomePage(
-                vm: NotesHomePageViewModel(
-                  notesRepository:
-                      AppContainer().repositoryScope.notesRepository,
-                  storage: AppContainer().secureScope.secureStorage,
-                ),
-              ),
-            ),
+                path: AppRoutes.notesHomePage,
+                name: AppRoutes.notesHomePage,
+                builder: (context, state) {
+                  final transferObject = state.extra;
+                  final isValid = transferObject is NoteTransferObject;
+                  return NotesHomePage(
+                    vm: NotesHomePageViewModel(
+                      noteTransferObject: isValid ? transferObject : null,
+                      notesRepository:
+                          AppContainer().repositoryScope.notesRepository,
+                      storage: AppContainer().secureScope.secureStorage,
+                    ),
+                  );
+                }),
           ],
         ),
         StatefulShellBranch(

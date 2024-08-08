@@ -43,7 +43,7 @@ class _NotesHomePageState extends State<NotesHomePage>
           actionText: 'Delete',
           icon: Icons.delete_outline,
           onPressed: vm.selectedNotesList.isNotEmpty
-              ? () async => vm.deleteSomeNotes(context)
+              ? () async => vm.deleteNotesOnPressed(context)
               : null,
         ),
         ActionOnNoteButton(

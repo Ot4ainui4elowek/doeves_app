@@ -85,4 +85,33 @@ class NotesRepositoryImpl with RestApiHandler implements NotesRepository {
           errorList: [SpecificError(HttpStatusAndErrors.invalidRequest.value)]);
     }
   }
+
+  @override
+  Future<UseCaseResult<NoteResponseModel>> getNote(
+      {required int id, required String jwtToken}) async {
+    try {
+      final result = await request(
+        callback: () => _notesDataSourse.getNote(token: jwtToken, id: id),
+        dataMapper: NoteResponseModel.fromJson,
+      );
+
+      switch (result) {
+        case DataRestApiResult<NoteResponseModel>(:final data):
+          {
+            return UseCaseResult.good(data);
+          }
+        case ErrorRestApiResult<NoteResponseModel>(:final errorList):
+          {
+            return UseCaseResult.bad(errorList);
+          }
+        case ErrorWitchDataRestApiResult<NoteResponseModel>(:final errorData):
+          {
+            return UseCaseResult.dataBad(errorData);
+          }
+      }
+    } catch (e) {
+      return UseCaseResult.bad(
+          [SpecificError(HttpStatusAndErrors.invalidRequest.value)]);
+    }
+  }
 }

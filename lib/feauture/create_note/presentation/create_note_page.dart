@@ -160,17 +160,12 @@ class _CreateNotePageState extends State<CreateNotePage> {
   @override
   void initState() {
     vm.init();
-    // vm.init(isEditedNote: checkNotesDataIsNotNull);
-    // if (checkNotesDataIsNotNull) {
-    //   vm.getNote(id: widget.notesData!.id, context: context);
-    // }
     super.initState();
   }
 
   @override
   void dispose() {
     vm.dispose();
-    //vm.dispose(isEditedNote: checkNotesDataIsNotNull);
     super.dispose();
   }
 
@@ -186,19 +181,27 @@ class _CreateNotePageState extends State<CreateNotePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: TitleAppBar(
-        context: context,
-      ),
-      body: AppWrapper(
-        maxWidth: 700,
-        child: Scaffold(
-          body: _bodyBuilder,
-          bottomNavigationBar: const _BottomBar(
-              // contentWidgetDatatList: controller.getAddContentList,
+    return PopScope(
+      onPopInvoked: (didPop) {},
+      child: Scaffold(
+        appBar: TitleAppBar(
+          context: context,
+        ),
+        body: AppWrapper(
+          maxWidth: 700,
+          child: Scaffold(
+            body: _bodyBuilder,
+            bottomNavigationBar: vm.noteId.observer(
+              (context, value) => _BottomBar(
+                deleteNote:
+                    value != -1 ? () => controller.deleteNote(id: value) : null,
+                // contentWidgetDatatList: controller.getAddContentList,
               ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-          floatingActionButton: _addNoteButtonBuilder,
+            ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.endDocked,
+            floatingActionButton: _addNoteButtonBuilder,
+          ),
         ),
       ),
     );

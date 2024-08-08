@@ -5,13 +5,14 @@ import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page_controller.dart';
 import 'package:doeves_app/feauture/create_note/presentation/view_models/create_note_page_vm.dart';
 import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
-import 'package:flutter/material.dart';
+import 'package:reactive_variables/reactive_variables.dart';
 
 class OpenNoteViewModel implements CreateNotePageViewModel {
   OpenNoteViewModel({
     required this.controller,
-    required this.noteId,
+    required int noteId,
   }) {
+    this.noteId(noteId);
     _descriptionDefferedAction = DeferredAction(
       callback: _listenDescription,
       delay: _requestsTimerDuration,
@@ -22,10 +23,13 @@ class OpenNoteViewModel implements CreateNotePageViewModel {
     );
   }
 
-  final int noteId;
+  @override
+  final Rv<int> noteId = Rv(-1);
 
   @override
   final CreateNotePageController controller;
+
+  final _noteIsLoadedSucessfully = false.rv;
 
   @override
   void dispose() {
@@ -44,35 +48,36 @@ class OpenNoteViewModel implements CreateNotePageViewModel {
     controller.titleTextController.addListener(_titleDefferedAction.call);
   }
 
-  final Duration _requestsTimerDuration = const Duration(seconds: 2);
+  final Duration _requestsTimerDuration = const Duration(seconds: 3);
 
   late final DeferredAction _descriptionDefferedAction;
 
   late final DeferredAction _titleDefferedAction;
 
   Future<void> _listenDescription() async {
-    if (controller.noteIsLoadedSucessfully.value) {
+    if (_noteIsLoadedSucessfully.value) {
       return;
     }
-    debugPrint(controller.descriptionTextController.text);
+    final result = await controller.editDescription(noteId.value);
   }
 
   Future<void> _listenTitle() async {
-    if (controller.noteIsLoadedSucessfully.value) {
+    if (_noteIsLoadedSucessfully.value) {
       return;
     }
-    debugPrint(controller.titleTextController.text);
+    final result = await controller.editTitle(noteId.value);
   }
 
   void _getNote() async {
-    final result = await controller.getNote(id: noteId);
+    final result = await controller.getNote(id: noteId.value);
+
     if (result is GoodUseCaseResult<NoteResponseModel>) {
-      controller.noteIsLoadedSucessfully(true);
+      _noteIsLoadedSucessfully(true);
       final note = result.data;
       controller.titleTextController.text = note.name;
       controller.descriptionTextController.text = note.description;
     }
-    Future.delayed(_requestsTimerDuration,
-        () => controller.noteIsLoadedSucessfully(false));
+    Future.delayed(
+        _requestsTimerDuration, () => _noteIsLoadedSucessfully(false));
   }
 }

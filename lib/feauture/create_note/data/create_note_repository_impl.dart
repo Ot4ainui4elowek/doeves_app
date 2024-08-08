@@ -2,10 +2,11 @@ import 'package:doeves_app/core/domain/app_error/app_error.dart';
 import 'package:doeves_app/core/domain/rest_api_handler.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/feauture/authorization/data/model/http_status_and_errors.dart';
-import 'package:doeves_app/feauture/create_note/domain/create_note_repository.dart';
+import 'package:doeves_app/feauture/create_note/domain/repository/create_note_repository.dart';
 import 'package:doeves_app/feauture/main_page/data/model/create_note_request_model.dart';
 import 'package:doeves_app/feauture/main_page/data/model/create_note_response_model.dart';
 import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
+import 'package:doeves_app/feauture/main_page/data/model/remove_list_of_notes/empty_good_response.dart';
 import 'package:doeves_app/feauture/main_page/data/model/remove_list_of_notes/remove_notes_remote_response.dart';
 import 'package:doeves_app/feauture/main_page/data/source/notes_data_source.dart';
 
@@ -102,6 +103,68 @@ class CreateNoteRepositoryImpl
             return UseCaseResult.bad(errorList);
           }
         case ErrorWitchDataRestApiResult<NoteResponseModel>(:final errorData):
+          {
+            return UseCaseResult.dataBad(errorData);
+          }
+      }
+    } catch (e) {
+      return UseCaseResult.bad(
+          [SpecificError(HttpStatusAndErrors.invalidRequest.value)]);
+    }
+  }
+
+  @override
+  Future<UseCaseResult<EmptyGoodResponse>> editDescription(
+      {required int id,
+      required String jwtToken,
+      required String newDescription}) async {
+    try {
+      final result = await request(
+          callback: () => _data.editDescription(
+              token: jwtToken, id: id, newDescription: newDescription),
+          dataMapper: EmptyGoodResponse.fromJson);
+
+      switch (result) {
+        case DataRestApiResult<EmptyGoodResponse>(:final data):
+          {
+            return UseCaseResult.good(data);
+          }
+        case ErrorRestApiResult<EmptyGoodResponse>(:final errorList):
+          {
+            return UseCaseResult.bad(errorList);
+          }
+        case ErrorWitchDataRestApiResult<EmptyGoodResponse>(:final errorData):
+          {
+            return UseCaseResult.dataBad(errorData);
+          }
+      }
+    } catch (e) {
+      return UseCaseResult.bad(
+          [SpecificError(HttpStatusAndErrors.invalidRequest.value)]);
+    }
+  }
+
+  @override
+  Future<UseCaseResult<EmptyGoodResponse>> editTitle({
+    required int id,
+    required String jwtToken,
+    required String newTitle,
+  }) async {
+    try {
+      final result = await request(
+          callback: () =>
+              _data.editTitle(token: jwtToken, id: id, newTitle: newTitle),
+          dataMapper: EmptyGoodResponse.fromJson);
+      switch (result) {
+        case DataRestApiResult<EmptyGoodResponse>(:final data):
+          {
+            return UseCaseResult.good(data);
+          }
+        case ErrorRestApiResult<EmptyGoodResponse>(:final errorList):
+          {
+            return UseCaseResult.bad(errorList);
+          }
+        case ErrorWitchDataRestApiResult<EmptyGoodResponse>(:final errorData):
           {
             return UseCaseResult.dataBad(errorData);
           }

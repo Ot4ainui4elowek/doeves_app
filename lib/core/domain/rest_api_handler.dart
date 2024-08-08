@@ -76,7 +76,7 @@ abstract mixin class RestApiHandler {
       final res = error.response;
       if (res != null && res.statusCode != null) {
         switch (res.statusCode!) {
-          case > 300 && < 500:
+          case > 300:
             {
               late final ErrorResponseModel errorResponce;
               if (ErrorResponseModel.patternMatch(res.data)) {
@@ -84,13 +84,6 @@ abstract mixin class RestApiHandler {
               }
               return RestApiResult.errorWitchData(
                 errorData: errorResponce,
-                statusCode: res.statusCode!,
-              );
-            }
-          case >= 500:
-            {
-              return RestApiResult.error(
-                errorList: [SpecificError(HttpStatusAndErrors.e500.value)],
                 statusCode: res.statusCode!,
               );
             }

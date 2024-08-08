@@ -9,7 +9,7 @@ import 'package:doeves_app/feauture/authorization/domain/bloc/theme_service.dart
 import 'package:doeves_app/feauture/authorization/domain/repository/authorization_repository.dart';
 import 'package:doeves_app/feauture/authorization/domain/repository/verification_repository.dart';
 import 'package:doeves_app/feauture/create_note/data/create_note_repository_impl.dart';
-import 'package:doeves_app/feauture/create_note/domain/create_note_repository.dart';
+import 'package:doeves_app/feauture/create_note/domain/repository/create_note_repository.dart';
 import 'package:doeves_app/feauture/main_page/data/repository/notes_repository_impl.dart';
 import 'package:doeves_app/feauture/main_page/data/source/notes_data_source.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';

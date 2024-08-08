@@ -35,6 +35,20 @@ abstract class NotesClientDataSource {
     @Path('id') required int id,
   });
 
+  @PATCH('/note/{id}/name')
+  Future<HttpResponse<String>> editTitle({
+    @Header('Authorization') required String token,
+    @Path('id') required int id,
+    @Query('val') required String newTitle,
+  });
+
+  @PATCH('/note/{id}/description')
+  Future<HttpResponse<String>> editDescription({
+    @Header('Authorization') required String token,
+    @Path('id') required int id,
+    @Query('val') required String newDescription,
+  });
+
   @DELETE('/note/{listId}')
   Future<HttpResponse<String>> deleteMultipleNotes({
     @Header('Authorization') required String token,
