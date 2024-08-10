@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 class DeferredAction {
   DeferredAction({
@@ -9,7 +10,9 @@ class DeferredAction {
   final FutureOr<void> Function() callback;
 
   Timer? _timer;
+
   final Duration delay;
+
   void call() {
     if (_timer != null) {
       _timer!.cancel();
@@ -19,5 +22,13 @@ class DeferredAction {
       const Duration(seconds: 1),
       callback,
     );
+  }
+
+  Future<void> dispose() async {
+    if (_timer != null) {
+      _timer!.cancel();
+      log('dispose defferred action');
+      await callback();
+    }
   }
 }

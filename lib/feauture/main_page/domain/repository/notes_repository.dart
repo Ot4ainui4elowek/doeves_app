@@ -15,7 +15,6 @@ abstract interface class NotesRepository {
     required String jwtToken,
   });
 
-  @override
   Future<UseCaseResult<NoteResponseModel>> getNote(
       {required int id, required String jwtToken});
 }

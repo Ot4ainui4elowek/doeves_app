@@ -42,11 +42,13 @@ class OpenNoteViewModel implements CreateNotePageViewModel, OpenViewModel {
   }
 
   @override
-  void dispose() {
-    log('dispose open note vm');
+  Future<void> dispose() async {
     controller.descriptionTextController
         .removeListener(_descriptionDefferedAction.call);
     controller.titleTextController.removeListener(_titleDefferedAction.call);
+    await _descriptionDefferedAction.dispose();
+    await _titleDefferedAction.dispose();
+    log('dispose open note vm');
   }
 
   final Duration _requestsTimerDuration = const Duration(seconds: 3);

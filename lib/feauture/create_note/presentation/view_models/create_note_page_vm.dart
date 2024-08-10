@@ -10,7 +10,7 @@ import 'package:reactive_variables/reactive_variables.dart';
 abstract interface class CreateNotePageViewModel implements ViewModel {
   const CreateNotePageViewModel(this.controller, this.noteId);
   void init();
-  void dispose();
+  Future<void> dispose();
   final CreateNotePageController controller;
   final Rv<int> noteId;
 

@@ -6,11 +6,19 @@ enum DataTransferAction {
 
 typedef Data = int;
 
-class DataTransferObject<T> {
-  const DataTransferObject({
-    required this.action,
-    required this.data,
-  });
-  final DataTransferAction action;
-  final Data data;
+abstract interface class DataTransferObject<T> {}
+
+class DeleteDataTransferObject<T> implements DataTransferObject<T> {
+  DeleteDataTransferObject(this.id);
+  final int id;
+}
+
+class AddDataTransferObject<T> implements DataTransferObject<T> {
+  AddDataTransferObject(this.data);
+  final T data;
+}
+
+class EditDataTransferObject<T> implements DataTransferObject<T> {
+  EditDataTransferObject(this.editData);
+  final T editData;
 }

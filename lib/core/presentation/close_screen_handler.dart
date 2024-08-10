@@ -4,17 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class CloseScreenHandler<T> {
-  const CloseScreenHandler(this._vm);
-
+  const CloseScreenHandler(
+    this._vm,
+  );
   final ViewModel _vm;
 
   void delete({required BuildContext context, required int id}) {
     switch (_vm) {
       case OpenViewModel():
         {
-          context.pop(
-            DataTransferObject(action: DataTransferAction.delete, data: id),
-          );
+          context.pop(DeleteDataTransferObject(id));
           break;
         }
 
@@ -26,21 +25,17 @@ class CloseScreenHandler<T> {
     }
   }
 
-  void back({required BuildContext context, required int id}) {
+  void back({required BuildContext context, required T editData}) {
     switch (_vm) {
       case OpenViewModel():
         {
-          context.pop(
-            DataTransferObject(action: DataTransferAction.edit, data: id),
-          );
+          context.pop(EditDataTransferObject(editData));
           break;
         }
 
       case CreateViewModel():
         {
-          context.pop(
-            DataTransferObject(action: DataTransferAction.add, data: id),
-          );
+          context.pop(AddDataTransferObject(editData));
           break;
         }
     }

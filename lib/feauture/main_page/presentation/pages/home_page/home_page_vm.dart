@@ -156,38 +156,38 @@ class NotesHomePageViewModel {
   }
 
   Future<void> _noteTransferObjectHandler(Object? noteTransferObject) async {
+    log(noteTransferObject.toString());
     if (noteTransferObject is DataTransferObject) {
-      switch (noteTransferObject.action) {
-        case DataTransferAction.delete:
+      switch (noteTransferObject) {
+        case DeleteDataTransferObject(:final id):
           {
             log('delete');
             notes.removeWhere(
-              (note) => note.id == noteTransferObject.data,
+              (note) => note.id == id,
             );
+            notes.refresh();
             break;
           }
-        case DataTransferAction.add:
+        case AddDataTransferObject<NoteResponseModel>(:final data):
           {
             log('add');
-            final result = await _getNote(id: noteTransferObject.data);
-            if (result is GoodUseCaseResult<NoteResponseModel>) {
-              notes.value.insert(0, result.data);
-              notes.refresh();
-            }
+            notes.value.insert(0, data);
+            notes.refresh();
+
             break;
           }
-        case DataTransferAction.edit:
-          final result = await _getNote(id: noteTransferObject.data);
-          if (result is GoodUseCaseResult<NoteResponseModel>) {
+        case EditDataTransferObject<NoteResponseModel>(:final editData):
+          {
+            log('edit');
             final index =
-                notes.value.indexWhere((note) => note.id == result.data.id);
+                notes.value.indexWhere((note) => note.id == editData.id);
             if (index == -1) {
               return;
             }
-            notes.value[index] = result.data;
+            notes.value[index] = editData;
             notes.refresh();
+            break;
           }
-          break;
       }
     }
   }

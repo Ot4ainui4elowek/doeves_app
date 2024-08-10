@@ -13,9 +13,7 @@ import 'package:doeves_app/feauture/main_page/data/model/create_note_response_mo
 import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
 import 'package:doeves_app/feauture/main_page/data/model/remove_list_of_notes/empty_good_response.dart';
 import 'package:doeves_app/feauture/main_page/data/model/remove_list_of_notes/remove_notes_remote_response.dart';
-import 'package:doeves_app/feauture/main_page/domain/data_transfer_object.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:reactive_variables/reactive_variables.dart';
 
 enum CreateContentEnum {
@@ -114,10 +112,7 @@ class CreateNotePageController {
         ],
       );
     }
-    if (context.mounted) {
-      context
-          .pop(DataTransferObject(action: DataTransferAction.delete, data: id));
-    }
+
     return await _createNoteRepository.deleteNote(id: id, jwtToken: jwt);
   }
 

@@ -15,6 +15,7 @@ import 'package:doeves_app/feauture/create_note/presentation/view_models/create_
 import 'package:doeves_app/feauture/create_note/presentation/widgets/content_widget.dart';
 import 'package:doeves_app/feauture/create_note/presentation/widgets/tasks_list/tasks_list_widget.dart';
 import 'package:doeves_app/feauture/create_note/presentation/widgets/text_content_widget.dart';
+import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,7 +30,7 @@ class CreateNotePage extends StatefulWidget {
   }
   final CreateNotePageViewModel vm;
 
-  late final CloseScreenHandler handler;
+  late final CloseScreenHandler<NoteResponseModel> handler;
 
   @override
   State<CreateNotePage> createState() => _CreateNotePageState();
@@ -40,7 +41,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
 
   CreateNotePageController get controller => vm.controller;
 
-  CloseScreenHandler get handler => widget.handler;
+  CloseScreenHandler<NoteResponseModel> get handler => widget.handler;
 
   Widget get _titleBuilder {
     final textStyle = AppTextTheme.text2Xl(weight: TextWeight.bold).copyWith(
@@ -189,6 +190,18 @@ class _CreateNotePageState extends State<CreateNotePage> {
         child: const Icon(Icons.check),
       );
 
+  CustomBackButton get _leadingBuilder => CustomBackButton(
+        onPressed: () => handler.back(
+          context: context,
+          editData: NoteResponseModel(
+            id: vm.noteId.value,
+            name: controller.titleTextController.text,
+            description: controller.descriptionTextController.text,
+            dateOfCreate: DateTime.now(),
+          ),
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -196,10 +209,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
       child: Scaffold(
         appBar: TitleAppBar(
           context: context,
-          leading: CustomBackButton(
-            onPressed: () =>
-                handler.back(context: context, id: vm.noteId.value),
-          ),
+          leading: _leadingBuilder,
         ),
         body: AppWrapper(
           maxWidth: 700,
@@ -208,7 +218,11 @@ class _CreateNotePageState extends State<CreateNotePage> {
             bottomNavigationBar: vm.noteId.observer(
               (context, value) => _BottomBar(
                 deleteNote: value != -1
-                    ? () => controller.deleteNote(id: value, context: context)
+                    ? () async {
+                        await controller.deleteNote(
+                            id: value, context: context);
+                        handler.delete(context: context, id: value);
+                      }
                     : null,
                 // contentWidgetDatatList: controller.getAddContentList,
               ),
@@ -266,7 +280,7 @@ class _BottomBar extends StatelessWidget {
       this.deleteNote});
   //   : _contentWidgetDatatList = contentWidgetDatatList;
   // final Map<CreateContentEnum, void Function()> _contentWidgetDatatList;
-  final Future<void> Function()? deleteNote;
+  final void Function()? deleteNote;
 
   // void _showNavigationBar(BuildContext context) {
   //   if (FocusScope.of(context).hasFocus) {
