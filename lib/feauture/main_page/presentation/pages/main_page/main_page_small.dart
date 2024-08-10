@@ -3,7 +3,6 @@ import 'package:doeves_app/core/presentation/app_bars/custom_app_bar.dart';
 import 'package:doeves_app/core/presentation/hero_widgets/hero_search_widget.dart';
 import 'package:doeves_app/feauture/app_drawer/presentation/app_drawer.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/main_page/pages_enum.dart';
-import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/add_note_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -24,31 +23,48 @@ class MainPageSmallState extends State<MainPageSmall> {
     );
   }
 
-  List<NavigationDestination> get _navigationDestinitionBuilder =>
-      <NavigationDestination>[
-        NavigationDestination(
-          selectedIcon: const Icon(Icons.home),
-          icon: const Icon(Icons.home_outlined),
-          label: PagesEnum.homePage.pageName,
+  List<NavigationDestination> get _navigationDestinitionBuilder {
+    final selectedColor = Theme.of(context).colorScheme.onPrimaryContainer;
+    final unSelectedColor = Theme.of(context).colorScheme.outline;
+    return <NavigationDestination>[
+      NavigationDestination(
+        selectedIcon: Icon(
+          Icons.home,
+          color: selectedColor,
         ),
-        NavigationDestination(
-          selectedIcon: const Icon(Icons.bookmark_added),
-          icon: const Icon(Icons.bookmark_added_outlined),
-          label: PagesEnum.completedPage.pageName,
+        icon: Icon(Icons.home_outlined, color: unSelectedColor),
+        label: PagesEnum.homePage.pageName,
+      ),
+      NavigationDestination(
+        selectedIcon: Icon(
+          Icons.bookmark_added,
+          color: selectedColor,
         ),
-        NavigationDestination(
-          selectedIcon: const Icon(Icons.collections_bookmark),
-          icon: const Icon(Icons.collections_bookmark_outlined),
-          label: PagesEnum.catalogPage.pageName,
+        icon: Icon(Icons.bookmark_added_outlined, color: unSelectedColor),
+        label: PagesEnum.completedPage.pageName,
+      ),
+      NavigationDestination(
+        selectedIcon: Icon(
+          Icons.collections_bookmark,
+          color: selectedColor,
         ),
-      ];
+        icon: Icon(Icons.collections_bookmark_outlined, color: unSelectedColor),
+        label: PagesEnum.catalogPage.pageName,
+      ),
+    ];
+  }
 
-  Widget get _bottomNavigationBarBuilder => BottomAppBar(
-        padding: const EdgeInsets.only(right: 75),
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 5,
+  Widget get _bottomNavigationBarBuilder => Container(
+        decoration: BoxDecoration(
+          border: BorderDirectional(
+            top: BorderSide(
+              color: Theme.of(context).colorScheme.outlineVariant,
+              width: 1,
+            ),
+          ),
+        ),
         child: NavigationBar(
-          backgroundColor: Colors.transparent,
+          indicatorColor: Theme.of(context).colorScheme.primaryContainer,
           labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
           onDestinationSelected: (int index) => _onTap(context, index),
           selectedIndex: widget._navigationShell.currentIndex,
@@ -75,6 +91,7 @@ class MainPageSmallState extends State<MainPageSmall> {
           onTap: () => context.push(AppRoutes.notesSearchPage),
         ),
       );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,11 +99,6 @@ class MainPageSmallState extends State<MainPageSmall> {
       body: widget._navigationShell,
       bottomNavigationBar: _bottomNavigationBarBuilder,
       drawer: AppDrawer(),
-      floatingActionButton: const AddNoteButton(
-        elevation: 0,
-        shape: CircleBorder(),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 }

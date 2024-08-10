@@ -8,7 +8,7 @@ import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/core/presentation/notification_service/snack_bar_notification_service/snack_bar_notification_service_impl.dart';
 import 'package:doeves_app/feauture/create_note/domain/create_note_transfer_object.dart';
 import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
-import 'package:doeves_app/feauture/main_page/domain/note_transfer_object.dart';
+import 'package:doeves_app/feauture/main_page/domain/data_transfer_object.dart';
 import 'package:doeves_app/feauture/main_page/domain/repository/notes_repository.dart';
 import 'package:doeves_app/feauture/main_page/domain/response_bloc/response_bloc.dart';
 import 'package:flutter/material.dart';
@@ -19,14 +19,14 @@ class NotesHomePageViewModel {
   NotesHomePageViewModel({
     required NotesRepository notesRepository,
     required SecureStorage storage,
-    NoteTransferObject? noteTransferObject,
-  })  : _storage = storage,
+    DataTransferObject? noteTransferObject,
+  })  : _secureStorage = storage,
         _notesRepository = notesRepository,
         _noteTransferObject = noteTransferObject;
 
-  final NoteTransferObject? _noteTransferObject;
+  final DataTransferObject? _noteTransferObject;
 
-  final SecureStorage _storage;
+  final SecureStorage _secureStorage;
 
   final NotesRepository _notesRepository;
 
@@ -69,11 +69,11 @@ class NotesHomePageViewModel {
     return selectedNotesList.value.contains(id);
   }
 
-  void _removeNoteInDeleteNotesList(int id) {
+  void _removeNoteInSelectedNotesList(int id) {
     selectedNotesList.removeWhere((noteId) => id == noteId);
   }
 
-  void _addNoteInDeleteNotesList(int id) {
+  void _addNoteInSelectedNotesList(int id) {
     selectedNotesList.add(id);
   }
 
@@ -106,8 +106,8 @@ class NotesHomePageViewModel {
   void performActionOnNote(
       {required bool deleteNotesListContainNote, required int id}) {
     deleteNotesListContainNote
-        ? _removeNoteInDeleteNotesList(id)
-        : _addNoteInDeleteNotesList(id);
+        ? _removeNoteInSelectedNotesList(id)
+        : _addNoteInSelectedNotesList(id);
   }
 
   void checkScroll() {
@@ -129,7 +129,7 @@ class NotesHomePageViewModel {
   Future<void> getNotes() async {
     isLoading(true);
 
-    final jwtToken = await _storage.readToken();
+    final jwtToken = await _secureStorage.readToken();
     if (jwtToken == null) {
       return;
     }
@@ -150,13 +150,65 @@ class NotesHomePageViewModel {
   }
 
   Future<void> refreshNotes() async {
-    notesBloc.add(ResponseBlocEvent.clearState());
+    notesBloc.add(ResponseBlocEvent.loadingNotes());
     notes.clear();
-    await getNotes();
+    getNotes();
+  }
+
+  Future<void> _noteTransferObjectHandler(Object? noteTransferObject) async {
+    if (noteTransferObject is DataTransferObject) {
+      switch (noteTransferObject.action) {
+        case DataTransferAction.delete:
+          {
+            log('delete');
+            notes.removeWhere(
+              (note) => note.id == noteTransferObject.data,
+            );
+            break;
+          }
+        case DataTransferAction.add:
+          {
+            log('add');
+            final result = await _getNote(id: noteTransferObject.data);
+            if (result is GoodUseCaseResult<NoteResponseModel>) {
+              notes.value.insert(0, result.data);
+              notes.refresh();
+            }
+            break;
+          }
+        case DataTransferAction.edit:
+          final result = await _getNote(id: noteTransferObject.data);
+          if (result is GoodUseCaseResult<NoteResponseModel>) {
+            final index =
+                notes.value.indexWhere((note) => note.id == result.data.id);
+            if (index == -1) {
+              return;
+            }
+            notes.value[index] = result.data;
+            notes.refresh();
+          }
+          break;
+      }
+    }
+  }
+
+  Future<UseCaseResult<NoteResponseModel>> _getNote({
+    required int id,
+  }) async {
+    final jwt = await _secureStorage.readToken();
+
+    if (jwt == null) {
+      return UseCaseResult.bad([SpecificError('undefined jwt')]);
+    }
+    return await _notesRepository.getNote(id: id, jwtToken: jwt);
+  }
+
+  Future<void> addNote(BuildContext context) async {
+    _noteTransferObjectHandler(await context.push(AppRoutes.createNotePage));
   }
 
   FutureOr<void> onPressedNote(
-      {required int index, required BuildContext context}) {
+      {required int index, required BuildContext context}) async {
     if (isSelectNotesMode.value) {
       performActionOnNote(
         id: notes[index].id,
@@ -164,17 +216,17 @@ class NotesHomePageViewModel {
             checkDelteNotesListContainsNote(notes[index].id),
       );
     } else {
-      context.pushNamed(
+      _noteTransferObjectHandler(await context.pushNamed(
         AppRoutes.createNotePage,
         extra: OpenNoteTransferObject(
           notes[index].id,
         ),
-      );
+      ));
     }
   }
 
   Future<UseCaseResult> _deleteSomeNotes(List<int> idList) async {
-    final jwtToken = await _storage.readToken();
+    final jwtToken = await _secureStorage.readToken();
     if (jwtToken == null) {
       return BadUseCaseResult(errorList: [SpecificError('undefined jwt')]);
     }

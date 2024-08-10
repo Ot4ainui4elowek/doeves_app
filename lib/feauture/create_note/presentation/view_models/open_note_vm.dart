@@ -2,12 +2,13 @@ import 'dart:developer';
 
 import 'package:doeves_app/core/domain/deferred_action.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
+import 'package:doeves_app/core/domain/view_model/view_model_factory.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page_controller.dart';
 import 'package:doeves_app/feauture/create_note/presentation/view_models/create_note_page_vm.dart';
 import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
 import 'package:reactive_variables/reactive_variables.dart';
 
-class OpenNoteViewModel implements CreateNotePageViewModel {
+class OpenNoteViewModel implements CreateNotePageViewModel, OpenViewModel {
   OpenNoteViewModel({
     required this.controller,
     required int noteId,
@@ -32,20 +33,20 @@ class OpenNoteViewModel implements CreateNotePageViewModel {
   final _noteIsLoadedSucessfully = false.rv;
 
   @override
-  void dispose() {
-    log('dispose open note vm');
-    controller.descriptionTextController
-        .removeListener(_descriptionDefferedAction.call);
-    controller.titleTextController.removeListener(_titleDefferedAction.call);
-  }
-
-  @override
   void init() {
     log('open note vm');
     _getNote();
     controller.descriptionTextController
         .addListener(_descriptionDefferedAction.call);
     controller.titleTextController.addListener(_titleDefferedAction.call);
+  }
+
+  @override
+  void dispose() {
+    log('dispose open note vm');
+    controller.descriptionTextController
+        .removeListener(_descriptionDefferedAction.call);
+    controller.titleTextController.removeListener(_titleDefferedAction.call);
   }
 
   final Duration _requestsTimerDuration = const Duration(seconds: 3);

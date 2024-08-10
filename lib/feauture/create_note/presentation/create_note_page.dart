@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:doeves_app/core/presentation/animated_visibility.dart';
 import 'package:doeves_app/core/presentation/app_bars/title_app_bar.dart';
 import 'package:doeves_app/core/presentation/app_wrapper.dart';
+import 'package:doeves_app/core/presentation/buttons/back_button.dart';
+import 'package:doeves_app/core/presentation/close_screen_handler.dart';
 import 'package:doeves_app/core/presentation/logo/app_logo_animated.dart';
 import 'package:doeves_app/core/presentation/text_fields/clear_text_field.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/create_content_entity.dart';
@@ -19,11 +21,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class CreateNotePage extends StatefulWidget {
-  const CreateNotePage({
+  CreateNotePage({
     super.key,
     required this.vm,
-  });
+  }) {
+    handler = CloseScreenHandler(vm);
+  }
   final CreateNotePageViewModel vm;
+
+  late final CloseScreenHandler handler;
 
   @override
   State<CreateNotePage> createState() => _CreateNotePageState();
@@ -31,7 +37,11 @@ class CreateNotePage extends StatefulWidget {
 
 class _CreateNotePageState extends State<CreateNotePage> {
   CreateNotePageViewModel get vm => widget.vm;
+
   CreateNotePageController get controller => vm.controller;
+
+  CloseScreenHandler get handler => widget.handler;
+
   Widget get _titleBuilder {
     final textStyle = AppTextTheme.text2Xl(weight: TextWeight.bold).copyWith(
       color: Theme.of(context).colorScheme.onSurface,
@@ -182,10 +192,14 @@ class _CreateNotePageState extends State<CreateNotePage> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      onPopInvoked: (didPop) {},
+      canPop: false,
       child: Scaffold(
         appBar: TitleAppBar(
           context: context,
+          leading: CustomBackButton(
+            onPressed: () =>
+                handler.back(context: context, id: vm.noteId.value),
+          ),
         ),
         body: AppWrapper(
           maxWidth: 700,
@@ -193,8 +207,9 @@ class _CreateNotePageState extends State<CreateNotePage> {
             body: _bodyBuilder,
             bottomNavigationBar: vm.noteId.observer(
               (context, value) => _BottomBar(
-                deleteNote:
-                    value != -1 ? () => controller.deleteNote(id: value) : null,
+                deleteNote: value != -1
+                    ? () => controller.deleteNote(id: value, context: context)
+                    : null,
                 // contentWidgetDatatList: controller.getAddContentList,
               ),
             ),

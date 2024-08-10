@@ -10,7 +10,7 @@ import 'package:doeves_app/feauture/create_note/domain/create_note_transfer_obje
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page_controller.dart';
 import 'package:doeves_app/feauture/create_note/presentation/view_models/create_note_page_vm.dart';
-import 'package:doeves_app/feauture/main_page/domain/note_transfer_object.dart';
+import 'package:doeves_app/feauture/main_page/domain/data_transfer_object.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/catalogs_with_notes_page/catalogs_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/catalogs_with_notes_page/catalogs_page_vm.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/completed_notes_page/completed_notes_page.dart';
@@ -94,7 +94,7 @@ final router = GoRouter(
                 name: AppRoutes.notesHomePage,
                 builder: (context, state) {
                   final transferObject = state.extra;
-                  final isValid = transferObject is NoteTransferObject;
+                  final isValid = transferObject is DataTransferObject;
                   return NotesHomePage(
                     vm: NotesHomePageViewModel(
                       noteTransferObject: isValid ? transferObject : null,

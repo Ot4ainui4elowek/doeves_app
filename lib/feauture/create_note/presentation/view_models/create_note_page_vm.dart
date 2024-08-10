@@ -1,12 +1,13 @@
 import 'dart:developer';
 
+import 'package:doeves_app/core/domain/view_model/view_model_factory.dart';
 import 'package:doeves_app/feauture/create_note/domain/create_note_transfer_object.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page_controller.dart';
 import 'package:doeves_app/feauture/create_note/presentation/view_models/create_new_note_vm.dart';
 import 'package:doeves_app/feauture/create_note/presentation/view_models/open_note_vm.dart';
 import 'package:reactive_variables/reactive_variables.dart';
 
-abstract interface class CreateNotePageViewModel {
+abstract interface class CreateNotePageViewModel implements ViewModel {
   const CreateNotePageViewModel(this.controller, this.noteId);
   void init();
   void dispose();
@@ -18,12 +19,12 @@ abstract interface class CreateNotePageViewModel {
     required CreateNotePageController controller,
   }) {
     switch (notesData) {
-      case CreateNoteTransferObject(:final folderId):
+      case CreateNoteTransferObject(folderId: final catalogId):
         {
           log('folder');
           return CreateNewNoteViewModel(
             controller: controller,
-            catalogId: folderId,
+            catalogId: catalogId,
           );
         }
       case OpenNoteTransferObject(:final noteId):

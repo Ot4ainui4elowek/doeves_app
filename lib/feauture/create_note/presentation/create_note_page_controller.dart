@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:doeves_app/core/data/secure_storage/secure_storage.dart';
 import 'package:doeves_app/core/domain/app_error/app_error.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
+import 'package:doeves_app/core/presentation/notification_service/snack_bar_notification_service/snack_bar_notification_service_impl.dart';
 import 'package:doeves_app/core/presentation/text_fields/controllers/app_text_editing_controller.dart';
 import 'package:doeves_app/feauture/create_note/domain/create_note/create_note_bloc.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/create_content_entity.dart';
@@ -12,7 +13,9 @@ import 'package:doeves_app/feauture/main_page/data/model/create_note_response_mo
 import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
 import 'package:doeves_app/feauture/main_page/data/model/remove_list_of_notes/empty_good_response.dart';
 import 'package:doeves_app/feauture/main_page/data/model/remove_list_of_notes/remove_notes_remote_response.dart';
+import 'package:doeves_app/feauture/main_page/domain/data_transfer_object.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:reactive_variables/reactive_variables.dart';
 
 enum CreateContentEnum {
@@ -29,16 +32,17 @@ class CreateNotePageController {
 
   final titleAndDescriptionBloc = CreateNoteBloc();
 
-  final noteIsLoadedSucessfully = false.rv;
-
   final CreateNoteRepository _createNoteRepository;
 
   final descriptionTextController = AppTextEditingController();
+
   final titleTextController = AppTextEditingController();
 
   final SecureStorage _secureStorage;
 
   final isLoading = false.rv;
+
+  final _notificationService = SnackBarNotificationServiceImpl();
 
   Future<UseCaseResult<EmptyGoodResponse>> editTitle(int id) async {
     final jwt = await _secureStorage.readToken();
@@ -99,9 +103,8 @@ class CreateNotePageController {
     return result;
   }
 
-  Future<UseCaseResult<RemoveNoteRemoteResponse>> deleteNote({
-    required int id,
-  }) async {
+  Future<UseCaseResult<RemoveNoteRemoteResponse>> deleteNote(
+      {required int id, required BuildContext context}) async {
     final jwt = await _secureStorage.readToken();
 
     if (jwt == null) {
@@ -110,6 +113,10 @@ class CreateNotePageController {
           SpecificError('undefined jwt token'),
         ],
       );
+    }
+    if (context.mounted) {
+      context
+          .pop(DataTransferObject(action: DataTransferAction.delete, data: id));
     }
     return await _createNoteRepository.deleteNote(id: id, jwtToken: jwt);
   }

@@ -5,7 +5,6 @@ import 'package:doeves_app/core/presentation/buttons/app_bar_button.dart';
 import 'package:doeves_app/core/presentation/hero_widgets/hero_search_widget.dart';
 import 'package:doeves_app/feauture/app_drawer/presentation/app_drawer.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/main_page/pages_enum.dart';
-import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/add_note_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -44,6 +43,12 @@ class _MainPageLargeState extends State<MainPageLarge> {
         ),
       ];
 
+  Widget get _floatingActionButtonBuilder => FloatingActionButton(
+        shape: const CircleBorder(),
+        onPressed: () => context.push(AppRoutes.createNotePage),
+        child: const Icon(Icons.add_rounded),
+      );
+
   Widget get _navigationBuilder => Center(
         child: NavigationRail(
           groupAlignment: -1,
@@ -59,14 +64,12 @@ class _MainPageLargeState extends State<MainPageLarge> {
               );
             },
           ),
-          trailing: const AddNoteButton(
-            shape: CircleBorder(),
-          ),
           destinations: _navigationItemsBuilder,
           selectedIndex: widget._navigationShell.currentIndex,
           onDestinationSelected: (int index) => _onTap(context, index),
         ),
       );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

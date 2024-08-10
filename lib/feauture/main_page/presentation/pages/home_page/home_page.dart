@@ -260,6 +260,14 @@ class _NotesHomePageState extends State<NotesHomePage>
         ],
       );
 
+  Widget get _floatingActionButtonBuilder => FloatingActionButton(
+        shape: const CircleBorder(),
+        onPressed: () => vm.addNote(context),
+        child: const Icon(
+          Icons.add_rounded,
+        ),
+      );
+
   @override
   void initState() {
     vm.init();
@@ -281,6 +289,7 @@ class _NotesHomePageState extends State<NotesHomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: _floatingActionButtonBuilder,
       body: RefreshIndicator(
         key: vm.refreshIndicatorKey,
         onRefresh: vm.refreshNotes,
