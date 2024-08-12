@@ -7,9 +7,11 @@ class NoteWithContentWidget extends StatelessWidget {
     super.key,
     required this.note,
     required this.onPressed,
+    this.onLongPress,
   });
   final NoteResponseModel note;
   final void Function()? onPressed;
+  final void Function()? onLongPress;
 
   // Widget get _contentListViewBuilder => ListView.separated(
   //       shrinkWrap: true,
@@ -39,6 +41,7 @@ class NoteWithContentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onLongPress: onLongPress,
       onTap: onPressed,
       contentPadding: EdgeInsets.zero,
       title: Column(

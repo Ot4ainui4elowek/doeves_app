@@ -29,6 +29,13 @@ abstract class NotesClientDataSource {
     @Body() required CreateNoteRequestModel note,
   });
 
+  @PATCH('/note/{id}/order-after')
+  Future<HttpResponse<String>> moveNote({
+    @Header('Authorization') required String token,
+    @Path('id') required int noteId,
+    @Query('prev-note-id') required int? prevNoteId,
+  });
+
   @GET('/note/{id}')
   Future<HttpResponse<CreateNoteResponseModel>> getNote({
     @Header('Authorization') required String token,

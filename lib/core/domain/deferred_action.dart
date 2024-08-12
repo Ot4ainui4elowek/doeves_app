@@ -14,21 +14,21 @@ class DeferredAction {
   final Duration delay;
 
   void call() {
-    if (_timer != null) {
+    if (_timer != null && _timer!.isActive) {
       _timer!.cancel();
     }
 
     _timer = Timer(
-      const Duration(seconds: 1),
+      delay,
       callback,
     );
   }
 
   Future<void> dispose() async {
-    if (_timer != null) {
+    if (_timer != null && _timer!.isActive) {
       _timer!.cancel();
+      final result = await callback();
       log('dispose defferred action');
-      await callback();
     }
   }
 }

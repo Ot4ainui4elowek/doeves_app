@@ -52,6 +52,40 @@ class _NotesClientDataSource implements NotesClientDataSource {
   }
 
   @override
+  Future<HttpResponse<String>> moveNote({
+    required String token,
+    required int noteId,
+    int? prevNoteId,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'prev-note-id': prevNoteId};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{r'Authorization': token};
+    _headers.removeWhere((k, v) => v == null);
+    const Map<String, dynamic>? _data = null;
+    final _result =
+        await _dio.fetch<String>(_setStreamType<HttpResponse<String>>(Options(
+      method: 'PATCH',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/note/${noteId}/order-after',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = _result.data!;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
+  @override
   Future<HttpResponse<CreateNoteResponseModel>> getNote({
     required String token,
     required int id,

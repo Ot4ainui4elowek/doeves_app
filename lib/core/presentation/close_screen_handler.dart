@@ -13,7 +13,7 @@ class CloseScreenHandler<T> {
     switch (_vm) {
       case OpenViewModel():
         {
-          context.pop(DeleteDataTransferObject(id));
+          context.pop(DataTransferObject.delete(id));
           break;
         }
 
@@ -29,13 +29,13 @@ class CloseScreenHandler<T> {
     switch (_vm) {
       case OpenViewModel():
         {
-          context.pop(EditDataTransferObject(editData));
+          context.pop(DataTransferObject.edit(editData));
           break;
         }
 
       case CreateViewModel():
         {
-          context.pop(AddDataTransferObject(editData));
+          context.pop(DataTransferObject.add(editData));
           break;
         }
     }

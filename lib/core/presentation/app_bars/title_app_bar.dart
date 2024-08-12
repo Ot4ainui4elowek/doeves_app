@@ -7,7 +7,7 @@ class TitleAppBar extends AppBar {
   final String titleText;
   final BuildContext context;
   @override
-  final CustomBackButton? leading;
+  final Widget? leading;
   TitleAppBar({
     super.key,
     required this.context,

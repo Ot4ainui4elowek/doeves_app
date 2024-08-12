@@ -8,6 +8,7 @@ import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/core/presentation/notification_service/snack_bar_notification_service/snack_bar_notification_service_impl.dart';
 import 'package:doeves_app/feauture/create_note/domain/create_note_transfer_object.dart';
 import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
+import 'package:doeves_app/feauture/main_page/data/model/remove_list_of_notes/empty_good_response.dart';
 import 'package:doeves_app/feauture/main_page/domain/data_transfer_object.dart';
 import 'package:doeves_app/feauture/main_page/domain/repository/notes_repository.dart';
 import 'package:doeves_app/feauture/main_page/domain/response_bloc/response_bloc.dart';
@@ -157,7 +158,7 @@ class NotesHomePageViewModel {
 
   Future<void> _noteTransferObjectHandler(Object? noteTransferObject) async {
     log(noteTransferObject.toString());
-    if (noteTransferObject is DataTransferObject) {
+    if (noteTransferObject is DataTransferObject<NoteResponseModel>) {
       switch (noteTransferObject) {
         case DeleteDataTransferObject(:final id):
           {
@@ -190,17 +191,6 @@ class NotesHomePageViewModel {
           }
       }
     }
-  }
-
-  Future<UseCaseResult<NoteResponseModel>> _getNote({
-    required int id,
-  }) async {
-    final jwt = await _secureStorage.readToken();
-
-    if (jwt == null) {
-      return UseCaseResult.bad([SpecificError('undefined jwt')]);
-    }
-    return await _notesRepository.getNote(id: id, jwtToken: jwt);
   }
 
   Future<void> addNote(BuildContext context) async {
@@ -260,34 +250,50 @@ class NotesHomePageViewModel {
     }
   }
 
+  void onPressedSelectionModeButton() {
+    if (isSelectNotesMode.value) {
+      selectedNotesList.clear();
+    }
+    isSelectNotesMode(!isSelectNotesMode.value);
+  }
+
   Future<void> onNoteDrag(int oldIndex, int newIndex) async {
-    return;
-    // final oldId = notes.value[oldIndex].id;
-    // final newId = notes.value[newIndex].id;
+    final jwtToken = await _secureStorage.readToken();
+    if (jwtToken == null) {
+      return;
+    }
+    final resuestNewIndex = newIndex - 1;
 
-    // if (oldIndex < newIndex) {
-    //   newIndex--;
-    // }
+    if (oldIndex < newIndex) {
+      newIndex--;
+    }
 
-    // final note = notes.removeAt(oldIndex);
+    final oldId = notes.value[oldIndex].id;
+    final newId =
+        resuestNewIndex == -1 ? null : notes.value[resuestNewIndex].id;
 
-    // notes.value.insert(newIndex, note);
+    final note = notes.removeAt(oldIndex);
 
-    // final result = await _repository.moveNote(oldId: oldId, newId: newId);
+    notes.value.insert(newIndex, note);
+    final result = await _notesRepository.moveNote(
+      noteId: oldId,
+      prevNoteId: newId,
+      jwtToken: jwtToken,
+    );
 
-    // switch (result) {
-    //   case GoodUseCaseResult<String>(:final data):
-    //     {
-    //       log(data);
-    //     }
-    //   case BadUseCaseResult(:final errorList):
-    //     {
-    //       log(errorList[0].code);
-    //     }
-    //   default:
-    //     {
-    //       log('oops!');
-    //     }
-    // }
+    switch (result) {
+      case GoodUseCaseResult<EmptyGoodResponse>(:final data):
+        {
+          log('successfull');
+        }
+      case BadUseCaseResult<EmptyGoodResponse>(:final errorList):
+        {
+          log(errorList[0].code);
+        }
+      default:
+        {
+          log('oops!');
+        }
+    }
   }
 }

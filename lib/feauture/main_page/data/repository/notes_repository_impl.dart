@@ -5,6 +5,7 @@ import 'package:doeves_app/feauture/authorization/data/model/http_status_and_err
 import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
 import 'package:doeves_app/feauture/main_page/data/model/notes_list/get_notes_remote_response.dart';
 import 'package:doeves_app/feauture/main_page/data/model/notes_list/notes_list_response_model.dart';
+import 'package:doeves_app/feauture/main_page/data/model/remove_list_of_notes/empty_good_response.dart';
 import 'package:doeves_app/feauture/main_page/data/model/remove_list_of_notes/remove_notes_remote_response.dart';
 import 'package:doeves_app/feauture/main_page/data/source/notes_data_source.dart';
 import 'package:doeves_app/feauture/main_page/domain/repository/notes_repository.dart';
@@ -87,31 +88,32 @@ class NotesRepositoryImpl with RestApiHandler implements NotesRepository {
   }
 
   @override
-  Future<UseCaseResult<NoteResponseModel>> getNote(
-      {required int id, required String jwtToken}) async {
-    try {
-      final result = await request(
-        callback: () => _notesDataSourse.getNote(token: jwtToken, id: id),
-        dataMapper: NoteResponseModel.fromJson,
-      );
+  Future<UseCaseResult<EmptyGoodResponse>> moveNote({
+    required int noteId,
+    required int? prevNoteId,
+    required String jwtToken,
+  }) async {
+    final result = await request(
+        callback: () => _notesDataSourse.moveNote(
+              token: jwtToken,
+              noteId: noteId,
+              prevNoteId: prevNoteId,
+            ),
+        dataMapper: EmptyGoodResponse.fromJson);
 
-      switch (result) {
-        case DataRestApiResult<NoteResponseModel>(:final data):
-          {
-            return UseCaseResult.good(data);
-          }
-        case ErrorRestApiResult<NoteResponseModel>(:final errorList):
-          {
-            return UseCaseResult.bad(errorList);
-          }
-        case ErrorWitchDataRestApiResult<NoteResponseModel>(:final errorData):
-          {
-            return UseCaseResult.dataBad(errorData);
-          }
-      }
-    } catch (e) {
-      return UseCaseResult.bad(
-          [SpecificError(HttpStatusAndErrors.invalidRequest.value)]);
+    switch (result) {
+      case DataRestApiResult<EmptyGoodResponse>(:final data):
+        {
+          return GoodUseCaseResult(data);
+        }
+      case ErrorRestApiResult<EmptyGoodResponse>(:final errorList):
+        {
+          return UseCaseResult.bad(errorList);
+        }
+      case ErrorWitchDataRestApiResult<EmptyGoodResponse>(:final errorData):
+        {
+          return UseCaseResult.dataBad(errorData);
+        }
     }
   }
 }

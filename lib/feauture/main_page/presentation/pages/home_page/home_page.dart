@@ -1,10 +1,8 @@
 import 'dart:math';
 
-import 'package:doeves_app/core/presentation/animated_visibility.dart';
 import 'package:doeves_app/core/presentation/buttons/app_elevated_button.dart';
 import 'package:doeves_app/core/presentation/counter_widget.dart';
 import 'package:doeves_app/core/presentation/logo/app_logo_animated.dart';
-import 'package:doeves_app/feauture/main_page/domain/device_params.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/home_page/home_page_vm.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/action_on_note_button.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/refresh_button.dart';
@@ -184,78 +182,69 @@ class _NotesHomePageState extends State<NotesHomePage>
 
   Widget get _selectionModeButtonBuilder =>
       vm.isSelectNotesMode.observer((context, value) => SelectionModeButton(
-            isSelectedMode: value,
-            onPressed: () {
-              if (value) {
-                vm.selectedNotesList.clear();
-              }
-              vm.isSelectNotesMode(!value);
-            },
-          ));
+          isSelectedMode: value, onPressed: vm.onPressedSelectionModeButton));
 
-  Widget get _actionButtonBuilder => vm.isSelectNotesMode.observer(
-        (context, value) => AnimatedVisibility(
-          visible: value,
-          child: vm.selectedNotesList.observer(
-            (context, value) => AppElevatedButton(
-              mini: true,
-              onPressed: value.isNotEmpty ? _showActionsBottomSheet : null,
-              child: const Icon(Icons.more_vert_sharp),
-            ),
-          ),
+  Widget get _actionButtonBuilder => vm.selectedNotesList.observer(
+        (context, value) => AppElevatedButton(
+          mini: true,
+          onPressed: value.isNotEmpty ? _showActionsBottomSheet : null,
+          child: const Icon(Icons.more_vert_sharp),
         ),
       );
 
   Widget get _refreshNotesButtonBuilder => Obs(
         rvList: [vm.isSelectNotesMode, vm.isLoading],
-        builder: (context) => AnimatedVisibility(
-            visible: !DeviceParams.checkIsTouchDevice(context) &&
-                !vm.isSelectNotesMode.value,
-            child: RefreshButton(
-              onPressed: vm.isSelectNotesMode.value || vm.isLoading.value
-                  ? null
-                  : vm.refreshNotes,
-            )),
+        builder: (context) => RefreshButton(
+          onPressed: vm.isSelectNotesMode.value || vm.isLoading.value
+              ? null
+              : vm.refreshNotes,
+        ),
       );
 
   Widget get _selectedNotesCountBuilder => Obs(
         rvList: [vm.selectedNotesList, vm.isSelectNotesMode],
         builder: (context) => Container(
+          width: 44,
           margin: const EdgeInsets.only(right: 10),
-          child: AnimatedVisibility(
-            visible: vm.isSelectNotesMode.value,
-            child: CounterWidget(
-              count: vm.selectedNotesList.length,
-            ),
+          child: CounterWidget(
+            count: vm.selectedNotesList.length,
           ),
         ),
       );
 
   Widget get _selectAllNotesButtonBuilder => Obs(
         rvList: [vm.isSelectNotesMode, vm.allNotesIsSelected, vm.notes],
-        builder: (context) => AnimatedVisibility(
-            visible: vm.isSelectNotesMode.value,
-            child: SelectAllButton(
-              listIsSelected: vm.allNotesIsSelected.value,
-              onPressed:
-                  vm.notes.isNotEmpty ? vm.onPressedSelectAllNotes : null,
-            )),
+        builder: (context) => Container(
+          margin: const EdgeInsets.only(right: 10),
+          child: SelectAllButton(
+            listIsSelected: vm.allNotesIsSelected.value,
+            onPressed: vm.notes.isNotEmpty && vm.isSelectNotesMode.value
+                ? vm.onPressedSelectAllNotes
+                : null,
+          ),
+        ),
       );
 
   SliverAppBar get _appBarBuilder => SliverAppBar(
-        expandedHeight: 65,
+        //expandedHeight: 65,
         backgroundColor: Theme.of(context).colorScheme.surface,
         surfaceTintColor: Colors.transparent,
+        bottom: AppBar(
+          toolbarHeight: 65,
+          forceMaterialTransparency: true,
+          title: _refreshNotesButtonBuilder,
+          actions: [
+            _selectionModeButtonBuilder,
+            const SizedBox(width: 16),
+          ],
+        ),
+        pinned: true,
         snap: true,
         floating: true,
-        title: _refreshNotesButtonBuilder,
+        title: _selectedNotesCountBuilder,
         actions: [
-          _selectedNotesCountBuilder,
-          _actionButtonBuilder,
-          const SizedBox(width: 10),
           _selectAllNotesButtonBuilder,
-          const SizedBox(width: 10),
-          _selectionModeButtonBuilder,
+          _actionButtonBuilder,
           const SizedBox(width: 16),
         ],
       );

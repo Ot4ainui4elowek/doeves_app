@@ -190,15 +190,19 @@ class _CreateNotePageState extends State<CreateNotePage> {
         child: const Icon(Icons.check),
       );
 
-  CustomBackButton get _leadingBuilder => CustomBackButton(
-        onPressed: () => handler.back(
-          context: context,
-          editData: NoteResponseModel(
-            id: vm.noteId.value,
-            name: controller.titleTextController.text,
-            description: controller.descriptionTextController.text,
-            dateOfCreate: DateTime.now(),
-          ),
+  Widget get _leadingBuilder => vm.noteId.observer(
+        (context, value) => CustomBackButton(
+          onPressed: value != -1
+              ? () => handler.back(
+                    context: context,
+                    editData: NoteResponseModel(
+                      id: value,
+                      name: controller.titleTextController.text,
+                      description: controller.descriptionTextController.text,
+                      dateOfCreate: DateTime.now(),
+                    ),
+                  )
+              : null,
         ),
       );
 

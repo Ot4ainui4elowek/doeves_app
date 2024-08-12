@@ -30,8 +30,6 @@ class OpenNoteViewModel implements CreateNotePageViewModel, OpenViewModel {
   @override
   final CreateNotePageController controller;
 
-  final _noteIsLoadedSucessfully = false.rv;
-
   @override
   void init() {
     log('open note vm');
@@ -48,6 +46,7 @@ class OpenNoteViewModel implements CreateNotePageViewModel, OpenViewModel {
     controller.titleTextController.removeListener(_titleDefferedAction.call);
     await _descriptionDefferedAction.dispose();
     await _titleDefferedAction.dispose();
+
     log('dispose open note vm');
   }
 
@@ -58,16 +57,10 @@ class OpenNoteViewModel implements CreateNotePageViewModel, OpenViewModel {
   late final DeferredAction _titleDefferedAction;
 
   Future<void> _listenDescription() async {
-    if (_noteIsLoadedSucessfully.value) {
-      return;
-    }
     final result = await controller.editDescription(noteId.value);
   }
 
   Future<void> _listenTitle() async {
-    if (_noteIsLoadedSucessfully.value) {
-      return;
-    }
     final result = await controller.editTitle(noteId.value);
   }
 
@@ -75,12 +68,9 @@ class OpenNoteViewModel implements CreateNotePageViewModel, OpenViewModel {
     final result = await controller.getNote(id: noteId.value);
 
     if (result is GoodUseCaseResult<NoteResponseModel>) {
-      _noteIsLoadedSucessfully(true);
       final note = result.data;
       controller.titleTextController.text = note.name;
       controller.descriptionTextController.text = note.description;
     }
-    Future.delayed(
-        _requestsTimerDuration, () => _noteIsLoadedSucessfully(false));
   }
 }
