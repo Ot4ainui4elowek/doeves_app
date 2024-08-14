@@ -12,15 +12,13 @@ class SelectionModeButton extends StatelessWidget {
     return AppElevatedButton(
       key: key,
       mini: true,
-      style: ButtonStyle(
-        backgroundColor: WidgetStatePropertyAll(
-            Theme.of(context).colorScheme.surfaceContainer),
-        side: WidgetStatePropertyAll(
-          BorderSide(
-            color: isSelectedMode
-                ? Theme.of(context).colorScheme.primary
-                : Colors.transparent,
-          ),
+      style: ElevatedButton.styleFrom(
+        elevation: 0,
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+        side: BorderSide(
+          color: isSelectedMode
+              ? Theme.of(context).colorScheme.primary
+              : Colors.transparent,
         ),
       ),
       onPressed: onPressed,

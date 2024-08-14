@@ -27,7 +27,7 @@ class DeferredAction {
   Future<void> dispose() async {
     if (_timer != null && _timer!.isActive) {
       _timer!.cancel();
-      final result = await callback();
+      await callback();
       log('dispose defferred action');
     }
   }

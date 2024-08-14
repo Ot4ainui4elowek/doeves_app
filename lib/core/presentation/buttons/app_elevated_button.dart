@@ -57,9 +57,9 @@ class _AppElevatedButtonState extends State<AppElevatedButton> {
 
   double get _verticalPadding => widget.mini ? 10 : 18;
 
-  ButtonStyle get _minStyle => ButtonStyle(
-        backgroundColor: WidgetStatePropertyAll(
-            Theme.of(context).colorScheme.surfaceContainer),
+  ButtonStyle get _minStyle => ElevatedButton.styleFrom(
+        elevation: 0,
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       );
 
   ButtonStyle get _maxStyle => ElevatedButton.styleFrom(

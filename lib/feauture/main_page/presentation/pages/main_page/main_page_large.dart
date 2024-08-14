@@ -1,16 +1,15 @@
-import 'package:doeves_app/core/domain/router/doeves_routes.dart';
-import 'package:doeves_app/core/presentation/app_bars/custom_app_bar.dart';
 import 'package:doeves_app/core/presentation/app_wrapper.dart';
 import 'package:doeves_app/core/presentation/buttons/app_bar_button.dart';
-import 'package:doeves_app/core/presentation/hero_widgets/hero_search_widget.dart';
 import 'package:doeves_app/feauture/app_drawer/presentation/app_drawer.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/main_page/pages_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class MainPageLarge extends StatefulWidget {
-  const MainPageLarge({super.key, required navigationShell})
-      : _navigationShell = navigationShell;
+  const MainPageLarge({
+    super.key,
+    required navigationShell,
+  }) : _navigationShell = navigationShell;
   final StatefulNavigationShell _navigationShell;
 
   @override
@@ -43,15 +42,18 @@ class _MainPageLargeState extends State<MainPageLarge> {
         ),
       ];
 
-  Widget get _floatingActionButtonBuilder => FloatingActionButton(
-        shape: const CircleBorder(),
-        onPressed: () => context.push(AppRoutes.createNotePage),
-        child: const Icon(Icons.add_rounded),
-      );
-
-  Widget get _navigationBuilder => Center(
+  Widget get _navigationBuilder => Container(
+        decoration: BoxDecoration(
+            border: BorderDirectional(
+                end: BorderSide(
+          color: Theme.of(context).colorScheme.outlineVariant,
+        ))),
         child: NavigationRail(
+          selectedIconTheme: IconThemeData(
+            color: Theme.of(context).colorScheme.primary,
+          ),
           groupAlignment: -1,
+          indicatorColor: Theme.of(context).colorScheme.surfaceContainer,
           labelType: NavigationRailLabelType.selected,
           leading: StatefulBuilder(
             builder: (BuildContext context, setState) {
@@ -80,18 +82,11 @@ class _MainPageLargeState extends State<MainPageLarge> {
           _navigationBuilder,
           Expanded(
             child: AppWrapper(
-              padding: const EdgeInsets.only(right: 81),
+              padding: MediaQuery.of(context).size.width > 835
+                  ? const EdgeInsets.only(right: 81)
+                  : null,
               maxWidth: 700,
-              child: Scaffold(
-                appBar: CustomAppBar(
-                  context: context,
-                  titleWidget: HeroSearchWidget(
-                    onTap: () => context.push(AppRoutes.notesSearchPage),
-                  ),
-                  leadingIsAutomaticlySet: false,
-                ),
-                body: widget._navigationShell,
-              ),
+              child: widget._navigationShell,
             ),
           ),
         ],

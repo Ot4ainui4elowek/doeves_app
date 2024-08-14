@@ -50,6 +50,9 @@ final darkTheme = ThemeData(
   checkboxTheme: const CheckboxThemeData(
     side: BorderSide(color: AppDarkColors.outline, width: 2),
   ),
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+    backgroundColor: AppDarkColors.primary,
+  ),
   dividerColor: AppDarkColors.outline,
   inputDecorationTheme: const InputDecorationTheme(
     prefixIconColor: AppDarkColors.outline,

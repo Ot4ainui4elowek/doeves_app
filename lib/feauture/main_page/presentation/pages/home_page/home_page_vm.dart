@@ -127,6 +127,8 @@ class NotesHomePageViewModel {
 
   final ResponseBloc notesBloc = ResponseBloc();
 
+  final includingCatalogs = false.rv;
+
   Future<void> getNotes() async {
     isLoading(true);
 
@@ -138,7 +140,7 @@ class NotesHomePageViewModel {
     final result = await _notesRepository.getAllNotes(
         offset: notes.length,
         limit: 10,
-        includingCatalogs: false,
+        includingCatalogs: includingCatalogs.value,
         jwtToken: jwtToken);
 
     isLoading(false);

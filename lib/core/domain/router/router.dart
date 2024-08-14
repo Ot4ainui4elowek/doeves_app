@@ -83,8 +83,13 @@ final router = GoRouter(
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) => LayoutBuilder(
         builder: (context, constraints) => constraints.maxWidth < 540
-            ? MainPageSmall(navigationShell: navigationShell)
-            : MainPageLarge(navigationShell: navigationShell),
+            ? MainPageSmall(
+                navigationShell: navigationShell,
+                scaffoldKey: AppContainer().serviceScope.drawerService.key,
+              )
+            : MainPageLarge(
+                navigationShell: navigationShell,
+              ),
       ),
       branches: [
         StatefulShellBranch(
@@ -96,6 +101,7 @@ final router = GoRouter(
                   final transferObject = state.extra;
                   final isValid = transferObject is DataTransferObject;
                   return NotesHomePage(
+                    drawerService: AppContainer().serviceScope.drawerService,
                     vm: NotesHomePageViewModel(
                       noteTransferObject: isValid ? transferObject : null,
                       notesRepository:
@@ -119,6 +125,7 @@ final router = GoRouter(
             GoRoute(
               path: AppRoutes.catalogsPage,
               builder: (context, state) => CatalogsPage(
+                drawerService: AppContainer().serviceScope.drawerService,
                 vm: CatalogsPageViewModel(),
               ),
             ),

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:doeves_app/core/data/secure_storage/secure_storage.dart';
 import 'package:doeves_app/core/domain/app_error/app_error.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
-import 'package:doeves_app/core/presentation/notification_service/snack_bar_notification_service/snack_bar_notification_service_impl.dart';
 import 'package:doeves_app/core/presentation/text_fields/controllers/app_text_editing_controller.dart';
 import 'package:doeves_app/feauture/create_note/domain/create_note/create_note_bloc.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/create_content_entity.dart';
@@ -40,7 +39,7 @@ class CreateNotePageController {
 
   final isLoading = false.rv;
 
-  final _notificationService = SnackBarNotificationServiceImpl();
+  //final _notificationService = SnackBarNotificationServiceImpl();
 
   Future<UseCaseResult<EmptyGoodResponse>> editTitle(int id) async {
     final jwt = await _secureStorage.readToken();

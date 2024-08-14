@@ -22,15 +22,22 @@ class CustomAppBar extends AppBar {
           automaticallyImplyLeading: false,
           title: AnimatedContainer(
             duration: const Duration(milliseconds: 300),
+            constraints: const BoxConstraints(maxHeight: 50),
             height: 50,
+            clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(28)),
               color: Theme.of(context).colorScheme.surfaceContainer,
               border: isSelected
-                  ? Border.all(color: Theme.of(context).colorScheme.primary)
+                  ? Border.all(
+                      color: Theme.of(context).colorScheme.primary,
+                      strokeAlign: BorderSide.strokeAlignOutside)
                   : null,
             ),
-            child: Row(
+            child: Flex(
+              //clipBehavior: Clip.antiAlias,
+              direction: Axis.horizontal,
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 leadeing ??

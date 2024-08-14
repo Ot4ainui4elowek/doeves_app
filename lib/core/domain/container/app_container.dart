@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:doeves_app/core/data/secure_storage/secure_storage.dart';
 import 'package:doeves_app/core/domain/network_info/network_info.dart';
+import 'package:doeves_app/feauture/app_drawer/presentation/drawer_service.dart';
 import 'package:doeves_app/feauture/authorization/data/repository/authorization_remote_repository.dart';
 import 'package:doeves_app/feauture/authorization/data/repository/verification_repository_impl.dart';
 import 'package:doeves_app/feauture/authorization/data/source/authorization_client_data_source.dart';
@@ -57,10 +58,15 @@ class AppContainer {
   Future<void> _initServiceScope() async {
     try {
       log('init service scope');
+
       final themeService = ThemeService();
+
       final networkService = NetworkInfoServiceImpl();
 
+      final drawerService = DrawerService();
+
       serviceScope = ServiceScope(
+        drawerService: drawerService,
         themeService: themeService,
         networkService: networkService,
       );
@@ -114,9 +120,11 @@ class SecureScope {
 class ServiceScope {
   final ThemeService themeService;
   final NetworkInfoServiceImpl networkService;
+  final DrawerService drawerService;
   const ServiceScope({
     required this.themeService,
     required this.networkService,
+    required this.drawerService,
   });
 }
 

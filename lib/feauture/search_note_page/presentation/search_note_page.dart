@@ -6,6 +6,8 @@ import 'package:doeves_app/feauture/search_note_page/presentation/search_note_pa
 import 'package:flutter/material.dart';
 import 'package:reactive_variables/reactive_variables.dart';
 
+import '../../../core/domain/hero_tags.dart';
+
 class SearchNotePage extends StatefulWidget {
   const SearchNotePage({super.key, required this.vm});
   final SearchNotePageViewModel vm;
@@ -43,6 +45,23 @@ class _SearchNotePageState extends State<SearchNotePage> {
         const SizedBox(width: 16),
       ];
 
+  Widget get _searchBarBuilder => Expanded(
+        child: Hero(
+          tag: HeroTags.searchingHero,
+          child: Material(
+            type: MaterialType.transparency,
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surfaceContainer,
+                  borderRadius: BorderRadius.circular(28)),
+              child: SearchTextField(
+                focusNode: vm.focusNode,
+              ),
+            ),
+          ),
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     return AppWrapper(
@@ -53,9 +72,7 @@ class _SearchNotePageState extends State<SearchNotePage> {
           appBar: CustomAppBar(
             isSelected: vm.searchBarIsSelected.value,
             context: context,
-            titleWidget: HeroSearchWidget(
-              focusNode: vm.focusNode,
-            ),
+            titleWidget: _searchBarBuilder,
             actions: _actionsBuilder,
           ),
         ),

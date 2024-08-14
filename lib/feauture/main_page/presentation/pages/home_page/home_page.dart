@@ -1,11 +1,19 @@
 import 'dart:math';
 
+import 'package:doeves_app/core/domain/router/doeves_routes.dart';
+import 'package:doeves_app/core/presentation/animated_visibility.dart';
 import 'package:doeves_app/core/presentation/buttons/app_elevated_button.dart';
 import 'package:doeves_app/core/presentation/counter_widget.dart';
 import 'package:doeves_app/core/presentation/logo/app_logo_animated.dart';
+import 'package:doeves_app/core/presentation/scrollable_row.dart';
+import 'package:doeves_app/feauture/app_drawer/presentation/drawer_service.dart';
+import 'package:doeves_app/feauture/main_page/domain/device_params.dart';
+import 'package:doeves_app/feauture/main_page/domain/response_bloc/response_bloc.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/home_page/home_page_vm.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/action_on_note_button.dart';
+import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/burger_menu_button.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/refresh_button.dart';
+import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/search_button.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/select_all_button.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/selection_mode_button.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/notes/note_with_content_widget.dart';
@@ -13,11 +21,15 @@ import 'package:doeves_app/feauture/main_page/presentation/widgets/selectable_co
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:reactive_variables/reactive_variables.dart';
 
 class NotesHomePage extends StatefulWidget {
-  const NotesHomePage({super.key, required this.vm});
+  const NotesHomePage(
+      {super.key, required this.vm, required DrawerService drawerService})
+      : _drawerService = drawerService;
   final NotesHomePageViewModel vm;
+  final DrawerService _drawerService;
 
   @override
   State<NotesHomePage> createState() => _NotesHomePageState();
@@ -194,24 +206,37 @@ class _NotesHomePageState extends State<NotesHomePage>
 
   Widget get _refreshNotesButtonBuilder => Obs(
         rvList: [vm.isSelectNotesMode, vm.isLoading],
-        builder: (context) => RefreshButton(
-          onPressed: vm.isSelectNotesMode.value || vm.isLoading.value
-              ? null
-              : vm.refreshNotes,
-        ),
-      );
-
-  Widget get _selectedNotesCountBuilder => Obs(
-        rvList: [vm.selectedNotesList, vm.isSelectNotesMode],
-        builder: (context) => Container(
-          width: 44,
-          margin: const EdgeInsets.only(right: 10),
-          child: CounterWidget(
-            count: vm.selectedNotesList.length,
+        builder: (context) => AnimatedVisibility(
+          visible: !DeviceInfo.checkIsTouchDevice(context),
+          child: Container(
+            margin: const EdgeInsets.only(right: 10),
+            child: RefreshButton(
+              onPressed: vm.isSelectNotesMode.value || vm.isLoading.value
+                  ? null
+                  : vm.refreshNotes,
+            ),
           ),
         ),
       );
 
+  Widget get _selectedNotesCountBuilder => vm.isSelectNotesMode.observer(
+        (context, value) => AnimatedVisibility(
+          visible: value,
+          child: Obs(
+            rvList: [vm.selectedNotesList, vm.isSelectNotesMode],
+            builder: (context) => Container(
+              width: 44,
+              margin: const EdgeInsets.only(right: 10),
+              child: CounterWidget(
+                style: AppTextTheme.textBase(
+                    weight: TextWeight.medium,
+                    color: Theme.of(context).colorScheme.primary),
+                count: vm.selectedNotesList.length,
+              ),
+            ),
+          ),
+        ),
+      );
   Widget get _selectAllNotesButtonBuilder => Obs(
         rvList: [vm.isSelectNotesMode, vm.allNotesIsSelected, vm.notes],
         builder: (context) => Container(
@@ -225,35 +250,130 @@ class _NotesHomePageState extends State<NotesHomePage>
         ),
       );
 
-  SliverAppBar get _appBarBuilder => SliverAppBar(
-        //expandedHeight: 65,
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        surfaceTintColor: Colors.transparent,
-        bottom: AppBar(
-          toolbarHeight: 65,
-          forceMaterialTransparency: true,
-          title: _refreshNotesButtonBuilder,
-          actions: [
-            _selectionModeButtonBuilder,
-            const SizedBox(width: 16),
+  Widget get _searchButtonBuilder => Expanded(
+        child: SearchButton(
+          onPressed: () => context.push(AppRoutes.notesSearchPage),
+        ),
+      );
+
+  Widget get _selectedListActionButtonsBuilder => vm.isSelectNotesMode.observer(
+        (context, value) => AnimatedVisibility(
+          visible: value,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(28),
+            ),
+            padding: const EdgeInsets.only(bottom: 4),
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            child: ScrollableRow(
+              children: [
+                _selectAllNotesButtonBuilder,
+                _actionButtonBuilder,
+                const SizedBox(width: 10),
+              ],
+            ),
+          ),
+        ),
+      );
+  Future<void> _showFiltersBottomSheet() async {
+    final bool includingCatalogs = vm.includingCatalogs.value;
+    await showModalBottomSheet(
+      context: context,
+      showDragHandle: true,
+      useRootNavigator: true,
+      builder: (context) => _filtersBottomSheetBuilder,
+    );
+    if (includingCatalogs != vm.includingCatalogs.value) {
+      vm.notes.clear();
+      vm.notesBloc.add(ResponseBlocEvent.loadingNotes());
+      vm.getNotes();
+    }
+  }
+
+  Widget get _filtersBottomSheetBuilder => Container(
+        padding: const EdgeInsets.all(16),
+        width: double.maxFinite,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const AppLogoAnimated(
+              repeat: false,
+            ),
+            const SizedBox(height: 20),
+            vm.includingCatalogs.observer(
+              (context, include) => SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(
+                  'Notes from other catalogs',
+                  style: AppTextTheme.textBase(weight: TextWeight.medium),
+                ),
+                value: include,
+                onChanged: (value) => vm.includingCatalogs(!include),
+              ),
+            )
           ],
         ),
+      );
+
+  Widget get _filterButtonBuilder => AppElevatedButton(
+        mini: true,
+        onPressed: _showFiltersBottomSheet,
+        child: const Icon(Icons.filter_alt_outlined),
+      );
+
+  PreferredSizeWidget get _bottomAppBarBuilder => AppBar(
+        toolbarHeight: 68,
+        forceMaterialTransparency: true,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _selectedNotesCountBuilder,
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _selectedListActionButtonsBuilder,
+                  const SizedBox(width: 10),
+                  _selectionModeButtonBuilder,
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+
+  SliverAppBar get _appBarBuilder => SliverAppBar(
+        toolbarHeight: 65,
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        surfaceTintColor: Colors.transparent,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            BurgerMenuButton(
+              onPressed: widget._drawerService.openDrawer,
+            ),
+            Visibility(
+              visible: DeviceInfo.checkIsSmallMainScreen(context),
+              child: const SizedBox(width: 10),
+            ),
+            _refreshNotesButtonBuilder,
+            _searchButtonBuilder,
+            const SizedBox(width: 10),
+            _filterButtonBuilder
+          ],
+        ),
+        bottom: _bottomAppBarBuilder,
         pinned: true,
         snap: true,
         floating: true,
-        title: _selectedNotesCountBuilder,
-        actions: [
-          _selectAllNotesButtonBuilder,
-          _actionButtonBuilder,
-          const SizedBox(width: 16),
-        ],
       );
 
   Widget get _floatingActionButtonBuilder => FloatingActionButton(
         shape: const CircleBorder(),
         onPressed: () => vm.addNote(context),
-        child: const Icon(
+        child: Icon(
           Icons.add_rounded,
+          color: Theme.of(context).colorScheme.onPrimary,
         ),
       );
 

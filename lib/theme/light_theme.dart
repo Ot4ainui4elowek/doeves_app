@@ -47,6 +47,8 @@ final lightTheme = ThemeData(
       iconColor: WidgetStatePropertyAll(AppLightColors.outline),
     ),
   ),
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: AppLightColors.primary),
   checkboxTheme: const CheckboxThemeData(
     side: BorderSide(color: AppLightColors.outline, width: 2),
   ),

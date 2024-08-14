@@ -7,9 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class MainPageSmall extends StatefulWidget {
-  const MainPageSmall({super.key, required navigationShell})
-      : _navigationShell = navigationShell;
+  const MainPageSmall(
+      {super.key,
+      required navigationShell,
+      required GlobalKey<ScaffoldState> scaffoldKey})
+      : _scaffoldKey = scaffoldKey,
+        _navigationShell = navigationShell;
   final StatefulNavigationShell _navigationShell;
+  final GlobalKey<ScaffoldState>? _scaffoldKey;
 
   @override
   State<MainPageSmall> createState() => MainPageSmallState();
@@ -24,8 +29,8 @@ class MainPageSmallState extends State<MainPageSmall> {
   }
 
   List<NavigationDestination> get _navigationDestinitionBuilder {
-    final selectedColor = Theme.of(context).colorScheme.onPrimaryContainer;
-    final unSelectedColor = Theme.of(context).colorScheme.outline;
+    final selectedColor = Theme.of(context).colorScheme.primary;
+    final unSelectedColor = Theme.of(context).colorScheme.primary;
     return <NavigationDestination>[
       NavigationDestination(
         selectedIcon: Icon(
@@ -64,7 +69,8 @@ class MainPageSmallState extends State<MainPageSmall> {
           ),
         ),
         child: NavigationBar(
-          indicatorColor: Theme.of(context).colorScheme.primaryContainer,
+          backgroundColor: Colors.transparent,
+          indicatorColor: Theme.of(context).colorScheme.surfaceContainer,
           labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
           onDestinationSelected: (int index) => _onTap(context, index),
           selectedIndex: widget._navigationShell.currentIndex,
@@ -87,7 +93,7 @@ class MainPageSmallState extends State<MainPageSmall> {
   PreferredSizeWidget get _appBarBuilder => CustomAppBar(
         context: context,
         leadeing: _burgerMenuButtonBuilder,
-        titleWidget: HeroSearchWidget(
+        titleWidget: SearchTextField(
           onTap: () => context.push(AppRoutes.notesSearchPage),
         ),
       );
@@ -95,10 +101,14 @@ class MainPageSmallState extends State<MainPageSmall> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appBarBuilder,
+      drawerEnableOpenDragGesture: true,
+      drawer: AppDrawer(),
+      key: widget._scaffoldKey,
+
       body: widget._navigationShell,
       bottomNavigationBar: _bottomNavigationBarBuilder,
-      drawer: AppDrawer(),
+
+      //drawer: AppDrawer(),
     );
   }
 }
