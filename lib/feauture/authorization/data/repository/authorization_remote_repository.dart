@@ -19,26 +19,11 @@ class AuthorizationRepositoryImpl
   Future<UseCaseResult<SignInResponseModel>> signIn(
       {required String email, required String password}) async {
     try {
-      final signInResponse = await request(
+      final result = await request(
           callback: () => _authorizationDataSource
               .signIn(SignInRequestModel(email: email, password: password)),
           dataMapper: SignInResponseModel.fromJson);
-      switch (signInResponse) {
-        case DataRestApiResult<SignInResponseModel>(:final data):
-          {
-            return UseCaseResult.good(data);
-          }
-        case ErrorWitchDataRestApiResult<SignInResponseModel>(
-            :final errorData,
-          ):
-          {
-            return UseCaseResult.dataBad(errorData);
-          }
-        case ErrorRestApiResult<SignInResponseModel>(:final errorList):
-          {
-            return UseCaseResult.bad(errorList);
-          }
-      }
+      return getUseCaseResult(result);
     } catch (e) {
       return UseCaseResult.bad(
           [SpecificError(HttpStatusAndErrors.invalidRequest.value)]);
@@ -55,26 +40,11 @@ class AuthorizationRepositoryImpl
       return UseCaseResult.bad([SpecificError('Password mismatch error')]);
     }
     try {
-      final signUpResponse = await request(
+      final result = await request(
           callback: () => _authorizationDataSource
               .signUp(SignUpRequestModel(email: email, password: password)),
           dataMapper: SignUpResponseModel.fromJson);
-      switch (signUpResponse) {
-        case DataRestApiResult<SignUpResponseModel>(:final data):
-          {
-            return UseCaseResult.good(data);
-          }
-        case ErrorWitchDataRestApiResult<SignUpResponseModel>(
-            :final errorData,
-          ):
-          {
-            return UseCaseResult.dataBad(errorData);
-          }
-        case ErrorRestApiResult<SignUpResponseModel>(:final errorList):
-          {
-            return UseCaseResult.bad(errorList);
-          }
-      }
+      return getUseCaseResult(result);
     } catch (e) {
       return UseCaseResult.bad(
         [

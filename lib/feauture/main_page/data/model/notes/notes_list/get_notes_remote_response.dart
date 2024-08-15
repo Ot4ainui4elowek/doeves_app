@@ -1,5 +1,5 @@
 import 'package:doeves_app/core/data/remote_response.dart';
-import 'package:doeves_app/feauture/main_page/data/model/notes_list/notes_list_response_model.dart';
+import 'package:doeves_app/feauture/main_page/data/model/notes/notes_list/notes_list_response_model.dart';
 
 abstract interface class GetNotesRemoteResponse {
   factory GetNotesRemoteResponse.fromJson(JsonType json) {

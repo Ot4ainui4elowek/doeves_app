@@ -7,7 +7,7 @@ import 'package:doeves_app/core/domain/view_model/view_model_factory.dart';
 import 'package:doeves_app/feauture/create_note/domain/create_note/create_note_bloc.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page_controller.dart';
 import 'package:doeves_app/feauture/create_note/presentation/view_models/create_note_page_vm.dart';
-import 'package:doeves_app/feauture/main_page/data/model/create_note_response_model.dart';
+import 'package:doeves_app/feauture/main_page/data/model/notes/create_note_response_model.dart';
 import 'package:reactive_variables/reactive_variables.dart';
 
 class CreateNewNoteViewModel
@@ -56,7 +56,7 @@ class CreateNewNoteViewModel
     final result = await controller.createNote(catalogId: catalogId);
     controller.titleAndDescriptionBloc
         .add(CreateNoteEvent.fetch(result: result));
-    if (result is GoodUseCaseResult<CreateNoteResponseModel>) {
+    if (result is GoodUseCaseResult<IdResponseModel>) {
       noteId(result.data.id);
     }
   }

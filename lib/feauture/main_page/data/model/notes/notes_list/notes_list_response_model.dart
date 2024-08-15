@@ -1,7 +1,7 @@
 import 'package:doeves_app/core/data/model/list_response_model.dart';
 import 'package:doeves_app/core/data/remote_response.dart';
-import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
-import 'package:doeves_app/feauture/main_page/data/model/notes_list/get_notes_remote_response.dart';
+import 'package:doeves_app/feauture/main_page/data/model/notes/note_response_model.dart';
+import 'package:doeves_app/feauture/main_page/data/model/notes/notes_list/get_notes_remote_response.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'notes_list_response_model.g.dart';
@@ -10,6 +10,7 @@ part 'notes_list_response_model.g.dart';
 class NotesListResponseModel
     implements GetNotesRemoteResponse, ListResponseModel {
   const NotesListResponseModel(this.list);
+
   @JsonKey(name: 'list')
   @override
   final List<NoteResponseModel> list;

@@ -11,8 +11,11 @@ import 'package:doeves_app/feauture/authorization/domain/repository/authorizatio
 import 'package:doeves_app/feauture/authorization/domain/repository/verification_repository.dart';
 import 'package:doeves_app/feauture/create_note/data/create_note_repository_impl.dart';
 import 'package:doeves_app/feauture/create_note/domain/repository/create_note_repository.dart';
+import 'package:doeves_app/feauture/main_page/data/repository/catalogs_repository_impl.dart';
 import 'package:doeves_app/feauture/main_page/data/repository/notes_repository_impl.dart';
+import 'package:doeves_app/feauture/main_page/data/source/catalogs_data_source.dart';
 import 'package:doeves_app/feauture/main_page/data/source/notes_data_source.dart';
+import 'package:doeves_app/feauture/main_page/domain/repository/catalogs/catalogs_repository.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 
@@ -99,11 +102,18 @@ class AppContainer {
       final verificationRepository =
           VerificationRepositoryImpl(dataSourse: authDataSource);
 
+      final catalogsClientDataSource =
+          CatalogsClientDataSource.create(apiUrl: apiUrl);
+
+      final catalogsRepocitory = CatalogsRepositoryImpl(
+          catalogsClientDataSource: catalogsClientDataSource);
+
       repositoryScope = RepositoryScope(
         createNoteRepository: createNoteRepository,
         authorizationRepository: authorizationRepository,
         verificationRepository: verificationRepository,
         notesRepository: notesRepository,
+        catalogsRepository: catalogsRepocitory,
       );
     } catch (e, st) {
       log('Reposytory scope has not been initialized',
@@ -133,10 +143,11 @@ class RepositoryScope {
   final VerificationRepository verificationRepository;
   final NotesRepositoryImpl notesRepository;
   final CreateNoteRepository createNoteRepository;
-  const RepositoryScope({
-    required this.authorizationRepository,
-    required this.verificationRepository,
-    required this.notesRepository,
-    required this.createNoteRepository,
-  });
+  final CatalogsRepository catalogsRepository;
+  const RepositoryScope(
+      {required this.authorizationRepository,
+      required this.verificationRepository,
+      required this.notesRepository,
+      required this.createNoteRepository,
+      required this.catalogsRepository});
 }

@@ -1,3 +1,4 @@
+import 'package:doeves_app/core/data/model/list_response_model.dart';
 import 'package:doeves_app/core/domain/app_error/app_error.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,9 +20,9 @@ class ResponseBloc<T> extends Bloc<ResponseBlocEvent, ResponseBlocState> {
         switch (event.result) {
           case GoodUseCaseResult(:final data):
             {
-              if (event.initialListIsEmpty && data.isEmpty) {
+              if (event.initialListIsEmpty && data.list.isEmpty) {
                 emit(const ResponseBlocState.initial());
-              } else if (!event.initialListIsEmpty && data.isEmpty) {
+              } else if (!event.initialListIsEmpty && data.list.isEmpty) {
                 emit(const ResponseBlocState.emptyResponse());
               } else {
                 emit(const ResponseBlocState.emptyState());

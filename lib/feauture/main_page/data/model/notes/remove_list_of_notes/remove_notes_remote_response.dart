@@ -1,4 +1,4 @@
-import 'package:doeves_app/feauture/main_page/data/model/remove_list_of_notes/empty_good_response.dart';
+import 'package:doeves_app/feauture/main_page/data/model/notes/remove_list_of_notes/empty_good_response.dart';
 
 abstract interface class RemoveNoteRemoteResponse {
   factory RemoveNoteRemoteResponse.fromJson(Map<String, dynamic> json) {

@@ -20,27 +20,8 @@ class VerificationRepositoryImpl
       final result = await request(
           callback: () => _dataSource.resendVerificationCode(jwtToken),
           dataMapper: VerificationResponseModel.fromJson);
-      switch (result) {
-        case DataRestApiResult<VerificationResponseModel>(:final data):
-          {
-            return UseCaseResult.good(data);
-          }
-        case ErrorWitchDataRestApiResult<VerificationResponseModel>(
-            :final errorData,
-          ):
-          {
-            return UseCaseResult.dataBad(errorData);
-          }
-        case ErrorRestApiResult<VerificationResponseModel>(:final errorList):
-          {
-            return UseCaseResult.bad(errorList);
-          }
-        default:
-          {
-            return UseCaseResult.bad(
-                [SpecificError(HttpStatusAndErrors.invalidRequest.value)]);
-          }
-      }
+
+      return getUseCaseResult(result);
     } catch (e) {
       return UseCaseResult.bad(
           [SpecificError(HttpStatusAndErrors.invalidRequest.value)]);
@@ -54,27 +35,8 @@ class VerificationRepositoryImpl
       final result = await request(
           callback: () => _dataSource.sendVerificationCode(jwtToken, code),
           dataMapper: VerificationResponseModel.fromJson);
-      switch (result) {
-        case DataRestApiResult<VerificationResponseModel>(:final data):
-          {
-            return UseCaseResult.good(data);
-          }
-        case ErrorWitchDataRestApiResult<VerificationResponseModel>(
-            :final errorData,
-          ):
-          {
-            return UseCaseResult.dataBad(errorData);
-          }
-        case ErrorRestApiResult<VerificationResponseModel>(:final errorList):
-          {
-            return UseCaseResult.bad(errorList);
-          }
-        default:
-          {
-            return UseCaseResult.bad(
-                [SpecificError(HttpStatusAndErrors.invalidRequest.value)]);
-          }
-      }
+
+      return getUseCaseResult(result);
     } catch (e) {
       return UseCaseResult.bad(
           [SpecificError(HttpStatusAndErrors.invalidRequest.value)]);

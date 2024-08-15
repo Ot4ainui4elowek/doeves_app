@@ -15,7 +15,7 @@ import 'package:doeves_app/feauture/create_note/presentation/view_models/create_
 import 'package:doeves_app/feauture/create_note/presentation/widgets/content_widget.dart';
 import 'package:doeves_app/feauture/create_note/presentation/widgets/tasks_list/tasks_list_widget.dart';
 import 'package:doeves_app/feauture/create_note/presentation/widgets/text_content_widget.dart';
-import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
+import 'package:doeves_app/feauture/main_page/data/model/notes/note_response_model.dart';
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

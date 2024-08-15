@@ -6,14 +6,12 @@ part of 'create_note_response_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-CreateNoteResponseModel _$CreateNoteResponseModelFromJson(
-        Map<String, dynamic> json) =>
-    CreateNoteResponseModel(
+IdResponseModel _$IdResponseModelFromJson(Map<String, dynamic> json) =>
+    IdResponseModel(
       id: (json['id'] as num).toInt(),
     );
 
-Map<String, dynamic> _$CreateNoteResponseModelToJson(
-        CreateNoteResponseModel instance) =>
+Map<String, dynamic> _$IdResponseModelToJson(IdResponseModel instance) =>
     <String, dynamic>{
       'id': instance.id,
     };

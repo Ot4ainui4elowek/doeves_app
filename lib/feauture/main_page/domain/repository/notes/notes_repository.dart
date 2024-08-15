@@ -1,17 +1,16 @@
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
-import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
-import 'package:doeves_app/feauture/main_page/data/model/remove_list_of_notes/empty_good_response.dart';
-import 'package:doeves_app/feauture/main_page/data/model/remove_list_of_notes/remove_notes_remote_response.dart';
+import 'package:doeves_app/feauture/main_page/data/model/notes/notes_list/notes_list_response_model.dart';
+import 'package:doeves_app/feauture/main_page/data/model/notes/remove_list_of_notes/empty_good_response.dart';
 
 abstract interface class NotesRepository {
-  Future<UseCaseResult<List<NoteResponseModel>>> getAllNotes({
+  Future<UseCaseResult<NotesListResponseModel>> getAllNotes({
     required int offset,
     required int limit,
     required bool includingCatalogs,
     required String jwtToken,
   });
 
-  Future<UseCaseResult<RemoveNoteRemoteResponse>> deleteMultipleNotes({
+  Future<UseCaseResult<EmptyGoodResponse>> deleteMultipleNotes({
     required List<int> deleteNotesList,
     required String jwtToken,
   });

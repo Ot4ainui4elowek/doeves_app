@@ -7,10 +7,11 @@ import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/core/presentation/notification_service/snack_bar_notification_service/snack_bar_notification_service_impl.dart';
 import 'package:doeves_app/feauture/create_note/domain/create_note_transfer_object.dart';
-import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
-import 'package:doeves_app/feauture/main_page/data/model/remove_list_of_notes/empty_good_response.dart';
+import 'package:doeves_app/feauture/main_page/data/model/notes/note_response_model.dart';
+import 'package:doeves_app/feauture/main_page/data/model/notes/notes_list/notes_list_response_model.dart';
+import 'package:doeves_app/feauture/main_page/data/model/notes/remove_list_of_notes/empty_good_response.dart';
 import 'package:doeves_app/feauture/main_page/domain/data_transfer_object.dart';
-import 'package:doeves_app/feauture/main_page/domain/repository/notes_repository.dart';
+import 'package:doeves_app/feauture/main_page/domain/repository/notes/notes_repository.dart';
 import 'package:doeves_app/feauture/main_page/domain/response_bloc/response_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -45,7 +46,7 @@ class NotesHomePageViewModel {
     if (_noteTransferObject != null) {
       log('transfer object');
     }
-    notesBloc.add(ResponseBlocEvent.loadingNotes());
+    notesBloc.add(ResponseBlocEvent.loading());
     await getNotes();
 
     scrollController.addListener(checkScroll);
@@ -116,7 +117,7 @@ class NotesHomePageViewModel {
         !isLoading.value &&
         scrollController.position.atEdge &&
         scrollController.position.pixels != 0) {
-      notesBloc.add(ResponseBlocEvent.loadingNotes());
+      notesBloc.add(ResponseBlocEvent.loading());
       getNotes();
     }
   }
@@ -144,16 +145,16 @@ class NotesHomePageViewModel {
         jwtToken: jwtToken);
 
     isLoading(false);
-    notesBloc.add(ResponseBlocEvent.fetchNotes(
+    notesBloc.add(ResponseBlocEvent.fetch(
         result: result, initialListIsEmpty: notes.isEmpty));
-    if (result is GoodUseCaseResult<List<NoteResponseModel>>) {
-      final data = result.data;
+    if (result is GoodUseCaseResult<NotesListResponseModel>) {
+      final data = result.data.list;
       notes.addAll(data);
     }
   }
 
   Future<void> refreshNotes() async {
-    notesBloc.add(ResponseBlocEvent.loadingNotes());
+    notesBloc.add(ResponseBlocEvent.loading());
     notes.clear();
     getNotes();
   }
@@ -284,7 +285,7 @@ class NotesHomePageViewModel {
     );
 
     switch (result) {
-      case GoodUseCaseResult<EmptyGoodResponse>(:final data):
+      case GoodUseCaseResult<EmptyGoodResponse>():
         {
           log('successfull');
         }

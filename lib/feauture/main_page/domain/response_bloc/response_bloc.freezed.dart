@@ -19,7 +19,7 @@ mixin _$ResponseBlocEvent<T> {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            UseCaseResult<List<T>> result, bool initialListIsEmpty)
+            UseCaseResult<ListResponseModel<T>> result, bool initialListIsEmpty)
         fetchNotes,
     required TResult Function() loadingNotes,
     required TResult Function() emptyResponse,
@@ -29,7 +29,8 @@ mixin _$ResponseBlocEvent<T> {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(UseCaseResult<List<T>> result, bool initialListIsEmpty)?
+    TResult? Function(UseCaseResult<ListResponseModel<T>> result,
+            bool initialListIsEmpty)?
         fetchNotes,
     TResult? Function()? loadingNotes,
     TResult? Function()? emptyResponse,
@@ -39,7 +40,8 @@ mixin _$ResponseBlocEvent<T> {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(UseCaseResult<List<T>> result, bool initialListIsEmpty)?
+    TResult Function(UseCaseResult<ListResponseModel<T>> result,
+            bool initialListIsEmpty)?
         fetchNotes,
     TResult Function()? loadingNotes,
     TResult Function()? emptyResponse,
@@ -104,7 +106,8 @@ abstract class _$$FetchDataEventImplCopyWith<T, $Res> {
           $Res Function(_$FetchDataEventImpl<T>) then) =
       __$$FetchDataEventImplCopyWithImpl<T, $Res>;
   @useResult
-  $Res call({UseCaseResult<List<T>> result, bool initialListIsEmpty});
+  $Res call(
+      {UseCaseResult<ListResponseModel<T>> result, bool initialListIsEmpty});
 }
 
 /// @nodoc
@@ -125,7 +128,7 @@ class __$$FetchDataEventImplCopyWithImpl<T, $Res>
       result: null == result
           ? _value.result
           : result // ignore: cast_nullable_to_non_nullable
-              as UseCaseResult<List<T>>,
+              as UseCaseResult<ListResponseModel<T>>,
       initialListIsEmpty: null == initialListIsEmpty
           ? _value.initialListIsEmpty
           : initialListIsEmpty // ignore: cast_nullable_to_non_nullable
@@ -141,7 +144,7 @@ class _$FetchDataEventImpl<T> implements FetchDataEvent<T> {
       {required this.result, required this.initialListIsEmpty});
 
   @override
-  final UseCaseResult<List<T>> result;
+  final UseCaseResult<ListResponseModel<T>> result;
   @override
   final bool initialListIsEmpty;
 
@@ -174,7 +177,7 @@ class _$FetchDataEventImpl<T> implements FetchDataEvent<T> {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            UseCaseResult<List<T>> result, bool initialListIsEmpty)
+            UseCaseResult<ListResponseModel<T>> result, bool initialListIsEmpty)
         fetchNotes,
     required TResult Function() loadingNotes,
     required TResult Function() emptyResponse,
@@ -187,7 +190,8 @@ class _$FetchDataEventImpl<T> implements FetchDataEvent<T> {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(UseCaseResult<List<T>> result, bool initialListIsEmpty)?
+    TResult? Function(UseCaseResult<ListResponseModel<T>> result,
+            bool initialListIsEmpty)?
         fetchNotes,
     TResult? Function()? loadingNotes,
     TResult? Function()? emptyResponse,
@@ -200,7 +204,8 @@ class _$FetchDataEventImpl<T> implements FetchDataEvent<T> {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(UseCaseResult<List<T>> result, bool initialListIsEmpty)?
+    TResult Function(UseCaseResult<ListResponseModel<T>> result,
+            bool initialListIsEmpty)?
         fetchNotes,
     TResult Function()? loadingNotes,
     TResult Function()? emptyResponse,
@@ -258,10 +263,10 @@ class _$FetchDataEventImpl<T> implements FetchDataEvent<T> {
 
 abstract class FetchDataEvent<T> implements ResponseBlocEvent<T> {
   factory FetchDataEvent(
-      {required final UseCaseResult<List<T>> result,
+      {required final UseCaseResult<ListResponseModel<T>> result,
       required final bool initialListIsEmpty}) = _$FetchDataEventImpl<T>;
 
-  UseCaseResult<List<T>> get result;
+  UseCaseResult<ListResponseModel<T>> get result;
   bool get initialListIsEmpty;
   @JsonKey(ignore: true)
   _$$FetchDataEventImplCopyWith<T, _$FetchDataEventImpl<T>> get copyWith =>
@@ -307,7 +312,7 @@ class _$LoadingEventImpl<T> implements LoadingEvent<T> {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            UseCaseResult<List<T>> result, bool initialListIsEmpty)
+            UseCaseResult<ListResponseModel<T>> result, bool initialListIsEmpty)
         fetchNotes,
     required TResult Function() loadingNotes,
     required TResult Function() emptyResponse,
@@ -320,7 +325,8 @@ class _$LoadingEventImpl<T> implements LoadingEvent<T> {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(UseCaseResult<List<T>> result, bool initialListIsEmpty)?
+    TResult? Function(UseCaseResult<ListResponseModel<T>> result,
+            bool initialListIsEmpty)?
         fetchNotes,
     TResult? Function()? loadingNotes,
     TResult? Function()? emptyResponse,
@@ -333,7 +339,8 @@ class _$LoadingEventImpl<T> implements LoadingEvent<T> {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(UseCaseResult<List<T>> result, bool initialListIsEmpty)?
+    TResult Function(UseCaseResult<ListResponseModel<T>> result,
+            bool initialListIsEmpty)?
         fetchNotes,
     TResult Function()? loadingNotes,
     TResult Function()? emptyResponse,
@@ -434,7 +441,7 @@ class _$EmptyResponseEventImpl<T> implements EmptyResponseEvent<T> {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            UseCaseResult<List<T>> result, bool initialListIsEmpty)
+            UseCaseResult<ListResponseModel<T>> result, bool initialListIsEmpty)
         fetchNotes,
     required TResult Function() loadingNotes,
     required TResult Function() emptyResponse,
@@ -447,7 +454,8 @@ class _$EmptyResponseEventImpl<T> implements EmptyResponseEvent<T> {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(UseCaseResult<List<T>> result, bool initialListIsEmpty)?
+    TResult? Function(UseCaseResult<ListResponseModel<T>> result,
+            bool initialListIsEmpty)?
         fetchNotes,
     TResult? Function()? loadingNotes,
     TResult? Function()? emptyResponse,
@@ -460,7 +468,8 @@ class _$EmptyResponseEventImpl<T> implements EmptyResponseEvent<T> {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(UseCaseResult<List<T>> result, bool initialListIsEmpty)?
+    TResult Function(UseCaseResult<ListResponseModel<T>> result,
+            bool initialListIsEmpty)?
         fetchNotes,
     TResult Function()? loadingNotes,
     TResult Function()? emptyResponse,
@@ -563,7 +572,7 @@ class _$ResetToInitialStateEventImpl<T> implements ResetToInitialStateEvent<T> {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            UseCaseResult<List<T>> result, bool initialListIsEmpty)
+            UseCaseResult<ListResponseModel<T>> result, bool initialListIsEmpty)
         fetchNotes,
     required TResult Function() loadingNotes,
     required TResult Function() emptyResponse,
@@ -576,7 +585,8 @@ class _$ResetToInitialStateEventImpl<T> implements ResetToInitialStateEvent<T> {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(UseCaseResult<List<T>> result, bool initialListIsEmpty)?
+    TResult? Function(UseCaseResult<ListResponseModel<T>> result,
+            bool initialListIsEmpty)?
         fetchNotes,
     TResult? Function()? loadingNotes,
     TResult? Function()? emptyResponse,
@@ -589,7 +599,8 @@ class _$ResetToInitialStateEventImpl<T> implements ResetToInitialStateEvent<T> {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(UseCaseResult<List<T>> result, bool initialListIsEmpty)?
+    TResult Function(UseCaseResult<ListResponseModel<T>> result,
+            bool initialListIsEmpty)?
         fetchNotes,
     TResult Function()? loadingNotes,
     TResult Function()? emptyResponse,
@@ -688,7 +699,7 @@ class _$ClearStateEventImpl<T> implements ClearStateEvent<T> {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            UseCaseResult<List<T>> result, bool initialListIsEmpty)
+            UseCaseResult<ListResponseModel<T>> result, bool initialListIsEmpty)
         fetchNotes,
     required TResult Function() loadingNotes,
     required TResult Function() emptyResponse,
@@ -701,7 +712,8 @@ class _$ClearStateEventImpl<T> implements ClearStateEvent<T> {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(UseCaseResult<List<T>> result, bool initialListIsEmpty)?
+    TResult? Function(UseCaseResult<ListResponseModel<T>> result,
+            bool initialListIsEmpty)?
         fetchNotes,
     TResult? Function()? loadingNotes,
     TResult? Function()? emptyResponse,
@@ -714,7 +726,8 @@ class _$ClearStateEventImpl<T> implements ClearStateEvent<T> {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(UseCaseResult<List<T>> result, bool initialListIsEmpty)?
+    TResult Function(UseCaseResult<ListResponseModel<T>> result,
+            bool initialListIsEmpty)?
         fetchNotes,
     TResult Function()? loadingNotes,
     TResult Function()? emptyResponse,

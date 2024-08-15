@@ -11,8 +11,7 @@ NoteResponseModel _$NoteResponseModelFromJson(Map<String, dynamic> json) =>
       id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       description: json['description'] as String,
-      dateOfCreate: DateTime.parse(
-          (json['date_of_create'] ?? json['dateOfCreate']) as String),
+      dateOfCreate: DateTime.parse(json['date_of_create'] as String),
       catalog: (json['catalog'] as num?)?.toInt(),
     );
 

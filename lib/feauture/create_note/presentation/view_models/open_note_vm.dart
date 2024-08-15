@@ -5,7 +5,7 @@ import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/core/domain/view_model/view_model_factory.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page_controller.dart';
 import 'package:doeves_app/feauture/create_note/presentation/view_models/create_note_page_vm.dart';
-import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
+import 'package:doeves_app/feauture/main_page/data/model/notes/note_response_model.dart';
 import 'package:reactive_variables/reactive_variables.dart';
 
 class OpenNoteViewModel implements CreateNotePageViewModel, OpenViewModel {

@@ -12,6 +12,24 @@ import 'app_error/app_error.dart';
 
 abstract mixin class RestApiHandler {
   @protected
+  UseCaseResult<T> getUseCaseResult<T>(RestApiResult<T> result) {
+    switch (result) {
+      case DataRestApiResult<T>(:final data):
+        {
+          return UseCaseResult.good(data);
+        }
+      case ErrorRestApiResult<T>(:final errorList):
+        {
+          return UseCaseResult.bad(errorList);
+        }
+      case ErrorWitchDataRestApiResult<T>(:final errorData):
+        {
+          return UseCaseResult.dataBad(errorData);
+        }
+    }
+  }
+
+  @protected
   Future<RestApiResult<D>> request<R, D>({
     required final Future<HttpResponse<R>> Function() callback,
     required final D Function(JsonType json) dataMapper,

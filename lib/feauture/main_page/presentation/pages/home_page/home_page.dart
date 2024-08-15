@@ -285,7 +285,7 @@ class _NotesHomePageState extends State<NotesHomePage>
     );
     if (includingCatalogs != vm.includingCatalogs.value) {
       vm.notes.clear();
-      vm.notesBloc.add(ResponseBlocEvent.loadingNotes());
+      vm.notesBloc.add(ResponseBlocEvent.loading());
       vm.getNotes();
     }
   }

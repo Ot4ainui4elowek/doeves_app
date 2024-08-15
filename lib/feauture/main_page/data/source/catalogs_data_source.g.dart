@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'notes_data_source.dart';
+part of 'catalogs_data_source.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'notes_data_source.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _NotesClientDataSource implements NotesClientDataSource {
-  _NotesClientDataSource(
+class _CatalogsClientDataSource implements CatalogsClientDataSource {
+  _CatalogsClientDataSource(
     this._dio, {
     this.baseUrl,
   });
@@ -19,16 +19,16 @@ class _NotesClientDataSource implements NotesClientDataSource {
   String? baseUrl;
 
   @override
-  Future<HttpResponse<IdResponseModel>> createNote({
-    required String token,
-    required CreateNoteRequestModel note,
+  Future<HttpResponse<IdResponseModel>> createCatalog({
+    required CatalogRequestModel newCatalog,
+    required String jwtToken,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'Authorization': token};
+    final _headers = <String, dynamic>{r'Auntification': jwtToken};
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
-    _data.addAll(note.toJson());
+    _data.addAll(newCatalog.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<HttpResponse<IdResponseModel>>(Options(
       method: 'POST',
@@ -37,7 +37,7 @@ class _NotesClientDataSource implements NotesClientDataSource {
     )
             .compose(
               _dio.options,
-              '/note',
+              '/catalog',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -52,58 +52,28 @@ class _NotesClientDataSource implements NotesClientDataSource {
   }
 
   @override
-  Future<HttpResponse<String>> moveNote({
-    required String token,
-    required int noteId,
-    int? prevNoteId,
+  Future<HttpResponse<List<CatalogResponseModel>>> getCatalogs({
+    required int offset,
+    required int limit,
+    required String jwtToken,
   }) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'prev-note-id': prevNoteId};
-    queryParameters.removeWhere((k, v) => v == null);
-    final _headers = <String, dynamic>{r'Authorization': token};
+    final queryParameters = <String, dynamic>{
+      r'offset': offset,
+      r'limit': limit,
+    };
+    final _headers = <String, dynamic>{r'Auntification': jwtToken};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
-    final _result =
-        await _dio.fetch<String>(_setStreamType<HttpResponse<String>>(Options(
-      method: 'PATCH',
-      headers: _headers,
-      extra: _extra,
-    )
-            .compose(
-              _dio.options,
-              '/note/${noteId}/order-after',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = _result.data!;
-    final httpResponse = HttpResponse(value, _result);
-    return httpResponse;
-  }
-
-  @override
-  Future<HttpResponse<IdResponseModel>> getNote({
-    required String token,
-    required int id,
-  }) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'Authorization': token};
-    _headers.removeWhere((k, v) => v == null);
-    const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<IdResponseModel>>(Options(
+    final _result = await _dio.fetch<List<dynamic>>(
+        _setStreamType<HttpResponse<List<CatalogResponseModel>>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/note/${id}',
+              '/catalog/all',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -112,85 +82,22 @@ class _NotesClientDataSource implements NotesClientDataSource {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = IdResponseModel.fromJson(_result.data!);
+    var value = _result.data!
+        .map((dynamic i) =>
+            CatalogResponseModel.fromJson(i as Map<String, dynamic>))
+        .toList();
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }
 
   @override
-  Future<HttpResponse<String>> editTitle({
-    required String token,
-    required int id,
-    required String newTitle,
-  }) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'val': newTitle};
-    final _headers = <String, dynamic>{r'Authorization': token};
-    _headers.removeWhere((k, v) => v == null);
-    const Map<String, dynamic>? _data = null;
-    final _result =
-        await _dio.fetch<String>(_setStreamType<HttpResponse<String>>(Options(
-      method: 'PATCH',
-      headers: _headers,
-      extra: _extra,
-    )
-            .compose(
-              _dio.options,
-              '/note/${id}/name',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = _result.data!;
-    final httpResponse = HttpResponse(value, _result);
-    return httpResponse;
-  }
-
-  @override
-  Future<HttpResponse<String>> editDescription({
-    required String token,
-    required int id,
-    required String newDescription,
-  }) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'val': newDescription};
-    final _headers = <String, dynamic>{r'Authorization': token};
-    _headers.removeWhere((k, v) => v == null);
-    const Map<String, dynamic>? _data = null;
-    final _result =
-        await _dio.fetch<String>(_setStreamType<HttpResponse<String>>(Options(
-      method: 'PATCH',
-      headers: _headers,
-      extra: _extra,
-    )
-            .compose(
-              _dio.options,
-              '/note/${id}/description',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = _result.data!;
-    final httpResponse = HttpResponse(value, _result);
-    return httpResponse;
-  }
-
-  @override
-  Future<HttpResponse<String>> deleteMultipleNotes({
-    required String token,
+  Future<HttpResponse<String>> deleteCatalog({
+    required String jwtToken,
     required String idList,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'Authorization': token};
+    final _headers = <String, dynamic>{r'Auntification': jwtToken};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
     final _result =
@@ -201,7 +108,7 @@ class _NotesClientDataSource implements NotesClientDataSource {
     )
             .compose(
               _dio.options,
-              '/note/${idList}',
+              '/catalog/${idList}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -216,19 +123,50 @@ class _NotesClientDataSource implements NotesClientDataSource {
   }
 
   @override
-  Future<HttpResponse<List<NoteResponseModel>>> getNotes({
-    required String token,
+  Future<HttpResponse<String>> editCatalogName({
+    required String jwtToken,
+    required String id,
+    required String catalogName,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'val': catalogName};
+    final _headers = <String, dynamic>{r'Auntification': jwtToken};
+    _headers.removeWhere((k, v) => v == null);
+    const Map<String, dynamic>? _data = null;
+    final _result =
+        await _dio.fetch<String>(_setStreamType<HttpResponse<String>>(Options(
+      method: 'PATCH',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/catalog/${id}/name',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = _result.data!;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<List<NoteResponseModel>>> getNotesInCatalog({
     required int offset,
     required int limit,
-    required bool includingCatalogs,
+    required String jwtToken,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'offset': offset,
       r'limit': limit,
-      r'including-catalogs': includingCatalogs,
     };
-    final _headers = <String, dynamic>{r'Authorization': token};
+    final _headers = <String, dynamic>{r'Auntification': jwtToken};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<List<dynamic>>(
@@ -239,7 +177,7 @@ class _NotesClientDataSource implements NotesClientDataSource {
     )
             .compose(
               _dio.options,
-              '/note/all',
+              '/catalog/{id}/notes',
               queryParameters: queryParameters,
               data: _data,
             )

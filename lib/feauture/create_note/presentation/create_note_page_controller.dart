@@ -7,11 +7,11 @@ import 'package:doeves_app/core/presentation/text_fields/controllers/app_text_ed
 import 'package:doeves_app/feauture/create_note/domain/create_note/create_note_bloc.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/create_content_entity.dart';
 import 'package:doeves_app/feauture/create_note/domain/repository/create_note_repository.dart';
-import 'package:doeves_app/feauture/main_page/data/model/create_note_request_model.dart';
-import 'package:doeves_app/feauture/main_page/data/model/create_note_response_model.dart';
-import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
-import 'package:doeves_app/feauture/main_page/data/model/remove_list_of_notes/empty_good_response.dart';
-import 'package:doeves_app/feauture/main_page/data/model/remove_list_of_notes/remove_notes_remote_response.dart';
+import 'package:doeves_app/feauture/main_page/data/model/notes/create_note_request_model.dart';
+import 'package:doeves_app/feauture/main_page/data/model/notes/create_note_response_model.dart';
+import 'package:doeves_app/feauture/main_page/data/model/notes/note_response_model.dart';
+import 'package:doeves_app/feauture/main_page/data/model/notes/remove_list_of_notes/empty_good_response.dart';
+import 'package:doeves_app/feauture/main_page/data/model/notes/remove_list_of_notes/remove_notes_remote_response.dart';
 import 'package:flutter/material.dart';
 import 'package:reactive_variables/reactive_variables.dart';
 
@@ -115,7 +115,7 @@ class CreateNotePageController {
     return await _createNoteRepository.deleteNote(id: id, jwtToken: jwt);
   }
 
-  Future<UseCaseResult<CreateNoteResponseModel>> createNote({
+  Future<UseCaseResult<IdResponseModel>> createNote({
     int? catalogId,
   }) async {
     await Future.delayed(const Duration(seconds: 3));

@@ -126,7 +126,11 @@ final router = GoRouter(
               path: AppRoutes.catalogsPage,
               builder: (context, state) => CatalogsPage(
                 drawerService: AppContainer().serviceScope.drawerService,
-                vm: CatalogsPageViewModel(),
+                vm: CatalogsPageViewModel(
+                  catalogsRepository:
+                      AppContainer().repositoryScope.catalogsRepository,
+                  secureStorage: AppContainer().secureScope.secureStorage,
+                ),
               ),
             ),
           ],

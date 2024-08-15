@@ -2,7 +2,7 @@ import 'package:doeves_app/core/domain/app_error/app_error.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/feauture/main_page/data/source/notes_mocked_data.dart';
 import 'package:doeves_app/feauture/main_page/domain/entity/note_with_content/note_with_content_impl.dart';
-import 'package:doeves_app/feauture/main_page/domain/repository/notes_mocked_repository.dart';
+import 'package:doeves_app/feauture/main_page/domain/repository/notes/notes_mocked_repository.dart';
 
 class NotesMockedRepositoryImpl implements NotesMockedRepository {
   NotesMockedRepositoryImpl({required NotesMockedData data}) : _data = data;

@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:doeves_app/feauture/main_page/data/model/create_note_request_model.dart';
-import 'package:doeves_app/feauture/main_page/data/model/create_note_response_model.dart';
-import 'package:doeves_app/feauture/main_page/data/model/note_response_model.dart';
+import 'package:doeves_app/feauture/main_page/data/model/notes/create_note_request_model.dart';
+import 'package:doeves_app/feauture/main_page/data/model/notes/create_note_response_model.dart';
+import 'package:doeves_app/feauture/main_page/data/model/notes/note_response_model.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'notes_data_source.g.dart';
@@ -24,7 +24,7 @@ abstract class NotesClientDataSource {
   }
 
   @POST('/note')
-  Future<HttpResponse<CreateNoteResponseModel>> createNote({
+  Future<HttpResponse<IdResponseModel>> createNote({
     @Header('Authorization') required String token,
     @Body() required CreateNoteRequestModel note,
   });
@@ -37,7 +37,7 @@ abstract class NotesClientDataSource {
   });
 
   @GET('/note/{id}')
-  Future<HttpResponse<CreateNoteResponseModel>> getNote({
+  Future<HttpResponse<IdResponseModel>> getNote({
     @Header('Authorization') required String token,
     @Path('id') required int id,
   });
