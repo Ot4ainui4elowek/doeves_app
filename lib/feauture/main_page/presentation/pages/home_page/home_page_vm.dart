@@ -42,7 +42,7 @@ class NotesHomePageViewModel {
 
   final notificationService = SnackBarNotificationServiceImpl();
 
-  void init() async {
+  Future<void> init() async {
     if (_noteTransferObject != null) {
       log('transfer object');
     }

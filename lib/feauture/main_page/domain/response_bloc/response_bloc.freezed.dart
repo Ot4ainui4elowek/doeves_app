@@ -20,8 +20,8 @@ mixin _$ResponseBlocEvent<T> {
   TResult when<TResult extends Object?>({
     required TResult Function(
             UseCaseResult<ListResponseModel<T>> result, bool initialListIsEmpty)
-        fetchNotes,
-    required TResult Function() loadingNotes,
+        fetch,
+    required TResult Function() loading,
     required TResult Function() emptyResponse,
     required TResult Function() resetToInitialState,
     required TResult Function() clearState,
@@ -31,8 +31,8 @@ mixin _$ResponseBlocEvent<T> {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(UseCaseResult<ListResponseModel<T>> result,
             bool initialListIsEmpty)?
-        fetchNotes,
-    TResult? Function()? loadingNotes,
+        fetch,
+    TResult? Function()? loading,
     TResult? Function()? emptyResponse,
     TResult? Function()? resetToInitialState,
     TResult? Function()? clearState,
@@ -42,8 +42,8 @@ mixin _$ResponseBlocEvent<T> {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(UseCaseResult<ListResponseModel<T>> result,
             bool initialListIsEmpty)?
-        fetchNotes,
-    TResult Function()? loadingNotes,
+        fetch,
+    TResult Function()? loading,
     TResult Function()? emptyResponse,
     TResult Function()? resetToInitialState,
     TResult Function()? clearState,
@@ -52,8 +52,8 @@ mixin _$ResponseBlocEvent<T> {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(FetchDataEvent<T> value) fetchNotes,
-    required TResult Function(LoadingEvent<T> value) loadingNotes,
+    required TResult Function(FetchDataEvent<T> value) fetch,
+    required TResult Function(LoadingEvent<T> value) loading,
     required TResult Function(EmptyResponseEvent<T> value) emptyResponse,
     required TResult Function(ResetToInitialStateEvent<T> value)
         resetToInitialState,
@@ -62,8 +62,8 @@ mixin _$ResponseBlocEvent<T> {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(FetchDataEvent<T> value)? fetchNotes,
-    TResult? Function(LoadingEvent<T> value)? loadingNotes,
+    TResult? Function(FetchDataEvent<T> value)? fetch,
+    TResult? Function(LoadingEvent<T> value)? loading,
     TResult? Function(EmptyResponseEvent<T> value)? emptyResponse,
     TResult? Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
     TResult? Function(ClearStateEvent<T> value)? clearState,
@@ -71,8 +71,8 @@ mixin _$ResponseBlocEvent<T> {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(FetchDataEvent<T> value)? fetchNotes,
-    TResult Function(LoadingEvent<T> value)? loadingNotes,
+    TResult Function(FetchDataEvent<T> value)? fetch,
+    TResult Function(LoadingEvent<T> value)? loading,
     TResult Function(EmptyResponseEvent<T> value)? emptyResponse,
     TResult Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
     TResult Function(ClearStateEvent<T> value)? clearState,
@@ -150,7 +150,7 @@ class _$FetchDataEventImpl<T> implements FetchDataEvent<T> {
 
   @override
   String toString() {
-    return 'ResponseBlocEvent<$T>.fetchNotes(result: $result, initialListIsEmpty: $initialListIsEmpty)';
+    return 'ResponseBlocEvent<$T>.fetch(result: $result, initialListIsEmpty: $initialListIsEmpty)';
   }
 
   @override
@@ -178,13 +178,13 @@ class _$FetchDataEventImpl<T> implements FetchDataEvent<T> {
   TResult when<TResult extends Object?>({
     required TResult Function(
             UseCaseResult<ListResponseModel<T>> result, bool initialListIsEmpty)
-        fetchNotes,
-    required TResult Function() loadingNotes,
+        fetch,
+    required TResult Function() loading,
     required TResult Function() emptyResponse,
     required TResult Function() resetToInitialState,
     required TResult Function() clearState,
   }) {
-    return fetchNotes(result, initialListIsEmpty);
+    return fetch(result, initialListIsEmpty);
   }
 
   @override
@@ -192,13 +192,13 @@ class _$FetchDataEventImpl<T> implements FetchDataEvent<T> {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(UseCaseResult<ListResponseModel<T>> result,
             bool initialListIsEmpty)?
-        fetchNotes,
-    TResult? Function()? loadingNotes,
+        fetch,
+    TResult? Function()? loading,
     TResult? Function()? emptyResponse,
     TResult? Function()? resetToInitialState,
     TResult? Function()? clearState,
   }) {
-    return fetchNotes?.call(result, initialListIsEmpty);
+    return fetch?.call(result, initialListIsEmpty);
   }
 
   @override
@@ -206,15 +206,15 @@ class _$FetchDataEventImpl<T> implements FetchDataEvent<T> {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(UseCaseResult<ListResponseModel<T>> result,
             bool initialListIsEmpty)?
-        fetchNotes,
-    TResult Function()? loadingNotes,
+        fetch,
+    TResult Function()? loading,
     TResult Function()? emptyResponse,
     TResult Function()? resetToInitialState,
     TResult Function()? clearState,
     required TResult orElse(),
   }) {
-    if (fetchNotes != null) {
-      return fetchNotes(result, initialListIsEmpty);
+    if (fetch != null) {
+      return fetch(result, initialListIsEmpty);
     }
     return orElse();
   }
@@ -222,40 +222,40 @@ class _$FetchDataEventImpl<T> implements FetchDataEvent<T> {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(FetchDataEvent<T> value) fetchNotes,
-    required TResult Function(LoadingEvent<T> value) loadingNotes,
+    required TResult Function(FetchDataEvent<T> value) fetch,
+    required TResult Function(LoadingEvent<T> value) loading,
     required TResult Function(EmptyResponseEvent<T> value) emptyResponse,
     required TResult Function(ResetToInitialStateEvent<T> value)
         resetToInitialState,
     required TResult Function(ClearStateEvent<T> value) clearState,
   }) {
-    return fetchNotes(this);
+    return fetch(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(FetchDataEvent<T> value)? fetchNotes,
-    TResult? Function(LoadingEvent<T> value)? loadingNotes,
+    TResult? Function(FetchDataEvent<T> value)? fetch,
+    TResult? Function(LoadingEvent<T> value)? loading,
     TResult? Function(EmptyResponseEvent<T> value)? emptyResponse,
     TResult? Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
     TResult? Function(ClearStateEvent<T> value)? clearState,
   }) {
-    return fetchNotes?.call(this);
+    return fetch?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(FetchDataEvent<T> value)? fetchNotes,
-    TResult Function(LoadingEvent<T> value)? loadingNotes,
+    TResult Function(FetchDataEvent<T> value)? fetch,
+    TResult Function(LoadingEvent<T> value)? loading,
     TResult Function(EmptyResponseEvent<T> value)? emptyResponse,
     TResult Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
     TResult Function(ClearStateEvent<T> value)? clearState,
     required TResult orElse(),
   }) {
-    if (fetchNotes != null) {
-      return fetchNotes(this);
+    if (fetch != null) {
+      return fetch(this);
     }
     return orElse();
   }
@@ -296,7 +296,7 @@ class _$LoadingEventImpl<T> implements LoadingEvent<T> {
 
   @override
   String toString() {
-    return 'ResponseBlocEvent<$T>.loadingNotes()';
+    return 'ResponseBlocEvent<$T>.loading()';
   }
 
   @override
@@ -313,13 +313,13 @@ class _$LoadingEventImpl<T> implements LoadingEvent<T> {
   TResult when<TResult extends Object?>({
     required TResult Function(
             UseCaseResult<ListResponseModel<T>> result, bool initialListIsEmpty)
-        fetchNotes,
-    required TResult Function() loadingNotes,
+        fetch,
+    required TResult Function() loading,
     required TResult Function() emptyResponse,
     required TResult Function() resetToInitialState,
     required TResult Function() clearState,
   }) {
-    return loadingNotes();
+    return loading();
   }
 
   @override
@@ -327,13 +327,13 @@ class _$LoadingEventImpl<T> implements LoadingEvent<T> {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(UseCaseResult<ListResponseModel<T>> result,
             bool initialListIsEmpty)?
-        fetchNotes,
-    TResult? Function()? loadingNotes,
+        fetch,
+    TResult? Function()? loading,
     TResult? Function()? emptyResponse,
     TResult? Function()? resetToInitialState,
     TResult? Function()? clearState,
   }) {
-    return loadingNotes?.call();
+    return loading?.call();
   }
 
   @override
@@ -341,15 +341,15 @@ class _$LoadingEventImpl<T> implements LoadingEvent<T> {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(UseCaseResult<ListResponseModel<T>> result,
             bool initialListIsEmpty)?
-        fetchNotes,
-    TResult Function()? loadingNotes,
+        fetch,
+    TResult Function()? loading,
     TResult Function()? emptyResponse,
     TResult Function()? resetToInitialState,
     TResult Function()? clearState,
     required TResult orElse(),
   }) {
-    if (loadingNotes != null) {
-      return loadingNotes();
+    if (loading != null) {
+      return loading();
     }
     return orElse();
   }
@@ -357,40 +357,40 @@ class _$LoadingEventImpl<T> implements LoadingEvent<T> {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(FetchDataEvent<T> value) fetchNotes,
-    required TResult Function(LoadingEvent<T> value) loadingNotes,
+    required TResult Function(FetchDataEvent<T> value) fetch,
+    required TResult Function(LoadingEvent<T> value) loading,
     required TResult Function(EmptyResponseEvent<T> value) emptyResponse,
     required TResult Function(ResetToInitialStateEvent<T> value)
         resetToInitialState,
     required TResult Function(ClearStateEvent<T> value) clearState,
   }) {
-    return loadingNotes(this);
+    return loading(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(FetchDataEvent<T> value)? fetchNotes,
-    TResult? Function(LoadingEvent<T> value)? loadingNotes,
+    TResult? Function(FetchDataEvent<T> value)? fetch,
+    TResult? Function(LoadingEvent<T> value)? loading,
     TResult? Function(EmptyResponseEvent<T> value)? emptyResponse,
     TResult? Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
     TResult? Function(ClearStateEvent<T> value)? clearState,
   }) {
-    return loadingNotes?.call(this);
+    return loading?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(FetchDataEvent<T> value)? fetchNotes,
-    TResult Function(LoadingEvent<T> value)? loadingNotes,
+    TResult Function(FetchDataEvent<T> value)? fetch,
+    TResult Function(LoadingEvent<T> value)? loading,
     TResult Function(EmptyResponseEvent<T> value)? emptyResponse,
     TResult Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
     TResult Function(ClearStateEvent<T> value)? clearState,
     required TResult orElse(),
   }) {
-    if (loadingNotes != null) {
-      return loadingNotes(this);
+    if (loading != null) {
+      return loading(this);
     }
     return orElse();
   }
@@ -442,8 +442,8 @@ class _$EmptyResponseEventImpl<T> implements EmptyResponseEvent<T> {
   TResult when<TResult extends Object?>({
     required TResult Function(
             UseCaseResult<ListResponseModel<T>> result, bool initialListIsEmpty)
-        fetchNotes,
-    required TResult Function() loadingNotes,
+        fetch,
+    required TResult Function() loading,
     required TResult Function() emptyResponse,
     required TResult Function() resetToInitialState,
     required TResult Function() clearState,
@@ -456,8 +456,8 @@ class _$EmptyResponseEventImpl<T> implements EmptyResponseEvent<T> {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(UseCaseResult<ListResponseModel<T>> result,
             bool initialListIsEmpty)?
-        fetchNotes,
-    TResult? Function()? loadingNotes,
+        fetch,
+    TResult? Function()? loading,
     TResult? Function()? emptyResponse,
     TResult? Function()? resetToInitialState,
     TResult? Function()? clearState,
@@ -470,8 +470,8 @@ class _$EmptyResponseEventImpl<T> implements EmptyResponseEvent<T> {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(UseCaseResult<ListResponseModel<T>> result,
             bool initialListIsEmpty)?
-        fetchNotes,
-    TResult Function()? loadingNotes,
+        fetch,
+    TResult Function()? loading,
     TResult Function()? emptyResponse,
     TResult Function()? resetToInitialState,
     TResult Function()? clearState,
@@ -486,8 +486,8 @@ class _$EmptyResponseEventImpl<T> implements EmptyResponseEvent<T> {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(FetchDataEvent<T> value) fetchNotes,
-    required TResult Function(LoadingEvent<T> value) loadingNotes,
+    required TResult Function(FetchDataEvent<T> value) fetch,
+    required TResult Function(LoadingEvent<T> value) loading,
     required TResult Function(EmptyResponseEvent<T> value) emptyResponse,
     required TResult Function(ResetToInitialStateEvent<T> value)
         resetToInitialState,
@@ -499,8 +499,8 @@ class _$EmptyResponseEventImpl<T> implements EmptyResponseEvent<T> {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(FetchDataEvent<T> value)? fetchNotes,
-    TResult? Function(LoadingEvent<T> value)? loadingNotes,
+    TResult? Function(FetchDataEvent<T> value)? fetch,
+    TResult? Function(LoadingEvent<T> value)? loading,
     TResult? Function(EmptyResponseEvent<T> value)? emptyResponse,
     TResult? Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
     TResult? Function(ClearStateEvent<T> value)? clearState,
@@ -511,8 +511,8 @@ class _$EmptyResponseEventImpl<T> implements EmptyResponseEvent<T> {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(FetchDataEvent<T> value)? fetchNotes,
-    TResult Function(LoadingEvent<T> value)? loadingNotes,
+    TResult Function(FetchDataEvent<T> value)? fetch,
+    TResult Function(LoadingEvent<T> value)? loading,
     TResult Function(EmptyResponseEvent<T> value)? emptyResponse,
     TResult Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
     TResult Function(ClearStateEvent<T> value)? clearState,
@@ -573,8 +573,8 @@ class _$ResetToInitialStateEventImpl<T> implements ResetToInitialStateEvent<T> {
   TResult when<TResult extends Object?>({
     required TResult Function(
             UseCaseResult<ListResponseModel<T>> result, bool initialListIsEmpty)
-        fetchNotes,
-    required TResult Function() loadingNotes,
+        fetch,
+    required TResult Function() loading,
     required TResult Function() emptyResponse,
     required TResult Function() resetToInitialState,
     required TResult Function() clearState,
@@ -587,8 +587,8 @@ class _$ResetToInitialStateEventImpl<T> implements ResetToInitialStateEvent<T> {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(UseCaseResult<ListResponseModel<T>> result,
             bool initialListIsEmpty)?
-        fetchNotes,
-    TResult? Function()? loadingNotes,
+        fetch,
+    TResult? Function()? loading,
     TResult? Function()? emptyResponse,
     TResult? Function()? resetToInitialState,
     TResult? Function()? clearState,
@@ -601,8 +601,8 @@ class _$ResetToInitialStateEventImpl<T> implements ResetToInitialStateEvent<T> {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(UseCaseResult<ListResponseModel<T>> result,
             bool initialListIsEmpty)?
-        fetchNotes,
-    TResult Function()? loadingNotes,
+        fetch,
+    TResult Function()? loading,
     TResult Function()? emptyResponse,
     TResult Function()? resetToInitialState,
     TResult Function()? clearState,
@@ -617,8 +617,8 @@ class _$ResetToInitialStateEventImpl<T> implements ResetToInitialStateEvent<T> {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(FetchDataEvent<T> value) fetchNotes,
-    required TResult Function(LoadingEvent<T> value) loadingNotes,
+    required TResult Function(FetchDataEvent<T> value) fetch,
+    required TResult Function(LoadingEvent<T> value) loading,
     required TResult Function(EmptyResponseEvent<T> value) emptyResponse,
     required TResult Function(ResetToInitialStateEvent<T> value)
         resetToInitialState,
@@ -630,8 +630,8 @@ class _$ResetToInitialStateEventImpl<T> implements ResetToInitialStateEvent<T> {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(FetchDataEvent<T> value)? fetchNotes,
-    TResult? Function(LoadingEvent<T> value)? loadingNotes,
+    TResult? Function(FetchDataEvent<T> value)? fetch,
+    TResult? Function(LoadingEvent<T> value)? loading,
     TResult? Function(EmptyResponseEvent<T> value)? emptyResponse,
     TResult? Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
     TResult? Function(ClearStateEvent<T> value)? clearState,
@@ -642,8 +642,8 @@ class _$ResetToInitialStateEventImpl<T> implements ResetToInitialStateEvent<T> {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(FetchDataEvent<T> value)? fetchNotes,
-    TResult Function(LoadingEvent<T> value)? loadingNotes,
+    TResult Function(FetchDataEvent<T> value)? fetch,
+    TResult Function(LoadingEvent<T> value)? loading,
     TResult Function(EmptyResponseEvent<T> value)? emptyResponse,
     TResult Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
     TResult Function(ClearStateEvent<T> value)? clearState,
@@ -700,8 +700,8 @@ class _$ClearStateEventImpl<T> implements ClearStateEvent<T> {
   TResult when<TResult extends Object?>({
     required TResult Function(
             UseCaseResult<ListResponseModel<T>> result, bool initialListIsEmpty)
-        fetchNotes,
-    required TResult Function() loadingNotes,
+        fetch,
+    required TResult Function() loading,
     required TResult Function() emptyResponse,
     required TResult Function() resetToInitialState,
     required TResult Function() clearState,
@@ -714,8 +714,8 @@ class _$ClearStateEventImpl<T> implements ClearStateEvent<T> {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(UseCaseResult<ListResponseModel<T>> result,
             bool initialListIsEmpty)?
-        fetchNotes,
-    TResult? Function()? loadingNotes,
+        fetch,
+    TResult? Function()? loading,
     TResult? Function()? emptyResponse,
     TResult? Function()? resetToInitialState,
     TResult? Function()? clearState,
@@ -728,8 +728,8 @@ class _$ClearStateEventImpl<T> implements ClearStateEvent<T> {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(UseCaseResult<ListResponseModel<T>> result,
             bool initialListIsEmpty)?
-        fetchNotes,
-    TResult Function()? loadingNotes,
+        fetch,
+    TResult Function()? loading,
     TResult Function()? emptyResponse,
     TResult Function()? resetToInitialState,
     TResult Function()? clearState,
@@ -744,8 +744,8 @@ class _$ClearStateEventImpl<T> implements ClearStateEvent<T> {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(FetchDataEvent<T> value) fetchNotes,
-    required TResult Function(LoadingEvent<T> value) loadingNotes,
+    required TResult Function(FetchDataEvent<T> value) fetch,
+    required TResult Function(LoadingEvent<T> value) loading,
     required TResult Function(EmptyResponseEvent<T> value) emptyResponse,
     required TResult Function(ResetToInitialStateEvent<T> value)
         resetToInitialState,
@@ -757,8 +757,8 @@ class _$ClearStateEventImpl<T> implements ClearStateEvent<T> {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(FetchDataEvent<T> value)? fetchNotes,
-    TResult? Function(LoadingEvent<T> value)? loadingNotes,
+    TResult? Function(FetchDataEvent<T> value)? fetch,
+    TResult? Function(LoadingEvent<T> value)? loading,
     TResult? Function(EmptyResponseEvent<T> value)? emptyResponse,
     TResult? Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
     TResult? Function(ClearStateEvent<T> value)? clearState,
@@ -769,8 +769,8 @@ class _$ClearStateEventImpl<T> implements ClearStateEvent<T> {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(FetchDataEvent<T> value)? fetchNotes,
-    TResult Function(LoadingEvent<T> value)? loadingNotes,
+    TResult Function(FetchDataEvent<T> value)? fetch,
+    TResult Function(LoadingEvent<T> value)? loading,
     TResult Function(EmptyResponseEvent<T> value)? emptyResponse,
     TResult Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
     TResult Function(ClearStateEvent<T> value)? clearState,

@@ -27,25 +27,25 @@ abstract class CatalogsClientDataSource {
   @POST('/catalog')
   Future<HttpResponse<IdResponseModel>> createCatalog({
     @Body() required CatalogRequestModel newCatalog,
-    @Header('Auntification') required String jwtToken,
+    @Header('Authorization') required String jwtToken,
   });
 
   @GET('/catalog/all')
   Future<HttpResponse<List<CatalogResponseModel>>> getCatalogs({
     @Query('offset') required int offset,
     @Query('limit') required int limit,
-    @Header('Auntification') required String jwtToken,
+    @Header('Authorization') required String jwtToken,
   });
 
   @DELETE('/catalog/{id}')
   Future<HttpResponse<String>> deleteCatalog({
-    @Header('Auntification') required String jwtToken,
+    @Header('Authorization') required String jwtToken,
     @Path('id') required String idList,
   });
 
   @PATCH('/catalog/{id}/name')
   Future<HttpResponse<String>> editCatalogName({
-    @Header('Auntification') required String jwtToken,
+    @Header('Authorization') required String jwtToken,
     @Path('id') required String id,
     @Query('val') required String catalogName,
   });
@@ -54,6 +54,6 @@ abstract class CatalogsClientDataSource {
   Future<HttpResponse<List<NoteResponseModel>>> getNotesInCatalog({
     @Query('offset') required int offset,
     @Query('limit') required int limit,
-    @Header('Auntification') required String jwtToken,
+    @Header('Authorization') required String jwtToken,
   });
 }

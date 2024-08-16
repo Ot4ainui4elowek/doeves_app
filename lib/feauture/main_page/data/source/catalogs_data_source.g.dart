@@ -25,7 +25,7 @@ class _CatalogsClientDataSource implements CatalogsClientDataSource {
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'Auntification': jwtToken};
+    final _headers = <String, dynamic>{r'Authorization': jwtToken};
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(newCatalog.toJson());
@@ -62,7 +62,7 @@ class _CatalogsClientDataSource implements CatalogsClientDataSource {
       r'offset': offset,
       r'limit': limit,
     };
-    final _headers = <String, dynamic>{r'Auntification': jwtToken};
+    final _headers = <String, dynamic>{r'Authorization': jwtToken};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<List<dynamic>>(
@@ -97,7 +97,7 @@ class _CatalogsClientDataSource implements CatalogsClientDataSource {
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'Auntification': jwtToken};
+    final _headers = <String, dynamic>{r'Authorization': jwtToken};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
     final _result =
@@ -130,7 +130,7 @@ class _CatalogsClientDataSource implements CatalogsClientDataSource {
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'val': catalogName};
-    final _headers = <String, dynamic>{r'Auntification': jwtToken};
+    final _headers = <String, dynamic>{r'Authorization': jwtToken};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
     final _result =
@@ -166,7 +166,7 @@ class _CatalogsClientDataSource implements CatalogsClientDataSource {
       r'offset': offset,
       r'limit': limit,
     };
-    final _headers = <String, dynamic>{r'Auntification': jwtToken};
+    final _headers = <String, dynamic>{r'Authorization': jwtToken};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<List<dynamic>>(
