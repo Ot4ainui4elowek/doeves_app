@@ -3,34 +3,39 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:reactive_variables/reactive_variables.dart';
 
-abstract class PaginationSelectableListViewModel {
+class PaginationSelectableListController<T, D> {
+  PaginationSelectableListController({
+    required this.checkAllEntitysIsSelected,
+    required this.entitysList,
+    required this.getEntitys,
+    required this.selectedEntitysList,
+  });
+
   final ScrollController scrollController = ScrollController();
 
   final isSelectedMode = false.rv;
 
   final isLoading = false.rv;
 
-  abstract final Rv<List> entitysList;
-  abstract final Rv<List> selectedEntitysList;
+  final Rv<List<T>> entitysList;
+  final Rv<List<D>> selectedEntitysList;
+  final Future<void> Function() getEntitys;
+  final void Function() checkAllEntitysIsSelected;
 
   void init() {
     log('init');
     scrollController.addListener(checkScroll);
     isSelectedMode.addListener(clearSelectedLsit);
-    entitysList.addListener(checkAllNotesIsSelected);
-    selectedEntitysList.addListener(checkAllNotesIsSelected);
+    entitysList.addListener(checkAllEntitysIsSelected);
+    selectedEntitysList.addListener(checkAllEntitysIsSelected);
   }
 
   void dispose() {
     scrollController.removeListener(checkScroll);
     isSelectedMode.removeListener(clearSelectedLsit);
-    entitysList.removeListener(checkAllNotesIsSelected);
-    selectedEntitysList.removeListener(checkAllNotesIsSelected);
+    entitysList.removeListener(checkAllEntitysIsSelected);
+    selectedEntitysList.removeListener(checkAllEntitysIsSelected);
   }
-
-  Future<void> getEntitys();
-
-  void checkAllNotesIsSelected();
 
   void clearSelectedLsit() {
     if (!isSelectedMode.value) {

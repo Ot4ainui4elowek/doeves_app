@@ -105,9 +105,8 @@ class NotesHomePageViewModel {
     selectedNotesList.addAll(notes.value.map((note) => note.id));
   }
 
-  void performActionOnNote(
-      {required bool deleteNotesListContainNote, required int id}) {
-    deleteNotesListContainNote
+  void _performActionOnNote(int id) {
+    checkDelteNotesListContainsNote(id)
         ? _removeNoteInSelectedNotesList(id)
         : _addNoteInSelectedNotesList(id);
   }
@@ -203,11 +202,7 @@ class NotesHomePageViewModel {
   FutureOr<void> onPressedNote(
       {required int index, required BuildContext context}) async {
     if (isSelectNotesMode.value) {
-      performActionOnNote(
-        id: notes[index].id,
-        deleteNotesListContainNote:
-            checkDelteNotesListContainsNote(notes[index].id),
-      );
+      _performActionOnNote(notes[index].id);
     } else {
       _noteTransferObjectHandler(await context.pushNamed(
         AppRoutes.createNotePage,

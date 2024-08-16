@@ -9,14 +9,23 @@ import 'package:doeves_app/feauture/main_page/data/model/catalogs/catalogs_list_
 import 'package:doeves_app/feauture/main_page/domain/repository/catalogs/catalogs_repository.dart';
 import 'package:doeves_app/feauture/main_page/domain/response_bloc/response_bloc.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/vm/pagination_selectable_list_vm.dart';
+import 'package:flutter/material.dart';
 import 'package:reactive_variables/reactive_variables.dart';
 
-class CatalogsPageViewModel extends PaginationSelectableListViewModel {
+class CatalogsPageViewModel {
   CatalogsPageViewModel({
     required CatalogsRepository catalogsRepository,
     required SecureStorage secureStorage,
   })  : _secureStorage = secureStorage,
-        _catalogsRepository = catalogsRepository;
+        _catalogsRepository = catalogsRepository {
+    _paginationSelectableList = PaginationSelectableListController(
+      checkAllEntitysIsSelected: _checkAllNotesIsSelected,
+      entitysList: catalogsList,
+      getEntitys: getEntitys,
+      selectedEntitysList: selectedList,
+    );
+    log('$_paginationSelectableList');
+  }
 
   final CatalogsRepository _catalogsRepository;
 
@@ -27,16 +36,29 @@ class CatalogsPageViewModel extends PaginationSelectableListViewModel {
 
   final catalogsBloc = ResponseBloc();
 
-  @override
   void init() {
     catalogsBloc.add(ResponseBlocEvent.loading());
-    getCatalogs();
-    super.init();
+    _getCatalogs();
+    _paginationSelectableList.init();
   }
+
+  void dispose() {
+    _paginationSelectableList.dispose();
+  }
+
+  ScrollController get scrollController =>
+      _paginationSelectableList.scrollController;
+
+  Rv<bool> get isSelectedMode => _paginationSelectableList.isSelectedMode;
+
+  late final PaginationSelectableListController<CatalogResponseModel, int>
+      _paginationSelectableList;
 
   final _limit = 10.rv;
 
-  Future<void> getCatalogs() async {
+  final isLoading = false.rv;
+
+  Future<void> _getCatalogs() async {
     isLoading(true);
     catalogsBloc.add(ResponseBlocEvent.loading());
     final jwtToken = await _secureStorage.readToken();
@@ -60,32 +82,50 @@ class CatalogsPageViewModel extends PaginationSelectableListViewModel {
         result: result, initialListIsEmpty: catalogsList.isEmpty));
   }
 
+  void onPressedCatalog(
+    int id,
+  ) {
+    if (isSelectedMode.value) {
+      _onPressedCatalogSelectedMode(id);
+    } else {
+      log('open');
+    }
+  }
+
+  void _onPressedCatalogSelectedMode(int id) {
+    if (selectedList.value.contains(id)) {
+      selectedList.remove(id);
+    } else {
+      selectedList.add(id);
+    }
+  }
+
   Future<void> refreshCatalogs() async {
     catalogsList.clear();
-    await getCatalogs();
+    await _getCatalogs();
   }
 
   final Rv<List<int>> selectedList = Rv([]);
 
   final Rv<List<CatalogResponseModel>> catalogsList = Rv([]);
 
-  @override
   Future<void> getEntitys() async {
     catalogsBloc.add(ResponseBlocEvent.loading());
-    await getCatalogs();
+    await _getCatalogs();
   }
-
-  @override
-  Rv<List> get entitysList => catalogsList;
 
   final allCatalogsIsSelected = false.rv;
 
-  @override
-  void checkAllNotesIsSelected() {
+  void onPressedSelectAllButton() {
+    if (allCatalogsIsSelected.value) {
+      selectedList.clear();
+    } else {
+      selectedList.addAll(catalogsList.map((catalog) => catalog.id));
+    }
+  }
+
+  void _checkAllNotesIsSelected() {
     allCatalogsIsSelected(
         catalogsList.length == selectedList.length && catalogsList.isNotEmpty);
   }
-
-  @override
-  Rv<List> get selectedEntitysList => selectedList;
 }

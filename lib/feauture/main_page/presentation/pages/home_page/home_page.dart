@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/presentation/animated_visibility.dart';
 import 'package:doeves_app/core/presentation/buttons/app_elevated_button.dart';
@@ -17,10 +15,10 @@ import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/searc
 import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/select_all_button.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/selection_mode_button.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/notes/note_with_content_widget.dart';
+import 'package:doeves_app/feauture/main_page/presentation/widgets/response_bloc_buidler.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/selectable_container.dart';
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reactive_variables/reactive_variables.dart';
 
@@ -118,45 +116,11 @@ class _NotesHomePageState extends State<NotesHomePage>
             minHeight: vm.notes.isEmpty
                 ? MediaQuery.of(context).size.height - 300
                 : 0),
-        child: Center(
-          child: Container(
-            margin: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-            child: BlocBuilder(
-              bloc: vm.notesBloc,
-              builder: (context, state) => vm.notesBloc.state.maybeWhen(
-                orElse: () => const SizedBox(height: 0),
-                initial: () => Text(
-                  'You don\'t have any notes. Add them and they will appear here.',
-                  style: AppTextTheme.textXl(weight: TextWeight.medium),
-                ),
-                loading: () => AppLogoAnimated(
-                  curve: Curves.linear,
-                  repeat: true,
-                  width: min(MediaQuery.of(context).size.width, 200),
-                ),
-                emptyResponse: () => Text(
-                  'All notes are loaded!',
-                  style: AppTextTheme.textXl(weight: TextWeight.medium),
-                ),
-                error: (error) => Column(
-                  children: [
-                    Icon(
-                      Icons.error_outline,
-                      color: Theme.of(context).colorScheme.error,
-                      size: 50,
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      error.code,
-                      textAlign: TextAlign.center,
-                      style: AppTextTheme.textXl(weight: TextWeight.medium)
-                          .copyWith(color: Theme.of(context).colorScheme.error),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+        child: ResponseBlocBuidler(
+          bloc: vm.notesBloc,
+          emptyResponseText: 'All notes are loaded!',
+          epmtyListText:
+              'You don\'t have any notes. Add them and they will appear here.',
         ),
       );
 
