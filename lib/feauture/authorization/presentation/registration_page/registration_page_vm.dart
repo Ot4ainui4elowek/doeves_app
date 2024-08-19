@@ -56,7 +56,7 @@ class RegistrationPageViewModel {
     final signUpResponse = await strategy();
     if (context.mounted) {
       _notificationService.responseNotification(
-          response: signUpResponse,
+          result: signUpResponse,
           context: context,
           goodUseCaseMessage: 'the user was created successfully');
     }

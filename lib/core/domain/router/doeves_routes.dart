@@ -15,4 +15,6 @@ abstract class AppRoutes {
   static const goToVerificationPage =
       '${AppRoutes.loginPage}/${AppRoutes.verificationPage}';
   static const operationStatusPage = '/operation-status-page';
+
+  static const createCatalogPage = '/catalog';
 }

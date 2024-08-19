@@ -7,11 +7,11 @@ import 'package:flutter/material.dart';
 class SnackBarNotificationServiceImpl implements NotificationService {
   @override
   Future<void> responseNotification({
-    required UseCaseResult response,
+    required UseCaseResult result,
     required BuildContext context,
     required String goodUseCaseMessage,
   }) async {
-    switch (response) {
+    switch (result) {
       case GoodUseCaseResult():
         {
           showNotification(

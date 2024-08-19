@@ -19,7 +19,7 @@ abstract interface class CatalogsRepository {
 
   Future<UseCaseResult<EmptyGoodResponse>> deleteCatalog({
     required String jwtToken,
-    required String idList,
+    required List<int> idList,
   });
 
   Future<UseCaseResult<EmptyGoodResponse>> editCatalogName({

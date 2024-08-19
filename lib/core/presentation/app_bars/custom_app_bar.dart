@@ -31,7 +31,7 @@ class CustomAppBar extends AppBar {
               border: isSelected
                   ? Border.all(
                       color: Theme.of(context).colorScheme.primary,
-                      strokeAlign: BorderSide.strokeAlignOutside)
+                      strokeAlign: BorderSide.strokeAlignInside)
                   : null,
             ),
             child: Flex(

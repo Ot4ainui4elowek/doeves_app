@@ -1,5 +1,6 @@
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/presentation/animated_visibility.dart';
+import 'package:doeves_app/core/presentation/buttons/app_elevated_button.dart';
 import 'package:doeves_app/core/presentation/counter_widget.dart';
 import 'package:doeves_app/core/presentation/scrollable_row.dart';
 import 'package:doeves_app/feauture/app_drawer/presentation/drawer_service.dart';
@@ -62,12 +63,14 @@ class _CatalogsPageState extends State<CatalogsPage> {
           (context, value) => AnimatedVisibility(
             visible: value,
             child: Container(
+              constraints: const BoxConstraints(maxHeight: 44),
               decoration:
                   BoxDecoration(borderRadius: BorderRadius.circular(28)),
               clipBehavior: Clip.antiAlias,
               child: ScrollableRow(
                 children: [
                   _selectAllCatalogsBuilder,
+                  _deleteCatalogsButtonBuilder,
                 ],
               ),
             ),
@@ -76,18 +79,27 @@ class _CatalogsPageState extends State<CatalogsPage> {
       );
 
   Widget get _selectAllCatalogsBuilder => Obs(
-        rvList: [vm.isSelectedMode, vm.catalogsList, vm.allCatalogsIsSelected],
-        builder: (context) => AnimatedVisibility(
-            visible: vm.isSelectedMode.value,
-            child: Container(
-              margin: const EdgeInsets.only(right: 10),
-              child: SelectAllButton(
-                listIsSelected: vm.allCatalogsIsSelected.value,
-                onPressed: vm.catalogsList.isNotEmpty && vm.isSelectedMode.value
-                    ? vm.onPressedSelectAllButton
-                    : null,
-              ),
-            )),
+        rvList: [vm.catalogsList, vm.allCatalogsIsSelected],
+        builder: (context) => Container(
+          margin: const EdgeInsets.only(right: 10),
+          child: SelectAllButton(
+            listIsSelected: vm.allCatalogsIsSelected.value,
+            onPressed: vm.catalogsList.isNotEmpty && vm.isSelectedMode.value
+                ? vm.onPressedSelectAllButton
+                : null,
+          ),
+        ),
+      );
+
+  Widget get _deleteCatalogsButtonBuilder => Obs(
+        rvList: [vm.selectedList],
+        builder: (context) => AppElevatedButton(
+          mini: true,
+          onPressed: vm.selectedList.isNotEmpty
+              ? () => vm.deleteCatalogs(context)
+              : null,
+          child: const Icon(Icons.delete_outline_rounded),
+        ),
       );
 
   PreferredSizeWidget get _bottomAppBarBuilder => AppBar(
@@ -111,20 +123,21 @@ class _CatalogsPageState extends State<CatalogsPage> {
         ),
       );
 
-  Widget get _refreshButtonBuilder => Visibility(
-        visible: !DeviceInfo.checkIsTouchDevice(context),
-        child: Container(
-          margin: const EdgeInsets.only(right: 10),
-          child: RefreshButton(
-            onPressed: vm.refreshCatalogs,
+  Widget get _refreshButtonBuilder => Obs(
+        rvList: [vm.isSelectedMode],
+        builder: (context) => Visibility(
+          visible: !DeviceInfo.checkIsTouchDevice(context),
+          child: Container(
+            margin: const EdgeInsets.only(right: 10),
+            child: RefreshButton(
+              onPressed: !vm.isSelectedMode.value ? vm.refreshCatalogs : null,
+            ),
           ),
         ),
       );
 
-  Widget get _searchButtonBuilder => Expanded(
-        child: SearchButton(
-          onPressed: () => context.push(AppRoutes.notesSearchPage),
-        ),
+  Widget get _searchButtonBuilder => SearchButton(
+        onPressed: () => context.push(AppRoutes.notesSearchPage),
       );
 
   SliverAppBar get _appBarBuilder => SliverAppBar(
@@ -136,15 +149,20 @@ class _CatalogsPageState extends State<CatalogsPage> {
       backgroundColor: Theme.of(context).colorScheme.surface,
       surfaceTintColor: Colors.transparent,
       title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          BurgerMenuButton(
-            onPressed: widget._drawerService.openDrawer,
+          Row(
+            children: [
+              BurgerMenuButton(
+                onPressed: widget._drawerService.openDrawer,
+              ),
+              Visibility(
+                visible: DeviceInfo.checkIsSmallMainScreen(context),
+                child: const SizedBox(width: 10),
+              ),
+              _refreshButtonBuilder,
+            ],
           ),
-          Visibility(
-            visible: DeviceInfo.checkIsSmallMainScreen(context),
-            child: const SizedBox(width: 10),
-          ),
-          _refreshButtonBuilder,
           _searchButtonBuilder,
         ],
       ));
@@ -174,7 +192,11 @@ class _CatalogsPageState extends State<CatalogsPage> {
             children: [
               const Icon(Icons.folder_open_outlined),
               const SizedBox(width: 10),
-              Flexible(child: Text(catalog.name))
+              Flexible(
+                  child: Text(
+                catalog.name,
+                style: AppTextTheme.textBase(weight: TextWeight.medium),
+              ))
             ],
           ),
         ),
@@ -201,39 +223,42 @@ class _CatalogsPageState extends State<CatalogsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: CustomScrollView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      controller: vm.scrollController,
-      slivers: [
-        _appBarBuilder,
-        SliverToBoxAdapter(
-          child: Obs(
-            rvList: [vm.catalogsList, vm.isSelectedMode, vm.selectedList],
-            builder: (context) => ReorderableListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              footer: _catlogsBlocBuilder,
-              buildDefaultDragHandles: false,
-              shrinkWrap: true,
-              itemBuilder: (context, index) =>
-                  ReorderableDelayedDragStartListener(
-                index: index,
-                key: ValueKey(vm.catalogsList[index]),
-                child: SelectableContainer(
-                  isSelectedMode: vm.isSelectedMode.value,
-                  thisItemIsSelected:
-                      vm.selectedList.value.contains(vm.catalogsList[index].id),
-                  child: _catalogWidgetBuilder(
-                      catalog: vm.catalogsList[index],
-                      onTap: () =>
-                          vm.onPressedCatalog(vm.catalogsList[index].id)),
+        body: RefreshIndicator(
+      onRefresh: vm.refreshCatalogs,
+      child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        controller: vm.scrollController,
+        slivers: [
+          _appBarBuilder,
+          SliverToBoxAdapter(
+            child: Obs(
+              rvList: [vm.catalogsList, vm.isSelectedMode, vm.selectedList],
+              builder: (context) => ReorderableListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                footer: _catlogsBlocBuilder,
+                buildDefaultDragHandles: false,
+                shrinkWrap: true,
+                itemBuilder: (context, index) =>
+                    ReorderableDelayedDragStartListener(
+                  index: index,
+                  key: ValueKey(vm.catalogsList[index]),
+                  child: SelectableContainer(
+                    isSelectedMode: vm.isSelectedMode.value,
+                    thisItemIsSelected: vm.selectedList.value
+                        .contains(vm.catalogsList[index].id),
+                    child: _catalogWidgetBuilder(
+                        catalog: vm.catalogsList[index],
+                        onTap: () =>
+                            vm.onPressedCatalog(vm.catalogsList[index].id)),
+                  ),
                 ),
+                itemCount: vm.catalogsList.length,
+                onReorder: (oldIndex, newIndex) {},
               ),
-              itemCount: vm.catalogsList.length,
-              onReorder: (oldIndex, newIndex) {},
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     ));
   }
 }

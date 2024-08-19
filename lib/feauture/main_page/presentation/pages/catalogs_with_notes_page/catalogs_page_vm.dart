@@ -24,7 +24,6 @@ class CatalogsPageViewModel {
       getEntitys: getEntitys,
       selectedEntitysList: selectedList,
     );
-    log('$_paginationSelectableList');
   }
 
   final CatalogsRepository _catalogsRepository;
@@ -59,13 +58,13 @@ class CatalogsPageViewModel {
   final isLoading = false.rv;
 
   Future<void> _getCatalogs() async {
-    isLoading(true);
-    catalogsBloc.add(ResponseBlocEvent.loading());
     final jwtToken = await _secureStorage.readToken();
 
     if (jwtToken == null) {
       return;
     }
+    isLoading(true);
+    catalogsBloc.add(ResponseBlocEvent.loading());
     final result = await _catalogsRepository.getCatalogs(
         jwtToken: jwtToken, offset: catalogsList.length, limit: _limit.value);
     catalogsBloc.add(ResponseBlocEvent.fetch(
@@ -122,6 +121,28 @@ class CatalogsPageViewModel {
     } else {
       selectedList.addAll(catalogsList.map((catalog) => catalog.id));
     }
+  }
+
+  Future<void> deleteCatalogs(BuildContext context) async {
+    final jwtToken = await _secureStorage.readToken();
+
+    if (jwtToken == null) {
+      return;
+    }
+    final result = await _catalogsRepository.deleteCatalog(
+        jwtToken: jwtToken, idList: selectedList.value);
+    if ((result is BadUseCaseResult || result is DataBadUseCaseResult) &&
+        context.mounted) {
+      _notificationService.responseNotification(
+          result: result,
+          context: context,
+          goodUseCaseMessage: 'Catalogs successfully deleted!');
+    } else {
+      catalogsList
+          .removeWhere((catalog) => selectedList.value.contains(catalog.id));
+    }
+    selectedList.clear();
+    isSelectedMode(false);
   }
 
   void _checkAllNotesIsSelected() {

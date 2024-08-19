@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 abstract class NotificationService {
   Future<void> responseNotification({
-    required UseCaseResult response,
+    required UseCaseResult result,
     required BuildContext context,
     required String goodUseCaseMessage,
   });

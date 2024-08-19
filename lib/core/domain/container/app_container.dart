@@ -80,7 +80,7 @@ class AppContainer {
 
   Future<void> _initReposytoryScope({required bool initLocalApi}) async {
     try {
-      const APIAsdress apiAdress = APIAsdress.localhost;
+      const APIAsdress apiAdress = APIAsdress.myPc;
 
       final String? apiUrl = dotenv.env[apiAdress.url];
 

@@ -7,6 +7,7 @@ class AppElevatedButton extends StatefulWidget {
   final FutureOr<void> Function()? onPressed;
   final void Function()? onLongPress;
   final bool mini;
+  final bool isAsyncButton;
 
   final double? width;
   final Color? progressIndicatorColor;
@@ -21,6 +22,7 @@ class AppElevatedButton extends StatefulWidget {
     this.style,
     this.onLongPress,
     this.mini = false,
+    this.isAsyncButton = true,
   });
 
   @override
@@ -79,7 +81,11 @@ class _AppElevatedButtonState extends State<AppElevatedButton> {
       child: ElevatedButton(
         onLongPress: widget.onLongPress,
         style: _style,
-        onPressed: widget.onPressed == null ? null : _onPressed,
+        onPressed: widget.onPressed == null
+            ? null
+            : widget.isAsyncButton
+                ? _onPressed
+                : widget.onPressed,
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: _verticalPadding),
           child: !_isLoading

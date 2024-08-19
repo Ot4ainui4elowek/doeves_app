@@ -38,12 +38,12 @@ class CatalogsRepositoryImpl with RestApiHandler implements CatalogsRepository {
   @override
   Future<UseCaseResult<EmptyGoodResponse>> deleteCatalog({
     required String jwtToken,
-    required String idList,
+    required List<int> idList,
   }) async {
     try {
       final result = await request(
         callback: () => _catalogsClientDataSource.deleteCatalog(
-            jwtToken: jwtToken, idList: idList),
+            jwtToken: jwtToken, idList: idList.join(',')),
         dataMapper: EmptyGoodResponse.fromJson,
       );
       return getUseCaseResult(result);

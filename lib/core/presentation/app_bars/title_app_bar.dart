@@ -6,12 +6,11 @@ import 'package:go_router/go_router.dart';
 class TitleAppBar extends AppBar {
   final String titleText;
   final BuildContext context;
-  @override
-  final Widget? leading;
+  final Widget? customLeading;
   TitleAppBar({
     super.key,
     required this.context,
-    this.leading,
+    this.customLeading,
     this.titleText = '',
     super.actions,
   }) : super(
@@ -19,8 +18,9 @@ class TitleAppBar extends AppBar {
           automaticallyImplyLeading: false,
           leadingWidth: context.canPop() ? 82 : 0,
           centerTitle: true,
-          leading:
-              context.canPop() ? leading ?? const CustomBackButton() : null,
+          leading: context.canPop()
+              ? customLeading ?? const CustomBackButton()
+              : null,
           title: Text(
             titleText,
             style: AppTextTheme.textBase(weight: TextWeight.medium),

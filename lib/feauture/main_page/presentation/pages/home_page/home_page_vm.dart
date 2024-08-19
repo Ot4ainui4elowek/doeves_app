@@ -6,7 +6,7 @@ import 'package:doeves_app/core/domain/app_error/app_error.dart';
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/core/presentation/notification_service/snack_bar_notification_service/snack_bar_notification_service_impl.dart';
-import 'package:doeves_app/feauture/create_note/domain/create_note_transfer_object.dart';
+import 'package:doeves_app/feauture/create_note/domain/create_note_page_transfer_object.dart';
 import 'package:doeves_app/feauture/main_page/data/model/notes/note_response_model.dart';
 import 'package:doeves_app/feauture/main_page/data/model/notes/notes_list/notes_list_response_model.dart';
 import 'package:doeves_app/feauture/main_page/data/model/notes/remove_list_of_notes/empty_good_response.dart';
@@ -240,7 +240,7 @@ class NotesHomePageViewModel {
     isSelectNotesMode(false);
     if (context.mounted && context.canPop()) {
       notificationService.responseNotification(
-        response: result,
+        result: result,
         context: context,
         goodUseCaseMessage: 'Notes have been deleted',
       );

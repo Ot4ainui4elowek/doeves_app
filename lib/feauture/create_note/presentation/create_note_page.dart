@@ -213,7 +213,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
       child: Scaffold(
         appBar: TitleAppBar(
           context: context,
-          leading: _leadingBuilder,
+          customLeading: _leadingBuilder,
         ),
         body: AppWrapper(
           maxWidth: 700,
@@ -233,7 +233,6 @@ class _CreateNotePageState extends State<CreateNotePage> {
             ),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.endDocked,
-            floatingActionButton: _addNoteButtonBuilder,
           ),
         ),
       ),
@@ -399,7 +398,10 @@ class _BottomBar extends StatelessWidget {
               child: FloatingActionButton(
                 onPressed: () => _showDeleteDialogBuilder(context),
                 heroTag: UniqueKey(),
-                child: const Icon(Icons.delete_outline),
+                child: Icon(
+                  Icons.delete_outline,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
               ),
             ),
           ],

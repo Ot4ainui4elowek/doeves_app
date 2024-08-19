@@ -214,27 +214,27 @@ class _NotesHomePageState extends State<NotesHomePage>
         ),
       );
 
-  Widget get _searchButtonBuilder => Expanded(
-        child: SearchButton(
-          onPressed: () => context.push(AppRoutes.notesSearchPage),
-        ),
+  Widget get _searchButtonBuilder => SearchButton(
+        onPressed: () => context.push(AppRoutes.notesSearchPage),
       );
 
-  Widget get _selectedListActionButtonsBuilder => vm.isSelectNotesMode.observer(
-        (context, value) => AnimatedVisibility(
-          visible: value,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(28),
-            ),
-            padding: const EdgeInsets.only(bottom: 4),
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            child: ScrollableRow(
-              children: [
-                _selectAllNotesButtonBuilder,
-                _actionButtonBuilder,
-                const SizedBox(width: 10),
-              ],
+  Widget get _selectedListActionButtonsBuilder => Flexible(
+        child: vm.isSelectNotesMode.observer(
+          (context, value) => AnimatedVisibility(
+            visible: value,
+            child: Container(
+              constraints: const BoxConstraints(maxHeight: 44),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(28),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: ScrollableRow(
+                children: [
+                  _selectAllNotesButtonBuilder,
+                  _actionButtonBuilder,
+                  const SizedBox(width: 10),
+                ],
+              ),
             ),
           ),
         ),
@@ -280,6 +280,7 @@ class _NotesHomePageState extends State<NotesHomePage>
       );
 
   Widget get _filterButtonBuilder => AppElevatedButton(
+        isAsyncButton: false,
         mini: true,
         onPressed: _showFiltersBottomSheet,
         child: const Icon(Icons.filter_alt_outlined),
@@ -321,9 +322,13 @@ class _NotesHomePageState extends State<NotesHomePage>
               child: const SizedBox(width: 10),
             ),
             _refreshNotesButtonBuilder,
-            _searchButtonBuilder,
-            const SizedBox(width: 10),
-            _filterButtonBuilder
+            Row(
+              children: [
+                _searchButtonBuilder,
+                const SizedBox(width: 10),
+                _filterButtonBuilder,
+              ],
+            )
           ],
         ),
         bottom: _bottomAppBarBuilder,

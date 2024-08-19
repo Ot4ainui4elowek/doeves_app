@@ -79,7 +79,7 @@ class VerificationPageViewModel {
     }
     if (context.mounted) {
       _notificationService.responseNotification(
-          response: response,
+          result: response,
           context: context,
           goodUseCaseMessage: 'Your email has been successfully confirmed!');
     }
@@ -107,7 +107,7 @@ class VerificationPageViewModel {
     );
     if (context.mounted) {
       _notificationService.responseNotification(
-          response: response,
+          result: response,
           context: context,
           goodUseCaseMessage: 'Code send to your email successfully!');
     }

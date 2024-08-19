@@ -6,7 +6,8 @@ import 'package:doeves_app/feauture/authorization/presentation/registration_page
 import 'package:doeves_app/feauture/authorization/presentation/registration_page/registration_page_vm.dart';
 import 'package:doeves_app/feauture/authorization/presentation/verification_page/verification_page.dart';
 import 'package:doeves_app/feauture/authorization/presentation/verification_page/verification_page_vm.dart';
-import 'package:doeves_app/feauture/create_note/domain/create_note_transfer_object.dart';
+import 'package:doeves_app/feauture/create_catalog_page/presentation/create_catalog_page.dart';
+import 'package:doeves_app/feauture/create_note/domain/create_note_page_transfer_object.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page_controller.dart';
 import 'package:doeves_app/feauture/create_note/presentation/view_models/create_note_page_vm.dart';
@@ -160,7 +161,7 @@ final router = GoRouter(
           final isValid = notesData is CreateNotePageTransferObject;
           return CustomTransitionPage(
             child: CreateNotePage(
-              vm: CreateNotePageViewModel.createVM(
+              vm: CreateNotePageViewModel.create(
                 notesData: isValid ? notesData : null,
                 controller: CreateNotePageController(
                   secureStorage: AppContainer().secureScope.secureStorage,
@@ -196,5 +197,9 @@ final router = GoRouter(
         ),
       ),
     ),
+    GoRoute(
+      path: AppRoutes.createCatalogPage,
+      builder: (context, state) => const CreateCatalogPage(),
+    )
   ],
 );

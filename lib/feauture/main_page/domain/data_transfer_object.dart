@@ -1,11 +1,3 @@
-enum DataTransferAction {
-  delete,
-  add,
-  edit;
-}
-
-typedef Data = int;
-
 sealed class DataTransferObject<T> {
   factory DataTransferObject({
     final int? id,

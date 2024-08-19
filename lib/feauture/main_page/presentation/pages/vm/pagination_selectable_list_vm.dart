@@ -38,7 +38,7 @@ class PaginationSelectableListController<T, D> {
   }
 
   void clearSelectedLsit() {
-    if (!isSelectedMode.value) {
+    if (!isSelectedMode.value && selectedEntitysList.isNotEmpty) {
       selectedEntitysList.clear();
     }
   }

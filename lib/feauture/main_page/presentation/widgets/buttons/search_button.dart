@@ -1,4 +1,4 @@
-import 'package:doeves_app/theme/text_theme.dart';
+import 'package:doeves_app/core/presentation/buttons/app_elevated_button.dart';
 import 'package:flutter/material.dart';
 
 class SearchButton extends StatelessWidget {
@@ -7,26 +7,11 @@ class SearchButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-          elevation: 0,
-          padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 14),
-          backgroundColor: Theme.of(context).colorScheme.surfaceContainer),
+    return AppElevatedButton(
+      isAsyncButton: false,
+      mini: true,
       onPressed: onPressed,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Icon(Icons.search),
-            Text(
-              'Search',
-              style: AppTextTheme.textBase(weight: TextWeight.medium),
-            ),
-            const SizedBox(width: 20),
-          ],
-        ),
-      ),
+      child: const Icon(Icons.search),
     );
   }
 }

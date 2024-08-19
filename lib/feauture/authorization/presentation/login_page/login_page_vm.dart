@@ -83,7 +83,7 @@ class LoginPageViewModel {
             _notificationService.responseNotification(
               context: context,
               goodUseCaseMessage: 'Login successful',
-              response: result,
+              result: result,
             );
           }
         }
