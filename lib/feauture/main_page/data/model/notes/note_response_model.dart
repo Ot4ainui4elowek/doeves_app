@@ -1,3 +1,4 @@
+import 'package:doeves_app/feauture/main_page/data/model/catalogs/catalog_response_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'note_response_model.g.dart';
@@ -30,5 +31,5 @@ class NoteResponseModel {
   final DateTime dateOfCreate;
 
   @JsonKey(name: 'catalog')
-  final int? catalog;
+  final CatalogResponseModel? catalog;
 }

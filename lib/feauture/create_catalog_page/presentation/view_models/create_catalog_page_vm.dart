@@ -18,15 +18,15 @@ abstract interface class CreateCatalogPageViewModel implements ViewModel {
 
   factory CreateCatalogPageViewModel.create({
     required final CreateCatalogPageController controller,
-    final CatalogDataTransferObject? data,
+    final CreateCatalogPageDataTransferObject? data,
   }) {
     if (data != null) {
       switch (data) {
-        case CreateCatalogDataTransferObject():
+        case NewCatalogDataTransferObject():
           {
             return CreateCatalogViewModel(controller: controller);
           }
-        case OpenCatalogDatatrasferObject(:final catalogId):
+        case OpenCatalogDataTrasferObject(:final catalogId):
           {
             return OpenCatalogViewModel(
               catalogId: catalogId,

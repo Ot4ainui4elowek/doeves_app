@@ -37,7 +37,6 @@ abstract mixin class RestApiHandler {
     try {
       final HttpResponse(:response) = await callback();
       final Response(:data, :statusCode) = response;
-
       switch (statusCode!) {
         case >= 200 && < 300:
           {

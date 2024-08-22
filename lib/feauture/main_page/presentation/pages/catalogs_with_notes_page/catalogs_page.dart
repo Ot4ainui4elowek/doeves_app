@@ -4,7 +4,6 @@ import 'package:doeves_app/core/presentation/buttons/app_elevated_button.dart';
 import 'package:doeves_app/core/presentation/counter_widget.dart';
 import 'package:doeves_app/core/presentation/scrollable_row.dart';
 import 'package:doeves_app/feauture/app_drawer/presentation/drawer_service.dart';
-import 'package:doeves_app/feauture/main_page/data/model/catalogs/catalog_response_model.dart';
 import 'package:doeves_app/feauture/main_page/domain/device_params.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/catalogs_with_notes_page/catalogs_page_vm.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/burger_menu_button.dart';
@@ -12,6 +11,7 @@ import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/refre
 import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/search_button.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/select_all_button.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/selection_mode_button.dart';
+import 'package:doeves_app/feauture/main_page/presentation/widgets/catalogs/catalog_list_item.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/response_bloc_buidler.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/selectable_container.dart';
 import 'package:doeves_app/theme/text_theme.dart';
@@ -34,10 +34,13 @@ class CatalogsPage extends StatefulWidget {
 class _CatalogsPageState extends State<CatalogsPage> {
   CatalogsPageViewModel get vm => widget.vm;
 
-  Widget get _selectionModeButtonBuilder => vm.isSelectedMode.observer(
-        (context, value) => SelectionModeButton(
+  Widget get _selectionModeButtonBuilder => Obs(
+        rvList: [vm.isSelectedMode, vm.catalogsList],
+        builder: (context) => SelectionModeButton(
           isSelectedMode: vm.isSelectedMode.value,
-          onPressed: () => vm.isSelectedMode(!value),
+          onPressed: vm.catalogsList.isNotEmpty
+              ? () => vm.isSelectedMode(!vm.isSelectedMode.value)
+              : null,
         ),
       );
 
@@ -140,15 +143,7 @@ class _CatalogsPageState extends State<CatalogsPage> {
         onPressed: () => context.push(AppRoutes.notesSearchPage),
       );
 
-  SliverAppBar get _appBarBuilder => SliverAppBar(
-      pinned: true,
-      snap: true,
-      floating: true,
-      toolbarHeight: 65,
-      bottom: _bottomAppBarBuilder,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      surfaceTintColor: Colors.transparent,
-      title: Row(
+  Widget get _topAppBarBuilder => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
@@ -165,7 +160,17 @@ class _CatalogsPageState extends State<CatalogsPage> {
           ),
           _searchButtonBuilder,
         ],
-      ));
+      );
+
+  SliverAppBar get _appBarBuilder => SliverAppBar(
+      pinned: true,
+      snap: true,
+      floating: true,
+      toolbarHeight: 65,
+      bottom: _bottomAppBarBuilder,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      surfaceTintColor: Colors.transparent,
+      title: _topAppBarBuilder);
 
   Widget get _catlogsBlocBuilder => vm.catalogsList.observer(
         (context, value) => ConstrainedBox(
@@ -181,24 +186,28 @@ class _CatalogsPageState extends State<CatalogsPage> {
         ),
       );
 
-  Widget _catalogWidgetBuilder(
-          {required CatalogResponseModel catalog,
-          required void Function() onTap}) =>
-      Center(
-        child: ListTile(
-          onTap: onTap,
-          contentPadding: EdgeInsets.zero,
-          title: Row(
-            children: [
-              const Icon(Icons.folder_open_outlined),
-              const SizedBox(width: 10),
-              Flexible(
-                  child: Text(
-                catalog.name,
-                style: AppTextTheme.textBase(weight: TextWeight.medium),
-              ))
-            ],
+  Widget get _catalogListBuilder => Obs(
+        rvList: [vm.catalogsList, vm.isSelectedMode, vm.selectedList],
+        builder: (context) => ReorderableListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          footer: _catlogsBlocBuilder,
+          buildDefaultDragHandles: false,
+          shrinkWrap: true,
+          itemBuilder: (context, index) => ReorderableDelayedDragStartListener(
+            index: index,
+            key: ValueKey(vm.catalogsList[index]),
+            child: SelectableContainer(
+              isSelectedMode: vm.isSelectedMode.value,
+              thisItemIsSelected:
+                  vm.selectedList.value.contains(vm.catalogsList[index].id),
+              child: CatalogListItem(
+                  catalog: vm.catalogsList[index],
+                  onTap: () => vm.onPressedCatalog(
+                      id: vm.catalogsList[index].id, context: context)),
+            ),
           ),
+          itemCount: vm.catalogsList.length,
+          onReorder: (oldIndex, newIndex) {},
         ),
       );
 
@@ -231,31 +240,7 @@ class _CatalogsPageState extends State<CatalogsPage> {
         slivers: [
           _appBarBuilder,
           SliverToBoxAdapter(
-            child: Obs(
-              rvList: [vm.catalogsList, vm.isSelectedMode, vm.selectedList],
-              builder: (context) => ReorderableListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                footer: _catlogsBlocBuilder,
-                buildDefaultDragHandles: false,
-                shrinkWrap: true,
-                itemBuilder: (context, index) =>
-                    ReorderableDelayedDragStartListener(
-                  index: index,
-                  key: ValueKey(vm.catalogsList[index]),
-                  child: SelectableContainer(
-                    isSelectedMode: vm.isSelectedMode.value,
-                    thisItemIsSelected: vm.selectedList.value
-                        .contains(vm.catalogsList[index].id),
-                    child: _catalogWidgetBuilder(
-                        catalog: vm.catalogsList[index],
-                        onTap: () =>
-                            vm.onPressedCatalog(vm.catalogsList[index].id)),
-                  ),
-                ),
-                itemCount: vm.catalogsList.length,
-                onReorder: (oldIndex, newIndex) {},
-              ),
-            ),
+            child: _catalogListBuilder,
           )
         ],
       ),

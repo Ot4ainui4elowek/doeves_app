@@ -10,4 +10,6 @@ abstract class ResponseBlocEvent<T> with _$ResponseBlocEvent {
   factory ResponseBlocEvent.emptyResponse() = EmptyResponseEvent;
   factory ResponseBlocEvent.resetToInitialState() = ResetToInitialStateEvent;
   factory ResponseBlocEvent.clearState() = ClearStateEvent;
+
+  factory ResponseBlocEvent.error(String message) = ErrorEvent;
 }

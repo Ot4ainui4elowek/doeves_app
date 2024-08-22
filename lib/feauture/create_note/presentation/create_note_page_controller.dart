@@ -39,7 +39,7 @@ class CreateNotePageController {
 
   final isLoading = false.rv;
 
-  //final _notificationService = SnackBarNotificationServiceImpl();
+  final Rv<int> noteId = Rv(-1);
 
   Future<UseCaseResult<EmptyGoodResponse>> editTitle(int id) async {
     final jwt = await _secureStorage.readToken();

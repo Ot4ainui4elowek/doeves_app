@@ -25,6 +25,7 @@ mixin _$ResponseBlocEvent<T> {
     required TResult Function() emptyResponse,
     required TResult Function() resetToInitialState,
     required TResult Function() clearState,
+    required TResult Function(String message) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -36,6 +37,7 @@ mixin _$ResponseBlocEvent<T> {
     TResult? Function()? emptyResponse,
     TResult? Function()? resetToInitialState,
     TResult? Function()? clearState,
+    TResult? Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -47,6 +49,7 @@ mixin _$ResponseBlocEvent<T> {
     TResult Function()? emptyResponse,
     TResult Function()? resetToInitialState,
     TResult Function()? clearState,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -58,6 +61,7 @@ mixin _$ResponseBlocEvent<T> {
     required TResult Function(ResetToInitialStateEvent<T> value)
         resetToInitialState,
     required TResult Function(ClearStateEvent<T> value) clearState,
+    required TResult Function(ErrorEvent<T> value) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -67,6 +71,7 @@ mixin _$ResponseBlocEvent<T> {
     TResult? Function(EmptyResponseEvent<T> value)? emptyResponse,
     TResult? Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
     TResult? Function(ClearStateEvent<T> value)? clearState,
+    TResult? Function(ErrorEvent<T> value)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -76,6 +81,7 @@ mixin _$ResponseBlocEvent<T> {
     TResult Function(EmptyResponseEvent<T> value)? emptyResponse,
     TResult Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
     TResult Function(ClearStateEvent<T> value)? clearState,
+    TResult Function(ErrorEvent<T> value)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -183,6 +189,7 @@ class _$FetchDataEventImpl<T> implements FetchDataEvent<T> {
     required TResult Function() emptyResponse,
     required TResult Function() resetToInitialState,
     required TResult Function() clearState,
+    required TResult Function(String message) error,
   }) {
     return fetch(result, initialListIsEmpty);
   }
@@ -197,6 +204,7 @@ class _$FetchDataEventImpl<T> implements FetchDataEvent<T> {
     TResult? Function()? emptyResponse,
     TResult? Function()? resetToInitialState,
     TResult? Function()? clearState,
+    TResult? Function(String message)? error,
   }) {
     return fetch?.call(result, initialListIsEmpty);
   }
@@ -211,6 +219,7 @@ class _$FetchDataEventImpl<T> implements FetchDataEvent<T> {
     TResult Function()? emptyResponse,
     TResult Function()? resetToInitialState,
     TResult Function()? clearState,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (fetch != null) {
@@ -228,6 +237,7 @@ class _$FetchDataEventImpl<T> implements FetchDataEvent<T> {
     required TResult Function(ResetToInitialStateEvent<T> value)
         resetToInitialState,
     required TResult Function(ClearStateEvent<T> value) clearState,
+    required TResult Function(ErrorEvent<T> value) error,
   }) {
     return fetch(this);
   }
@@ -240,6 +250,7 @@ class _$FetchDataEventImpl<T> implements FetchDataEvent<T> {
     TResult? Function(EmptyResponseEvent<T> value)? emptyResponse,
     TResult? Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
     TResult? Function(ClearStateEvent<T> value)? clearState,
+    TResult? Function(ErrorEvent<T> value)? error,
   }) {
     return fetch?.call(this);
   }
@@ -252,6 +263,7 @@ class _$FetchDataEventImpl<T> implements FetchDataEvent<T> {
     TResult Function(EmptyResponseEvent<T> value)? emptyResponse,
     TResult Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
     TResult Function(ClearStateEvent<T> value)? clearState,
+    TResult Function(ErrorEvent<T> value)? error,
     required TResult orElse(),
   }) {
     if (fetch != null) {
@@ -318,6 +330,7 @@ class _$LoadingEventImpl<T> implements LoadingEvent<T> {
     required TResult Function() emptyResponse,
     required TResult Function() resetToInitialState,
     required TResult Function() clearState,
+    required TResult Function(String message) error,
   }) {
     return loading();
   }
@@ -332,6 +345,7 @@ class _$LoadingEventImpl<T> implements LoadingEvent<T> {
     TResult? Function()? emptyResponse,
     TResult? Function()? resetToInitialState,
     TResult? Function()? clearState,
+    TResult? Function(String message)? error,
   }) {
     return loading?.call();
   }
@@ -346,6 +360,7 @@ class _$LoadingEventImpl<T> implements LoadingEvent<T> {
     TResult Function()? emptyResponse,
     TResult Function()? resetToInitialState,
     TResult Function()? clearState,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -363,6 +378,7 @@ class _$LoadingEventImpl<T> implements LoadingEvent<T> {
     required TResult Function(ResetToInitialStateEvent<T> value)
         resetToInitialState,
     required TResult Function(ClearStateEvent<T> value) clearState,
+    required TResult Function(ErrorEvent<T> value) error,
   }) {
     return loading(this);
   }
@@ -375,6 +391,7 @@ class _$LoadingEventImpl<T> implements LoadingEvent<T> {
     TResult? Function(EmptyResponseEvent<T> value)? emptyResponse,
     TResult? Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
     TResult? Function(ClearStateEvent<T> value)? clearState,
+    TResult? Function(ErrorEvent<T> value)? error,
   }) {
     return loading?.call(this);
   }
@@ -387,6 +404,7 @@ class _$LoadingEventImpl<T> implements LoadingEvent<T> {
     TResult Function(EmptyResponseEvent<T> value)? emptyResponse,
     TResult Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
     TResult Function(ClearStateEvent<T> value)? clearState,
+    TResult Function(ErrorEvent<T> value)? error,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -447,6 +465,7 @@ class _$EmptyResponseEventImpl<T> implements EmptyResponseEvent<T> {
     required TResult Function() emptyResponse,
     required TResult Function() resetToInitialState,
     required TResult Function() clearState,
+    required TResult Function(String message) error,
   }) {
     return emptyResponse();
   }
@@ -461,6 +480,7 @@ class _$EmptyResponseEventImpl<T> implements EmptyResponseEvent<T> {
     TResult? Function()? emptyResponse,
     TResult? Function()? resetToInitialState,
     TResult? Function()? clearState,
+    TResult? Function(String message)? error,
   }) {
     return emptyResponse?.call();
   }
@@ -475,6 +495,7 @@ class _$EmptyResponseEventImpl<T> implements EmptyResponseEvent<T> {
     TResult Function()? emptyResponse,
     TResult Function()? resetToInitialState,
     TResult Function()? clearState,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (emptyResponse != null) {
@@ -492,6 +513,7 @@ class _$EmptyResponseEventImpl<T> implements EmptyResponseEvent<T> {
     required TResult Function(ResetToInitialStateEvent<T> value)
         resetToInitialState,
     required TResult Function(ClearStateEvent<T> value) clearState,
+    required TResult Function(ErrorEvent<T> value) error,
   }) {
     return emptyResponse(this);
   }
@@ -504,6 +526,7 @@ class _$EmptyResponseEventImpl<T> implements EmptyResponseEvent<T> {
     TResult? Function(EmptyResponseEvent<T> value)? emptyResponse,
     TResult? Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
     TResult? Function(ClearStateEvent<T> value)? clearState,
+    TResult? Function(ErrorEvent<T> value)? error,
   }) {
     return emptyResponse?.call(this);
   }
@@ -516,6 +539,7 @@ class _$EmptyResponseEventImpl<T> implements EmptyResponseEvent<T> {
     TResult Function(EmptyResponseEvent<T> value)? emptyResponse,
     TResult Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
     TResult Function(ClearStateEvent<T> value)? clearState,
+    TResult Function(ErrorEvent<T> value)? error,
     required TResult orElse(),
   }) {
     if (emptyResponse != null) {
@@ -578,6 +602,7 @@ class _$ResetToInitialStateEventImpl<T> implements ResetToInitialStateEvent<T> {
     required TResult Function() emptyResponse,
     required TResult Function() resetToInitialState,
     required TResult Function() clearState,
+    required TResult Function(String message) error,
   }) {
     return resetToInitialState();
   }
@@ -592,6 +617,7 @@ class _$ResetToInitialStateEventImpl<T> implements ResetToInitialStateEvent<T> {
     TResult? Function()? emptyResponse,
     TResult? Function()? resetToInitialState,
     TResult? Function()? clearState,
+    TResult? Function(String message)? error,
   }) {
     return resetToInitialState?.call();
   }
@@ -606,6 +632,7 @@ class _$ResetToInitialStateEventImpl<T> implements ResetToInitialStateEvent<T> {
     TResult Function()? emptyResponse,
     TResult Function()? resetToInitialState,
     TResult Function()? clearState,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (resetToInitialState != null) {
@@ -623,6 +650,7 @@ class _$ResetToInitialStateEventImpl<T> implements ResetToInitialStateEvent<T> {
     required TResult Function(ResetToInitialStateEvent<T> value)
         resetToInitialState,
     required TResult Function(ClearStateEvent<T> value) clearState,
+    required TResult Function(ErrorEvent<T> value) error,
   }) {
     return resetToInitialState(this);
   }
@@ -635,6 +663,7 @@ class _$ResetToInitialStateEventImpl<T> implements ResetToInitialStateEvent<T> {
     TResult? Function(EmptyResponseEvent<T> value)? emptyResponse,
     TResult? Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
     TResult? Function(ClearStateEvent<T> value)? clearState,
+    TResult? Function(ErrorEvent<T> value)? error,
   }) {
     return resetToInitialState?.call(this);
   }
@@ -647,6 +676,7 @@ class _$ResetToInitialStateEventImpl<T> implements ResetToInitialStateEvent<T> {
     TResult Function(EmptyResponseEvent<T> value)? emptyResponse,
     TResult Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
     TResult Function(ClearStateEvent<T> value)? clearState,
+    TResult Function(ErrorEvent<T> value)? error,
     required TResult orElse(),
   }) {
     if (resetToInitialState != null) {
@@ -705,6 +735,7 @@ class _$ClearStateEventImpl<T> implements ClearStateEvent<T> {
     required TResult Function() emptyResponse,
     required TResult Function() resetToInitialState,
     required TResult Function() clearState,
+    required TResult Function(String message) error,
   }) {
     return clearState();
   }
@@ -719,6 +750,7 @@ class _$ClearStateEventImpl<T> implements ClearStateEvent<T> {
     TResult? Function()? emptyResponse,
     TResult? Function()? resetToInitialState,
     TResult? Function()? clearState,
+    TResult? Function(String message)? error,
   }) {
     return clearState?.call();
   }
@@ -733,6 +765,7 @@ class _$ClearStateEventImpl<T> implements ClearStateEvent<T> {
     TResult Function()? emptyResponse,
     TResult Function()? resetToInitialState,
     TResult Function()? clearState,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (clearState != null) {
@@ -750,6 +783,7 @@ class _$ClearStateEventImpl<T> implements ClearStateEvent<T> {
     required TResult Function(ResetToInitialStateEvent<T> value)
         resetToInitialState,
     required TResult Function(ClearStateEvent<T> value) clearState,
+    required TResult Function(ErrorEvent<T> value) error,
   }) {
     return clearState(this);
   }
@@ -762,6 +796,7 @@ class _$ClearStateEventImpl<T> implements ClearStateEvent<T> {
     TResult? Function(EmptyResponseEvent<T> value)? emptyResponse,
     TResult? Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
     TResult? Function(ClearStateEvent<T> value)? clearState,
+    TResult? Function(ErrorEvent<T> value)? error,
   }) {
     return clearState?.call(this);
   }
@@ -774,6 +809,7 @@ class _$ClearStateEventImpl<T> implements ClearStateEvent<T> {
     TResult Function(EmptyResponseEvent<T> value)? emptyResponse,
     TResult Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
     TResult Function(ClearStateEvent<T> value)? clearState,
+    TResult Function(ErrorEvent<T> value)? error,
     required TResult orElse(),
   }) {
     if (clearState != null) {
@@ -785,6 +821,170 @@ class _$ClearStateEventImpl<T> implements ClearStateEvent<T> {
 
 abstract class ClearStateEvent<T> implements ResponseBlocEvent<T> {
   factory ClearStateEvent() = _$ClearStateEventImpl<T>;
+}
+
+/// @nodoc
+abstract class _$$ErrorEventImplCopyWith<T, $Res> {
+  factory _$$ErrorEventImplCopyWith(
+          _$ErrorEventImpl<T> value, $Res Function(_$ErrorEventImpl<T>) then) =
+      __$$ErrorEventImplCopyWithImpl<T, $Res>;
+  @useResult
+  $Res call({String message});
+}
+
+/// @nodoc
+class __$$ErrorEventImplCopyWithImpl<T, $Res>
+    extends _$ResponseBlocEventCopyWithImpl<T, $Res, _$ErrorEventImpl<T>>
+    implements _$$ErrorEventImplCopyWith<T, $Res> {
+  __$$ErrorEventImplCopyWithImpl(
+      _$ErrorEventImpl<T> _value, $Res Function(_$ErrorEventImpl<T>) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? message = null,
+  }) {
+    return _then(_$ErrorEventImpl<T>(
+      null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ErrorEventImpl<T> implements ErrorEvent<T> {
+  _$ErrorEventImpl(this.message);
+
+  @override
+  final String message;
+
+  @override
+  String toString() {
+    return 'ResponseBlocEvent<$T>.error(message: $message)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ErrorEventImpl<T> &&
+            (identical(other.message, message) || other.message == message));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, message);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ErrorEventImplCopyWith<T, _$ErrorEventImpl<T>> get copyWith =>
+      __$$ErrorEventImplCopyWithImpl<T, _$ErrorEventImpl<T>>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            UseCaseResult<ListResponseModel<T>> result, bool initialListIsEmpty)
+        fetch,
+    required TResult Function() loading,
+    required TResult Function() emptyResponse,
+    required TResult Function() resetToInitialState,
+    required TResult Function() clearState,
+    required TResult Function(String message) error,
+  }) {
+    return error(message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(UseCaseResult<ListResponseModel<T>> result,
+            bool initialListIsEmpty)?
+        fetch,
+    TResult? Function()? loading,
+    TResult? Function()? emptyResponse,
+    TResult? Function()? resetToInitialState,
+    TResult? Function()? clearState,
+    TResult? Function(String message)? error,
+  }) {
+    return error?.call(message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(UseCaseResult<ListResponseModel<T>> result,
+            bool initialListIsEmpty)?
+        fetch,
+    TResult Function()? loading,
+    TResult Function()? emptyResponse,
+    TResult Function()? resetToInitialState,
+    TResult Function()? clearState,
+    TResult Function(String message)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(message);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(FetchDataEvent<T> value) fetch,
+    required TResult Function(LoadingEvent<T> value) loading,
+    required TResult Function(EmptyResponseEvent<T> value) emptyResponse,
+    required TResult Function(ResetToInitialStateEvent<T> value)
+        resetToInitialState,
+    required TResult Function(ClearStateEvent<T> value) clearState,
+    required TResult Function(ErrorEvent<T> value) error,
+  }) {
+    return error(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(FetchDataEvent<T> value)? fetch,
+    TResult? Function(LoadingEvent<T> value)? loading,
+    TResult? Function(EmptyResponseEvent<T> value)? emptyResponse,
+    TResult? Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
+    TResult? Function(ClearStateEvent<T> value)? clearState,
+    TResult? Function(ErrorEvent<T> value)? error,
+  }) {
+    return error?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(FetchDataEvent<T> value)? fetch,
+    TResult Function(LoadingEvent<T> value)? loading,
+    TResult Function(EmptyResponseEvent<T> value)? emptyResponse,
+    TResult Function(ResetToInitialStateEvent<T> value)? resetToInitialState,
+    TResult Function(ClearStateEvent<T> value)? clearState,
+    TResult Function(ErrorEvent<T> value)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ErrorEvent<T> implements ResponseBlocEvent<T> {
+  factory ErrorEvent(final String message) = _$ErrorEventImpl<T>;
+
+  String get message;
+  @JsonKey(ignore: true)
+  _$$ErrorEventImplCopyWith<T, _$ErrorEventImpl<T>> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc

@@ -8,7 +8,6 @@ import 'package:doeves_app/feauture/create_note/domain/create_note/create_note_b
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page_controller.dart';
 import 'package:doeves_app/feauture/create_note/presentation/view_models/create_note_page_vm.dart';
 import 'package:doeves_app/feauture/main_page/data/model/notes/create_note_response_model.dart';
-import 'package:reactive_variables/reactive_variables.dart';
 
 class CreateNewNoteViewModel
     implements CreateNotePageViewModel, CreateViewModel {
@@ -27,7 +26,7 @@ class CreateNewNoteViewModel
   }
   final int? catalogId;
   @override
-  final Rv<int> noteId = Rv(-1);
+  int? noteId;
 
   @override
   final CreateNotePageController controller;
@@ -57,7 +56,8 @@ class CreateNewNoteViewModel
     controller.titleAndDescriptionBloc
         .add(CreateNoteEvent.fetch(result: result));
     if (result is GoodUseCaseResult<IdResponseModel>) {
-      noteId(result.data.id);
+      noteId = result.data.id;
+      controller.noteId(noteId);
     }
   }
 
@@ -68,16 +68,16 @@ class CreateNewNoteViewModel
   late final DeferredAction _titleDefferedAction;
 
   Future<void> _listenDescription() async {
-    if (noteId.value == -1) {
+    if (noteId == null) {
       return;
     }
-    final result = await controller.editDescription(noteId.value);
+    final result = await controller.editDescription(noteId!);
   }
 
   Future<void> _listenTitle() async {
-    if (noteId.value == -1) {
+    if (noteId == null) {
       return;
     }
-    final result = await controller.editTitle(noteId.value);
+    final result = await controller.editTitle(noteId!);
   }
 }

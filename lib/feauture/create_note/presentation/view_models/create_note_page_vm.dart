@@ -5,14 +5,13 @@ import 'package:doeves_app/feauture/create_note/domain/create_note_page_transfer
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page_controller.dart';
 import 'package:doeves_app/feauture/create_note/presentation/view_models/create_new_note_vm.dart';
 import 'package:doeves_app/feauture/create_note/presentation/view_models/open_note_vm.dart';
-import 'package:reactive_variables/reactive_variables.dart';
 
 abstract interface class CreateNotePageViewModel implements ViewModel {
-  const CreateNotePageViewModel(this.controller, this.noteId);
+  CreateNotePageViewModel(this.controller, this.noteId);
   void init();
   Future<void> dispose();
   final CreateNotePageController controller;
-  final Rv<int> noteId;
+  int? noteId;
 
   factory CreateNotePageViewModel.create({
     CreateNotePageTransferObject? notesData,

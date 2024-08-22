@@ -6,14 +6,12 @@ import 'package:doeves_app/core/domain/view_model/view_model_factory.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page_controller.dart';
 import 'package:doeves_app/feauture/create_note/presentation/view_models/create_note_page_vm.dart';
 import 'package:doeves_app/feauture/main_page/data/model/notes/note_response_model.dart';
-import 'package:reactive_variables/reactive_variables.dart';
 
 class OpenNoteViewModel implements CreateNotePageViewModel, OpenViewModel {
   OpenNoteViewModel({
     required this.controller,
-    required int noteId,
+    required int this.noteId,
   }) {
-    this.noteId(noteId);
     _descriptionDefferedAction = DeferredAction(
       callback: _listenDescription,
       delay: _requestsTimerDuration,
@@ -25,13 +23,14 @@ class OpenNoteViewModel implements CreateNotePageViewModel, OpenViewModel {
   }
 
   @override
-  final Rv<int> noteId = Rv(-1);
+  int? noteId;
 
   @override
   final CreateNotePageController controller;
 
   @override
   void init() {
+    controller.noteId(noteId);
     log('open note vm');
     _getNote();
     controller.descriptionTextController
@@ -57,15 +56,15 @@ class OpenNoteViewModel implements CreateNotePageViewModel, OpenViewModel {
   late final DeferredAction _titleDefferedAction;
 
   Future<void> _listenDescription() async {
-    final result = await controller.editDescription(noteId.value);
+    final result = await controller.editDescription(noteId!);
   }
 
   Future<void> _listenTitle() async {
-    final result = await controller.editTitle(noteId.value);
+    final result = await controller.editTitle(noteId!);
   }
 
   void _getNote() async {
-    final result = await controller.getNote(id: noteId.value);
+    final result = await controller.getNote(id: noteId!);
 
     if (result is GoodUseCaseResult<NoteResponseModel>) {
       final note = result.data;

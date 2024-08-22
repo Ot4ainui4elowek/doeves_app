@@ -8,7 +8,7 @@ part 'response_bloc.freezed.dart';
 part 'response_event.dart';
 part 'response_state.dart';
 
-class ResponseBloc<T> extends Bloc<ResponseBlocEvent, ResponseBlocState> {
+class ResponseBloc extends Bloc<ResponseBlocEvent, ResponseBlocState> {
   ResponseBloc() : super(const ResponseBlocState.initial()) {
     on<LoadingEvent>(
       (event, emit) {
@@ -52,6 +52,11 @@ class ResponseBloc<T> extends Bloc<ResponseBlocEvent, ResponseBlocState> {
     );
     on<ClearStateEvent>(
       (event, emit) => emit(const ResponseBlocState.emptyState()),
+    );
+    on<ErrorEvent>(
+      (event, emit) => emit(
+        ResponseBlocState.error(SpecificError(event.message)),
+      ),
     );
   }
 }

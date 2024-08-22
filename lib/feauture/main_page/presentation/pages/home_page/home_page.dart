@@ -113,7 +113,7 @@ class _NotesHomePageState extends State<NotesHomePage>
 
   Widget get _notesLoadingIndicatorBuilder => Container(
         constraints: BoxConstraints(
-            minHeight: vm.notes.isEmpty
+            minHeight: vm.notesList.isEmpty
                 ? MediaQuery.of(context).size.height - 300
                 : 0),
         child: ResponseBlocBuidler(
@@ -126,7 +126,7 @@ class _NotesHomePageState extends State<NotesHomePage>
 
   Widget get _notesListBuilder => Obs(
         rvList: [
-          vm.notes,
+          vm.notesList,
           vm.isLoading,
           vm.isSelectNotesMode,
           vm.selectedNotesList
@@ -139,20 +139,20 @@ class _NotesHomePageState extends State<NotesHomePage>
           onReorder: (oldIndex, newIndex) => vm.onNoteDrag(oldIndex, newIndex),
           itemBuilder: (context, index) => ReorderableDelayedDragStartListener(
             enabled: !vm.isLoading.value ^ vm.isSelectNotesMode.value,
-            key: ObjectKey(vm.notes[index]),
+            key: ObjectKey(vm.notesList[index]),
             index: index,
             child: SelectableContainer(
               isSelectedMode: vm.isSelectNotesMode.value,
               thisItemIsSelected:
-                  vm.checkDelteNotesListContainsNote(vm.notes[index].id),
+                  vm.checkDelteNotesListContainsNote(vm.notesList[index].id),
               child: NoteWithContentWidget(
                 onPressed: () =>
                     vm.onPressedNote(context: context, index: index),
-                note: vm.notes[index],
+                note: vm.notesList[index],
               ),
             ),
           ),
-          itemCount: vm.notes.length,
+          itemCount: vm.notesList.length,
         ),
       );
 
@@ -202,12 +202,12 @@ class _NotesHomePageState extends State<NotesHomePage>
         ),
       );
   Widget get _selectAllNotesButtonBuilder => Obs(
-        rvList: [vm.isSelectNotesMode, vm.allNotesIsSelected, vm.notes],
+        rvList: [vm.isSelectNotesMode, vm.allNotesIsSelected, vm.notesList],
         builder: (context) => Container(
           margin: const EdgeInsets.only(right: 10),
           child: SelectAllButton(
             listIsSelected: vm.allNotesIsSelected.value,
-            onPressed: vm.notes.isNotEmpty && vm.isSelectNotesMode.value
+            onPressed: vm.notesList.isNotEmpty && vm.isSelectNotesMode.value
                 ? vm.onPressedSelectAllNotes
                 : null,
           ),
@@ -248,7 +248,7 @@ class _NotesHomePageState extends State<NotesHomePage>
       builder: (context) => _filtersBottomSheetBuilder,
     );
     if (includingCatalogs != vm.includingCatalogs.value) {
-      vm.notes.clear();
+      vm.notesList.clear();
       vm.notesBloc.add(ResponseBlocEvent.loading());
       vm.getNotes();
     }
@@ -314,14 +314,18 @@ class _NotesHomePageState extends State<NotesHomePage>
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            BurgerMenuButton(
-              onPressed: widget._drawerService.openDrawer,
+            Row(
+              children: [
+                BurgerMenuButton(
+                  onPressed: widget._drawerService.openDrawer,
+                ),
+                Visibility(
+                  visible: DeviceInfo.checkIsSmallMainScreen(context),
+                  child: const SizedBox(width: 10),
+                ),
+                _refreshNotesButtonBuilder,
+              ],
             ),
-            Visibility(
-              visible: DeviceInfo.checkIsSmallMainScreen(context),
-              child: const SizedBox(width: 10),
-            ),
-            _refreshNotesButtonBuilder,
             Row(
               children: [
                 _searchButtonBuilder,

@@ -6,7 +6,10 @@ import 'package:doeves_app/feauture/authorization/presentation/registration_page
 import 'package:doeves_app/feauture/authorization/presentation/registration_page/registration_page_vm.dart';
 import 'package:doeves_app/feauture/authorization/presentation/verification_page/verification_page.dart';
 import 'package:doeves_app/feauture/authorization/presentation/verification_page/verification_page_vm.dart';
+import 'package:doeves_app/feauture/create_catalog_page/domain/catalog_data_transfer_object.dart';
 import 'package:doeves_app/feauture/create_catalog_page/presentation/create_catalog_page.dart';
+import 'package:doeves_app/feauture/create_catalog_page/presentation/create_catalog_page_controller.dart';
+import 'package:doeves_app/feauture/create_catalog_page/presentation/view_models/create_catalog_page_vm.dart';
 import 'package:doeves_app/feauture/create_note/domain/create_note_page_transfer_object.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page_controller.dart';
@@ -198,8 +201,21 @@ final router = GoRouter(
       ),
     ),
     GoRoute(
-      path: AppRoutes.createCatalogPage,
-      builder: (context, state) => const CreateCatalogPage(),
-    )
+        path: AppRoutes.createCatalogPage,
+        name: AppRoutes.createCatalogPage,
+        builder: (context, state) {
+          final catalogData = state.extra;
+          final isValid = catalogData is CreateCatalogPageDataTransferObject;
+          return CreateCatalogPage(
+            vm: CreateCatalogPageViewModel.create(
+              data: isValid ? catalogData : null,
+              controller: CreateCatalogPageController(
+                catalogRepository:
+                    AppContainer().repositoryScope.createCatalogRepository,
+                secureStorage: AppContainer().secureScope.secureStorage,
+              ),
+            ),
+          );
+        })
   ],
 );

@@ -12,7 +12,10 @@ NoteResponseModel _$NoteResponseModelFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String,
       description: json['description'] as String,
       dateOfCreate: DateTime.parse(json['date_of_create'] as String),
-      catalog: (json['catalog'] as num?)?.toInt(),
+      catalog: json['catalog'] == null
+          ? null
+          : CatalogResponseModel.fromJson(
+              json['catalog'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$NoteResponseModelToJson(NoteResponseModel instance) =>

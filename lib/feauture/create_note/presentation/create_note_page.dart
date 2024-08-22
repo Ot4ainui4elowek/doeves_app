@@ -190,7 +190,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
         child: const Icon(Icons.check),
       );
 
-  Widget get _leadingBuilder => vm.noteId.observer(
+  Widget get _leadingBuilder => controller.noteId.observer(
         (context, value) => CustomBackButton(
           onPressed: value != -1
               ? () => handler.back(
@@ -219,13 +219,20 @@ class _CreateNotePageState extends State<CreateNotePage> {
           maxWidth: 700,
           child: Scaffold(
             body: _bodyBuilder,
-            bottomNavigationBar: vm.noteId.observer(
+            bottomNavigationBar: controller.noteId.observer(
               (context, value) => _BottomBar(
                 deleteNote: value != -1
                     ? () async {
                         await controller.deleteNote(
                             id: value, context: context);
-                        handler.delete(context: context, id: value);
+                        handler.delete(
+                            context: context,
+                            deleteData: NoteResponseModel(
+                                id: value,
+                                name: controller.titleTextController.text,
+                                description:
+                                    controller.descriptionTextController.text,
+                                dateOfCreate: DateTime.now()));
                       }
                     : null,
                 // contentWidgetDatatList: controller.getAddContentList,

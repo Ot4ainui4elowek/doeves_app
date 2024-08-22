@@ -1,13 +1,14 @@
 sealed class DataTransferObject<T> {
   factory DataTransferObject({
-    final int? id,
+    required final Type type,
+    final T? deletedData,
     final T? data,
     final T? editData,
   }) {
-    assert(((data == null) ^ (id == null) ^ (editData == null)),
-        'Data & edit data & id data can not be the same filled!');
-    if (id != null) {
-      return DeleteDataTransferObject(id);
+    assert(((data == null) ^ (deletedData == null) ^ (editData == null)),
+        'Data & edit data & deleted data can not be the same filled!');
+    if (deletedData != null) {
+      return DeleteDataTransferObject(deletedData);
     }
     if (data != null) {
       return AddDataTransferObject(data);
@@ -19,7 +20,7 @@ sealed class DataTransferObject<T> {
     throw Exception('Something went wrong with DataTransferObject arguments!');
   }
 
-  factory DataTransferObject.delete(int id) = DeleteDataTransferObject;
+  factory DataTransferObject.delete(T data) = DeleteDataTransferObject;
 
   factory DataTransferObject.add(T data) = AddDataTransferObject;
 
@@ -27,8 +28,8 @@ sealed class DataTransferObject<T> {
 }
 
 class DeleteDataTransferObject<T> implements DataTransferObject<T> {
-  DeleteDataTransferObject(this.id);
-  final int id;
+  const DeleteDataTransferObject(this.data);
+  final T data;
 }
 
 class AddDataTransferObject<T> implements DataTransferObject<T> {

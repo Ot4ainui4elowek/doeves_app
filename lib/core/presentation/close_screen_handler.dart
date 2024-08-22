@@ -9,11 +9,11 @@ class CloseScreenHandler<T> {
   );
   final ViewModel _vm;
 
-  void delete({required BuildContext context, required int id}) {
+  void delete({required BuildContext context, required T deleteData}) {
     switch (_vm) {
       case OpenViewModel():
         {
-          context.pop(DataTransferObject.delete(id));
+          context.pop(DataTransferObject.delete(deleteData));
           break;
         }
 

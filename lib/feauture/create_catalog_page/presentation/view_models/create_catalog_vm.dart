@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:doeves_app/core/domain/view_model/view_model_factory.dart';
 import 'package:doeves_app/feauture/create_catalog_page/presentation/create_catalog_page_controller.dart';
 import 'package:doeves_app/feauture/create_catalog_page/presentation/view_models/create_catalog_page_vm.dart';
@@ -15,13 +17,10 @@ class CreateCatalogViewModel
   final CreateCatalogPageController controller;
 
   @override
-  Future<void> dispose() {
-    // TODO: implement dispose
-    throw UnimplementedError();
+  void init() {
+    log('create catalog vm');
   }
 
   @override
-  void init() {
-    // TODO: implement init
-  }
+  Future<void> dispose() async {}
 }

@@ -1,12 +1,15 @@
-sealed class CatalogDataTransferObject {
-  factory CatalogDataTransferObject.create() = CreateCatalogDataTransferObject;
-  factory CatalogDataTransferObject.open(int catalogId) =
-      OpenCatalogDatatrasferObject;
+sealed class CreateCatalogPageDataTransferObject {
+  factory CreateCatalogPageDataTransferObject.create() =
+      NewCatalogDataTransferObject;
+  factory CreateCatalogPageDataTransferObject.open(int catalogId) =
+      OpenCatalogDataTrasferObject;
 }
 
-class CreateCatalogDataTransferObject implements CatalogDataTransferObject {}
+class NewCatalogDataTransferObject
+    implements CreateCatalogPageDataTransferObject {}
 
-class OpenCatalogDatatrasferObject implements CatalogDataTransferObject {
-  OpenCatalogDatatrasferObject(this.catalogId);
+class OpenCatalogDataTrasferObject
+    implements CreateCatalogPageDataTransferObject {
+  OpenCatalogDataTrasferObject(this.catalogId);
   final int catalogId;
 }

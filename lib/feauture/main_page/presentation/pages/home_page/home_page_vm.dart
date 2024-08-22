@@ -46,7 +46,6 @@ class NotesHomePageViewModel {
     if (_noteTransferObject != null) {
       log('transfer object');
     }
-    notesBloc.add(ResponseBlocEvent.loading());
     await getNotes();
 
     scrollController.addListener(checkScroll);
@@ -57,13 +56,13 @@ class NotesHomePageViewModel {
         }
       },
     );
-    notes.addListener(_checkAllNotesIsSelected);
+    notesList.addListener(_checkAllNotesIsSelected);
     selectedNotesList.addListener(_checkAllNotesIsSelected);
   }
 
   void dispose() {
     scrollController.removeListener(checkScroll);
-    notes.removeListener(_checkAllNotesIsSelected);
+    notesList.removeListener(_checkAllNotesIsSelected);
     selectedNotesList.removeListener(_checkAllNotesIsSelected);
   }
 
@@ -81,7 +80,7 @@ class NotesHomePageViewModel {
 
   void _checkAllNotesIsSelected() {
     allNotesIsSelected(
-        selectedNotesList.length == notes.length && notes.isNotEmpty);
+        selectedNotesList.length == notesList.length && notesList.isNotEmpty);
   }
 
   final allNotesIsSelected = false.rv;
@@ -102,7 +101,7 @@ class NotesHomePageViewModel {
     if (selectedNotesList.isNotEmpty) {
       selectedNotesList.clear();
     }
-    selectedNotesList.addAll(notes.value.map((note) => note.id));
+    selectedNotesList.addAll(notesList.value.map((note) => note.id));
   }
 
   void _performActionOnNote(int id) {
@@ -123,7 +122,7 @@ class NotesHomePageViewModel {
 
   final isLoading = false.rv;
 
-  final Rv<List<NoteResponseModel>> notes = Rv([]);
+  final Rv<List<NoteResponseModel>> notesList = Rv([]);
 
   final ResponseBloc notesBloc = ResponseBloc();
 
@@ -136,25 +135,24 @@ class NotesHomePageViewModel {
     if (jwtToken == null) {
       return;
     }
-    await Future.delayed(const Duration(seconds: 2));
+    notesBloc.add(ResponseBlocEvent.loading());
     final result = await _notesRepository.getAllNotes(
-        offset: notes.length,
+        offset: notesList.length,
         limit: 10,
         includingCatalogs: includingCatalogs.value,
         jwtToken: jwtToken);
 
     isLoading(false);
     notesBloc.add(ResponseBlocEvent.fetch(
-        result: result, initialListIsEmpty: notes.isEmpty));
+        result: result, initialListIsEmpty: notesList.isEmpty));
     if (result is GoodUseCaseResult<NotesListResponseModel>) {
       final data = result.data.list;
-      notes.addAll(data);
+      notesList.addAll(data);
     }
   }
 
   Future<void> refreshNotes() async {
-    notesBloc.add(ResponseBlocEvent.loading());
-    notes.clear();
+    notesList.clear();
     getNotes();
   }
 
@@ -162,20 +160,11 @@ class NotesHomePageViewModel {
     log(noteTransferObject.toString());
     if (noteTransferObject is DataTransferObject<NoteResponseModel>) {
       switch (noteTransferObject) {
-        case DeleteDataTransferObject(:final id):
-          {
-            log('delete');
-            notes.removeWhere(
-              (note) => note.id == id,
-            );
-            notes.refresh();
-            break;
-          }
         case AddDataTransferObject<NoteResponseModel>(:final data):
           {
             log('add');
-            notes.value.insert(0, data);
-            notes.refresh();
+            notesList.value.insert(0, data);
+            notesList.refresh();
 
             break;
           }
@@ -183,12 +172,21 @@ class NotesHomePageViewModel {
           {
             log('edit');
             final index =
-                notes.value.indexWhere((note) => note.id == editData.id);
+                notesList.value.indexWhere((note) => note.id == editData.id);
             if (index == -1) {
               return;
             }
-            notes.value[index] = editData;
-            notes.refresh();
+            notesList.value[index] = editData;
+            notesList.refresh();
+            break;
+          }
+        case DeleteDataTransferObject<NoteResponseModel>(:final data):
+          {
+            log('delete ${data.id}');
+            notesList.removeWhere(
+              (note) => note.id == data.id,
+            );
+            notesList.refresh();
             break;
           }
       }
@@ -202,14 +200,16 @@ class NotesHomePageViewModel {
   FutureOr<void> onPressedNote(
       {required int index, required BuildContext context}) async {
     if (isSelectNotesMode.value) {
-      _performActionOnNote(notes[index].id);
+      _performActionOnNote(notesList[index].id);
     } else {
-      _noteTransferObjectHandler(await context.pushNamed(
-        AppRoutes.createNotePage,
-        extra: OpenNoteTransferObject(
-          notes[index].id,
+      _noteTransferObjectHandler(
+        await context.pushNamed(
+          AppRoutes.createNotePage,
+          extra: OpenNoteTransferObject(
+            notesList[index].id,
+          ),
         ),
-      ));
+      );
     }
   }
 
@@ -223,10 +223,10 @@ class NotesHomePageViewModel {
       jwtToken: jwtToken,
     );
     if (result is GoodUseCaseResult) {
-      notes.value
+      notesList.value
           .removeWhere((note) => selectedNotesList.value.contains(note.id));
-      notes.refresh();
-      if (notes.isNotEmpty) {
+      notesList.refresh();
+      if (notesList.isNotEmpty) {
         notesBloc.add(ResponseBlocEvent.clearState());
       } else {
         notesBloc.add(ResponseBlocEvent.resetToInitialState());
@@ -238,12 +238,16 @@ class NotesHomePageViewModel {
   Future<void> deleteNotesOnPressed(BuildContext context) async {
     final result = await _deleteSomeNotes(selectedNotesList.value);
     isSelectNotesMode(false);
+    if (result is GoodUseCaseResult && notesList.isEmpty) {
+      await getNotes();
+    }
     if (context.mounted && context.canPop()) {
       notificationService.responseNotification(
         result: result,
         context: context,
         goodUseCaseMessage: 'Notes have been deleted',
       );
+
       context.pop();
     }
   }
@@ -266,13 +270,13 @@ class NotesHomePageViewModel {
       newIndex--;
     }
 
-    final oldId = notes.value[oldIndex].id;
+    final oldId = notesList.value[oldIndex].id;
     final newId =
-        resuestNewIndex == -1 ? null : notes.value[resuestNewIndex].id;
+        resuestNewIndex == -1 ? null : notesList.value[resuestNewIndex].id;
 
-    final note = notes.removeAt(oldIndex);
+    final note = notesList.removeAt(oldIndex);
 
-    notes.value.insert(newIndex, note);
+    notesList.value.insert(newIndex, note);
     final result = await _notesRepository.moveNote(
       noteId: oldId,
       prevNoteId: newId,

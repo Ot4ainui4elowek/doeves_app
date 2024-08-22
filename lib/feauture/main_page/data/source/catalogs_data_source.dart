@@ -55,5 +55,6 @@ abstract class CatalogsClientDataSource {
     @Query('offset') required int offset,
     @Query('limit') required int limit,
     @Header('Authorization') required String jwtToken,
+    @Path('id') required int id,
   });
 }

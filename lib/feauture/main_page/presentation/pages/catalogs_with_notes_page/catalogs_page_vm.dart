@@ -1,15 +1,19 @@
 import 'dart:developer';
 
 import 'package:doeves_app/core/data/secure_storage/secure_storage.dart';
+import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/core/presentation/notification_service/notification_service.dart';
 import 'package:doeves_app/core/presentation/notification_service/snack_bar_notification_service/snack_bar_notification_service_impl.dart';
+import 'package:doeves_app/feauture/create_catalog_page/domain/catalog_data_transfer_object.dart';
 import 'package:doeves_app/feauture/main_page/data/model/catalogs/catalog_response_model.dart';
 import 'package:doeves_app/feauture/main_page/data/model/catalogs/catalogs_list_response_model.dart';
 import 'package:doeves_app/feauture/main_page/domain/repository/catalogs/catalogs_repository.dart';
 import 'package:doeves_app/feauture/main_page/domain/response_bloc/response_bloc.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/vm/pagination_selectable_list_vm.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
 import 'package:reactive_variables/reactive_variables.dart';
 
 class CatalogsPageViewModel {
@@ -18,13 +22,16 @@ class CatalogsPageViewModel {
     required SecureStorage secureStorage,
   })  : _secureStorage = secureStorage,
         _catalogsRepository = catalogsRepository {
-    _paginationSelectableList = PaginationSelectableListController(
+    _catalogListController = PaginationSelectableListController(
+      scrollController: scrollController,
       checkAllEntitysIsSelected: _checkAllNotesIsSelected,
       entitysList: catalogsList,
-      getEntitys: getEntitys,
+      getEntitys: getCatalogs,
       selectedEntitysList: selectedList,
     );
   }
+
+  final scrollController = ScrollController();
 
   final CatalogsRepository _catalogsRepository;
 
@@ -36,28 +43,24 @@ class CatalogsPageViewModel {
   final catalogsBloc = ResponseBloc();
 
   void init() {
-    catalogsBloc.add(ResponseBlocEvent.loading());
-    _getCatalogs();
-    _paginationSelectableList.init();
+    getCatalogs();
+    _catalogListController.init();
   }
 
   void dispose() {
-    _paginationSelectableList.dispose();
+    _catalogListController.dispose();
   }
 
-  ScrollController get scrollController =>
-      _paginationSelectableList.scrollController;
-
-  Rv<bool> get isSelectedMode => _paginationSelectableList.isSelectedMode;
+  Rv<bool> get isSelectedMode => _catalogListController.isSelectedMode;
 
   late final PaginationSelectableListController<CatalogResponseModel, int>
-      _paginationSelectableList;
+      _catalogListController;
 
   final _limit = 10.rv;
 
   final isLoading = false.rv;
 
-  Future<void> _getCatalogs() async {
+  Future<void> getCatalogs() async {
     final jwtToken = await _secureStorage.readToken();
 
     if (jwtToken == null) {
@@ -81,14 +84,18 @@ class CatalogsPageViewModel {
         result: result, initialListIsEmpty: catalogsList.isEmpty));
   }
 
-  void onPressedCatalog(
-    int id,
-  ) {
+  void onPressedCatalog({required int id, required BuildContext context}) {
     if (isSelectedMode.value) {
       _onPressedCatalogSelectedMode(id);
     } else {
-      log('open');
+      _openCatalog(context: context, id: id);
     }
+  }
+
+  Future<void> _openCatalog(
+      {required int id, required BuildContext context}) async {
+    context.pushNamed(AppRoutes.createCatalogPage,
+        extra: OpenCatalogDataTrasferObject(id));
   }
 
   void _onPressedCatalogSelectedMode(int id) {
@@ -101,17 +108,12 @@ class CatalogsPageViewModel {
 
   Future<void> refreshCatalogs() async {
     catalogsList.clear();
-    await _getCatalogs();
+    await getCatalogs();
   }
 
   final Rv<List<int>> selectedList = Rv([]);
 
   final Rv<List<CatalogResponseModel>> catalogsList = Rv([]);
-
-  Future<void> getEntitys() async {
-    catalogsBloc.add(ResponseBlocEvent.loading());
-    await _getCatalogs();
-  }
 
   final allCatalogsIsSelected = false.rv;
 
@@ -143,6 +145,9 @@ class CatalogsPageViewModel {
     }
     selectedList.clear();
     isSelectedMode(false);
+    if (catalogsList.isEmpty) {
+      getCatalogs();
+    }
   }
 
   void _checkAllNotesIsSelected() {

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:reactive_variables/reactive_variables.dart';
 
@@ -9,9 +7,10 @@ class PaginationSelectableListController<T, D> {
     required this.entitysList,
     required this.getEntitys,
     required this.selectedEntitysList,
+    required this.scrollController,
   });
 
-  final ScrollController scrollController = ScrollController();
+  final ScrollController scrollController;
 
   final isSelectedMode = false.rv;
 
@@ -23,7 +22,6 @@ class PaginationSelectableListController<T, D> {
   final void Function() checkAllEntitysIsSelected;
 
   void init() {
-    log('init');
     scrollController.addListener(checkScroll);
     isSelectedMode.addListener(clearSelectedLsit);
     entitysList.addListener(checkAllEntitysIsSelected);

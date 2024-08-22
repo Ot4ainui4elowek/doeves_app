@@ -160,6 +160,7 @@ class _CatalogsClientDataSource implements CatalogsClientDataSource {
     required int offset,
     required int limit,
     required String jwtToken,
+    required int id,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -177,7 +178,7 @@ class _CatalogsClientDataSource implements CatalogsClientDataSource {
     )
             .compose(
               _dio.options,
-              '/catalog/{id}/notes',
+              '/catalog/${id}/notes',
               queryParameters: queryParameters,
               data: _data,
             )
