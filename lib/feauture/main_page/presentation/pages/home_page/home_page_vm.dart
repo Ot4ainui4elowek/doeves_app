@@ -3,6 +3,8 @@ import 'dart:developer';
 
 import 'package:doeves_app/core/data/secure_storage/secure_storage.dart';
 import 'package:doeves_app/core/domain/app_error/app_error.dart';
+import 'package:doeves_app/core/domain/data_transfer_controller.dart';
+import 'package:doeves_app/core/domain/data_transfer_object.dart';
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/core/presentation/notification_service/snack_bar_notification_service/snack_bar_notification_service_impl.dart';
@@ -10,14 +12,13 @@ import 'package:doeves_app/feauture/create_note/domain/create_note_page_transfer
 import 'package:doeves_app/feauture/main_page/data/model/notes/note_response_model.dart';
 import 'package:doeves_app/feauture/main_page/data/model/notes/notes_list/notes_list_response_model.dart';
 import 'package:doeves_app/feauture/main_page/data/model/notes/remove_list_of_notes/empty_good_response.dart';
-import 'package:doeves_app/feauture/main_page/domain/data_transfer_object.dart';
 import 'package:doeves_app/feauture/main_page/domain/repository/notes/notes_repository.dart';
 import 'package:doeves_app/feauture/main_page/domain/response_bloc/response_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reactive_variables/reactive_variables.dart';
 
-class NotesHomePageViewModel {
+class NotesHomePageViewModel with DataTransferHandler<NoteResponseModel> {
   NotesHomePageViewModel({
     required NotesRepository notesRepository,
     required SecureStorage storage,
@@ -156,45 +157,8 @@ class NotesHomePageViewModel {
     getNotes();
   }
 
-  Future<void> _noteTransferObjectHandler(Object? noteTransferObject) async {
-    log(noteTransferObject.toString());
-    if (noteTransferObject is DataTransferObject<NoteResponseModel>) {
-      switch (noteTransferObject) {
-        case AddDataTransferObject<NoteResponseModel>(:final data):
-          {
-            log('add');
-            notesList.value.insert(0, data);
-            notesList.refresh();
-
-            break;
-          }
-        case EditDataTransferObject<NoteResponseModel>(:final editData):
-          {
-            log('edit');
-            final index =
-                notesList.value.indexWhere((note) => note.id == editData.id);
-            if (index == -1) {
-              return;
-            }
-            notesList.value[index] = editData;
-            notesList.refresh();
-            break;
-          }
-        case DeleteDataTransferObject<NoteResponseModel>(:final data):
-          {
-            log('delete ${data.id}');
-            notesList.removeWhere(
-              (note) => note.id == data.id,
-            );
-            notesList.refresh();
-            break;
-          }
-      }
-    }
-  }
-
   Future<void> addNote(BuildContext context) async {
-    _noteTransferObjectHandler(await context.push(AppRoutes.createNotePage));
+    _goToCreateNotePage(await context.push(AppRoutes.createNotePage));
   }
 
   FutureOr<void> onPressedNote(
@@ -202,15 +166,48 @@ class NotesHomePageViewModel {
     if (isSelectNotesMode.value) {
       _performActionOnNote(notesList[index].id);
     } else {
-      _noteTransferObjectHandler(
-        await context.pushNamed(
-          AppRoutes.createNotePage,
-          extra: OpenNoteTransferObject(
-            notesList[index].id,
-          ),
-        ),
-      );
+      _openNote(context: context, index: index);
     }
+  }
+
+  Future<void> _openNote(
+      {required BuildContext context, required int index}) async {
+    _goToCreateNotePage(
+      await context.push(
+        AppRoutes.createNotePage,
+        extra: OpenNoteTransferObject(
+          notesList[index].id,
+        ),
+      ),
+    );
+  }
+
+  void _goToCreateNotePage(DataTransferObject<NoteResponseModel>? data) {
+    requestToPage(
+      data: data,
+      create: (data) {
+        log('add');
+        notesList.value.insert(0, data);
+        notesList.refresh();
+      },
+      edit: (editedData) {
+        log('edit');
+        final index =
+            notesList.value.indexWhere((note) => note.id == editedData.id);
+        if (index == -1) {
+          return;
+        }
+        notesList.value[index] = editedData;
+        notesList.refresh();
+      },
+      delete: (deletedData) {
+        log('delete ${deletedData.id}');
+        notesList.removeWhere(
+          (note) => note.id == deletedData.id,
+        );
+        notesList.refresh();
+      },
+    );
   }
 
   Future<UseCaseResult> _deleteSomeNotes(List<int> idList) async {

@@ -11,7 +11,7 @@ sealed class DataTransferObject<T> {
       return DeleteDataTransferObject(deletedData);
     }
     if (data != null) {
-      return AddDataTransferObject(data);
+      return CreateDataTransferObject(data);
     }
     if (editData != null) {
       return EditDataTransferObject(editData);
@@ -22,18 +22,18 @@ sealed class DataTransferObject<T> {
 
   factory DataTransferObject.delete(T data) = DeleteDataTransferObject;
 
-  factory DataTransferObject.add(T data) = AddDataTransferObject;
+  factory DataTransferObject.add(T data) = CreateDataTransferObject;
 
   factory DataTransferObject.edit(T editData) = EditDataTransferObject;
 }
 
 class DeleteDataTransferObject<T> implements DataTransferObject<T> {
-  const DeleteDataTransferObject(this.data);
-  final T data;
+  const DeleteDataTransferObject(this.deletedData);
+  final T deletedData;
 }
 
-class AddDataTransferObject<T> implements DataTransferObject<T> {
-  AddDataTransferObject(this.data);
+class CreateDataTransferObject<T> implements DataTransferObject<T> {
+  CreateDataTransferObject(this.data);
   final T data;
 }
 

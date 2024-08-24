@@ -47,6 +47,7 @@ class NoteWithContentWidget extends StatelessWidget {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text('id: ${note.id}'),
           _titleBuilder(context),
           _descriptionBuilder(context),
         ],

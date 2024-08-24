@@ -342,7 +342,6 @@ class _NotesHomePageState extends State<NotesHomePage>
       );
 
   Widget get _floatingActionButtonBuilder => FloatingActionButton(
-        shape: const CircleBorder(),
         onPressed: () => vm.addNote(context),
         child: Icon(
           Icons.add_rounded,

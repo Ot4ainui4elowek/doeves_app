@@ -31,31 +31,19 @@ class MainPageSmallState extends State<MainPageSmall> {
   List<NavigationDestination> get _navigationDestinitionBuilder {
     final selectedColor = Theme.of(context).colorScheme.primary;
     final unSelectedColor = Theme.of(context).colorScheme.primary;
+
+    NavigationDestination destinition(PagesEnum page) {
+      return NavigationDestination(
+        selectedIcon: Icon(page.selectedIcon, color: selectedColor),
+        icon: Icon(page.icon, color: unSelectedColor),
+        label: page.pageName,
+      );
+    }
+
     return <NavigationDestination>[
-      NavigationDestination(
-        selectedIcon: Icon(
-          Icons.home,
-          color: selectedColor,
-        ),
-        icon: Icon(Icons.home_outlined, color: unSelectedColor),
-        label: PagesEnum.homePage.pageName,
-      ),
-      NavigationDestination(
-        selectedIcon: Icon(
-          Icons.bookmark_added,
-          color: selectedColor,
-        ),
-        icon: Icon(Icons.bookmark_added_outlined, color: unSelectedColor),
-        label: PagesEnum.completedPage.pageName,
-      ),
-      NavigationDestination(
-        selectedIcon: Icon(
-          Icons.collections_bookmark,
-          color: selectedColor,
-        ),
-        icon: Icon(Icons.collections_bookmark_outlined, color: unSelectedColor),
-        label: PagesEnum.catalogPage.pageName,
-      ),
+      destinition(PagesEnum.homePage),
+      destinition(PagesEnum.tasksPage),
+      destinition(PagesEnum.catalogPage),
     ];
   }
 

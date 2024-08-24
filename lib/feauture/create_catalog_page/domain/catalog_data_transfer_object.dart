@@ -1,15 +1,15 @@
-sealed class CreateCatalogPageDataTransferObject {
-  factory CreateCatalogPageDataTransferObject.create() =
+import 'package:doeves_app/feauture/main_page/data/model/catalogs/catalog_response_model.dart';
+
+sealed class CreateCatalogDataTransferObject {
+  factory CreateCatalogDataTransferObject.create() =
       NewCatalogDataTransferObject;
-  factory CreateCatalogPageDataTransferObject.open(int catalogId) =
+  factory CreateCatalogDataTransferObject.open(CatalogResponseModel catalog) =
       OpenCatalogDataTrasferObject;
 }
 
-class NewCatalogDataTransferObject
-    implements CreateCatalogPageDataTransferObject {}
+class NewCatalogDataTransferObject implements CreateCatalogDataTransferObject {}
 
-class OpenCatalogDataTrasferObject
-    implements CreateCatalogPageDataTransferObject {
-  OpenCatalogDataTrasferObject(this.catalogId);
-  final int catalogId;
+class OpenCatalogDataTrasferObject implements CreateCatalogDataTransferObject {
+  OpenCatalogDataTrasferObject(this.catalog);
+  final CatalogResponseModel catalog;
 }

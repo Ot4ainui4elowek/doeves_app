@@ -59,7 +59,7 @@ class CreateCatalogRepositoryImpl
   @override
   Future<UseCaseResult<EmptyGoodResponse>> editCatalogName({
     required String jwtToken,
-    required String id,
+    required int id,
     required String catalogName,
   }) async {
     try {

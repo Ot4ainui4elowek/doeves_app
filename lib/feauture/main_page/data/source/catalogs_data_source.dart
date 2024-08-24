@@ -46,7 +46,7 @@ abstract class CatalogsClientDataSource {
   @PATCH('/catalog/{id}/name')
   Future<HttpResponse<String>> editCatalogName({
     @Header('Authorization') required String jwtToken,
-    @Path('id') required String id,
+    @Path('id') required int id,
     @Query('val') required String catalogName,
   });
 

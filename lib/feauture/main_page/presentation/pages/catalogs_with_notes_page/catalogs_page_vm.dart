@@ -84,18 +84,25 @@ class CatalogsPageViewModel {
         result: result, initialListIsEmpty: catalogsList.isEmpty));
   }
 
-  void onPressedCatalog({required int id, required BuildContext context}) {
+  void onPressedCatalog(
+      {required CatalogResponseModel catalog, required BuildContext context}) {
     if (isSelectedMode.value) {
-      _onPressedCatalogSelectedMode(id);
+      _onPressedCatalogSelectedMode(catalog.id);
     } else {
-      _openCatalog(context: context, id: id);
+      _openCatalog(context: context, catalog: catalog);
     }
   }
 
   Future<void> _openCatalog(
-      {required int id, required BuildContext context}) async {
-    context.pushNamed(AppRoutes.createCatalogPage,
-        extra: OpenCatalogDataTrasferObject(id));
+      {required CatalogResponseModel catalog,
+      required BuildContext context}) async {
+    context.push(AppRoutes.goToCreateCatalogPage,
+        extra: OpenCatalogDataTrasferObject(catalog));
+  }
+
+  Future<void> createCatalog(BuildContext context) async {
+    context.push(AppRoutes.goToCreateCatalogPage,
+        extra: CreateCatalogDataTransferObject.create());
   }
 
   void _onPressedCatalogSelectedMode(int id) {

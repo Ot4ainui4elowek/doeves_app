@@ -24,23 +24,21 @@ class _MainPageLargeState extends State<MainPageLarge> {
     );
   }
 
-  List<NavigationRailDestination> get _navigationItemsBuilder => [
-        NavigationRailDestination(
-          selectedIcon: const Icon(Icons.home),
-          icon: const Icon(Icons.home_outlined),
-          label: Text(PagesEnum.homePage.pageName),
-        ),
-        NavigationRailDestination(
-          selectedIcon: const Icon(Icons.bookmark_added),
-          icon: const Icon(Icons.bookmark_added_outlined),
-          label: Text(PagesEnum.completedPage.pageName),
-        ),
-        NavigationRailDestination(
-          selectedIcon: const Icon(Icons.collections_bookmark),
-          icon: const Icon(Icons.collections_bookmark_outlined),
-          label: Text(PagesEnum.catalogPage.pageName),
-        ),
-      ];
+  List<NavigationRailDestination> get _navigationItemsBuilder {
+    NavigationRailDestination railDestinition(PagesEnum page) {
+      return NavigationRailDestination(
+        selectedIcon: Icon(page.selectedIcon),
+        icon: Icon(page.icon),
+        label: Text(page.pageName),
+      );
+    }
+
+    return [
+      railDestinition(PagesEnum.homePage),
+      railDestinition(PagesEnum.tasksPage),
+      railDestinition(PagesEnum.catalogPage),
+    ];
+  }
 
   Widget get _navigationBuilder => Container(
         decoration: BoxDecoration(

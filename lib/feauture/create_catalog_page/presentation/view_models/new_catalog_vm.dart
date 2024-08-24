@@ -5,9 +5,9 @@ import 'package:doeves_app/feauture/create_catalog_page/presentation/create_cata
 import 'package:doeves_app/feauture/create_catalog_page/presentation/view_models/create_catalog_page_vm.dart';
 import 'package:reactive_variables/src/variable.dart';
 
-class CreateCatalogViewModel
+class NewCatalogViewModel
     implements CreateCatalogPageViewModel, CreateViewModel {
-  CreateCatalogViewModel({
+  NewCatalogViewModel({
     required this.controller,
   });
   @override

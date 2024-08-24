@@ -1,4 +1,5 @@
 import 'package:doeves_app/core/domain/container/app_container.dart';
+import 'package:doeves_app/core/domain/data_transfer_object.dart';
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/feauture/authorization/presentation/login_page/login_page.dart';
 import 'package:doeves_app/feauture/authorization/presentation/login_page/login_page_vm.dart';
@@ -14,14 +15,13 @@ import 'package:doeves_app/feauture/create_note/domain/create_note_page_transfer
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page_controller.dart';
 import 'package:doeves_app/feauture/create_note/presentation/view_models/create_note_page_vm.dart';
-import 'package:doeves_app/feauture/main_page/domain/data_transfer_object.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/catalogs_with_notes_page/catalogs_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/catalogs_with_notes_page/catalogs_page_vm.dart';
-import 'package:doeves_app/feauture/main_page/presentation/pages/completed_notes_page/completed_notes_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/home_page/home_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/home_page/home_page_vm.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/main_page/main_page_large.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/main_page/main_page_small.dart';
+import 'package:doeves_app/feauture/main_page/presentation/pages/tasks_page/tasks_page.dart';
 import 'package:doeves_app/feauture/search_note_page/presentation/search_note_page.dart';
 import 'package:doeves_app/feauture/search_note_page/presentation/search_note_page_vm.dart';
 import 'package:doeves_app/feauture/select_new_note_page/presentation/pages/select_new_note_page.dart';
@@ -119,8 +119,8 @@ final router = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: AppRoutes.completedNotesPage,
-              builder: (context, state) => const CompletedNotesPage(),
+              path: AppRoutes.tasksPage,
+              builder: (context, state) => const TasksPage(),
             ),
           ],
         ),
@@ -136,6 +136,29 @@ final router = GoRouter(
                   secureStorage: AppContainer().secureScope.secureStorage,
                 ),
               ),
+              routes: [
+                GoRoute(
+                  path: AppRoutes.createCatalogPage,
+                  name: AppRoutes.createCatalogPage,
+                  builder: (context, state) {
+                    final catalogData = state.extra;
+                    final isValid =
+                        catalogData is CreateCatalogDataTransferObject;
+                    return CreateCatalogPage(
+                      vm: CreateCatalogPageViewModel.create(
+                        data: isValid ? catalogData : null,
+                        controller: CreateCatalogPageController(
+                          catalogRepository: AppContainer()
+                              .repositoryScope
+                              .createCatalogRepository,
+                          secureStorage:
+                              AppContainer().secureScope.secureStorage,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ],
         ),
@@ -200,22 +223,5 @@ final router = GoRouter(
         ),
       ),
     ),
-    GoRoute(
-        path: AppRoutes.createCatalogPage,
-        name: AppRoutes.createCatalogPage,
-        builder: (context, state) {
-          final catalogData = state.extra;
-          final isValid = catalogData is CreateCatalogPageDataTransferObject;
-          return CreateCatalogPage(
-            vm: CreateCatalogPageViewModel.create(
-              data: isValid ? catalogData : null,
-              controller: CreateCatalogPageController(
-                catalogRepository:
-                    AppContainer().repositoryScope.createCatalogRepository,
-                secureStorage: AppContainer().secureScope.secureStorage,
-              ),
-            ),
-          );
-        })
   ],
 );

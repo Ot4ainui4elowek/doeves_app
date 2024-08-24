@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/presentation/animated_visibility.dart';
 import 'package:doeves_app/core/presentation/buttons/app_elevated_button.dart';
@@ -203,7 +205,7 @@ class _CatalogsPageState extends State<CatalogsPage> {
               child: CatalogListItem(
                   catalog: vm.catalogsList[index],
                   onTap: () => vm.onPressedCatalog(
-                      id: vm.catalogsList[index].id, context: context)),
+                      catalog: vm.catalogsList[index], context: context)),
             ),
           ),
           itemCount: vm.catalogsList.length,
@@ -219,6 +221,7 @@ class _CatalogsPageState extends State<CatalogsPage> {
 
   @override
   void didUpdateWidget(covariant oldWidget) {
+    log('update catalogs page');
     vm.init();
     super.didUpdateWidget(oldWidget);
   }
@@ -229,21 +232,31 @@ class _CatalogsPageState extends State<CatalogsPage> {
     super.dispose();
   }
 
+  Widget get _floatingActionButtonBuilder => FloatingActionButton(
+        heroTag: 'create catalog hero',
+        onPressed: () => vm.createCatalog(context),
+        child: Icon(
+          Icons.create_new_folder_outlined,
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: _floatingActionButtonBuilder,
         body: RefreshIndicator(
-      onRefresh: vm.refreshCatalogs,
-      child: CustomScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        controller: vm.scrollController,
-        slivers: [
-          _appBarBuilder,
-          SliverToBoxAdapter(
-            child: _catalogListBuilder,
-          )
-        ],
-      ),
-    ));
+          onRefresh: vm.refreshCatalogs,
+          child: CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            controller: vm.scrollController,
+            slivers: [
+              _appBarBuilder,
+              SliverToBoxAdapter(
+                child: _catalogListBuilder,
+              )
+            ],
+          ),
+        ));
   }
 }

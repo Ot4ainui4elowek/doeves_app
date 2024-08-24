@@ -3,7 +3,7 @@ abstract class AppRoutes {
   static const loginPage = '/login';
   static const registrationPage = '/registration';
   static const notesHomePage = '/notes-home';
-  static const completedNotesPage = '/finished-notes';
+  static const tasksPage = '/tasks';
   static const settingsPage = '/settings';
   static const selectNewNotePage = '/select-new-note';
   static const createNotePage = '/create-note';
@@ -16,5 +16,7 @@ abstract class AppRoutes {
       '${AppRoutes.loginPage}/${AppRoutes.verificationPage}';
   static const operationStatusPage = '/operation-status-page';
 
-  static const createCatalogPage = '/catalog';
+  static const createCatalogPage = 'catalog';
+  static const goToCreateCatalogPage =
+      '${AppRoutes.catalogsPage}/${AppRoutes.createCatalogPage}';
 }

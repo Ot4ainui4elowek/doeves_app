@@ -1,12 +1,16 @@
+import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/presentation/app_bars/title_app_bar.dart';
 import 'package:doeves_app/core/presentation/app_wrapper.dart';
 import 'package:doeves_app/core/presentation/text_fields/clear_text_field.dart';
 import 'package:doeves_app/feauture/create_catalog_page/presentation/create_catalog_page_controller.dart';
 import 'package:doeves_app/feauture/create_catalog_page/presentation/view_models/create_catalog_page_vm.dart';
+import 'package:doeves_app/feauture/create_note/domain/create_note_page_transfer_object.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/notes/note_with_content_widget.dart';
+import 'package:doeves_app/feauture/main_page/presentation/widgets/response_bloc_buidler.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/selectable_container.dart';
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class CreateCatalogPage extends StatefulWidget {
   const CreateCatalogPage({
@@ -43,10 +47,46 @@ class _CreateCatalogPageState extends State<CreateCatalogPage> {
         ),
       );
 
+  Widget get _notesBlocBuilder => controller.notesList.observer(
+        (context, value) => ConstrainedBox(
+          constraints: BoxConstraints(
+              minHeight:
+                  value.isEmpty ? MediaQuery.of(context).size.height - 300 : 0),
+          child: ResponseBlocBuidler(
+            bloc: controller.notesBloc,
+            emptyResponseText: 'All notes are loaded!',
+            epmtyListText:
+                'You don\'t have any notes. Add them and they will appear here.',
+          ),
+        ),
+      );
+
+  Widget get _notesListBuilder => controller.notesList.observer(
+        (context, value) => ReorderableListView.builder(
+          footer: _notesBlocBuilder,
+          buildDefaultDragHandles: false,
+          onReorder: (oldIndex, newIndex) {},
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemBuilder: (context, index) => ReorderableDelayedDragStartListener(
+            key: ObjectKey(value[index]),
+            index: index,
+            child: SelectableContainer(
+              isSelectedMode: false,
+              thisItemIsSelected: false,
+              child: NoteWithContentWidget(
+                  note: value[index],
+                  onPressed: () => controller.onPressedNote(
+                      context: context, note: value[index])),
+            ),
+          ),
+          itemCount: value.length,
+        ),
+      );
+
   @override
   void initState() {
     vm.init();
-
     super.initState();
   }
 
@@ -65,29 +105,29 @@ class _CreateCatalogPageState extends State<CreateCatalogPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: vm.catalogId.observer(
+        (context, value) => value != -1
+            ? FloatingActionButton(
+                heroTag: 'create note in catalog',
+                onPressed: () => context.push(AppRoutes.createNotePage,
+                    extra: CreateNoteTransferObject(value)),
+                child: Icon(Icons.add_outlined,
+                    color: Theme.of(context).colorScheme.onPrimary),
+              )
+            : const SizedBox(height: 0),
+      ),
       appBar: TitleAppBar(
         context: context,
       ),
       body: AppWrapper(
         maxWidth: 700,
         child: CustomScrollView(
+          controller: controller.scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             _catalogNameBuilder,
             SliverToBoxAdapter(
-              child: controller.notesList.observer(
-                (context, value) => ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) => SelectableContainer(
-                    isSelectedMode: false,
-                    thisItemIsSelected: false,
-                    child: NoteWithContentWidget(
-                        note: value[index], onPressed: () {}),
-                  ),
-                  itemCount: value.length,
-                ),
-              ),
+              child: _notesListBuilder,
             )
           ],
         ),

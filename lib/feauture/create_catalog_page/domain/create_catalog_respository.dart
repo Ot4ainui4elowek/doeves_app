@@ -7,7 +7,7 @@ import 'package:doeves_app/feauture/main_page/data/model/notes/remove_list_of_no
 abstract interface class CreateCatalogRepository {
   Future<UseCaseResult<EmptyGoodResponse>> editCatalogName({
     required String jwtToken,
-    required String id,
+    required int id,
     required String catalogName,
   });
 

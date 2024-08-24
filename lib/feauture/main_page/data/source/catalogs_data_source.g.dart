@@ -125,7 +125,7 @@ class _CatalogsClientDataSource implements CatalogsClientDataSource {
   @override
   Future<HttpResponse<String>> editCatalogName({
     required String jwtToken,
-    required String id,
+    required int id,
     required String catalogName,
   }) async {
     final _extra = <String, dynamic>{};
