@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'create_note_bloc.dart';
+part of 'response_bloc.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,7 +15,7 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$CreateNoteEvent {
+mixin _$ResponseEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(UseCaseResult<dynamic> result) fetch,
@@ -63,16 +63,16 @@ mixin _$CreateNoteEvent {
 }
 
 /// @nodoc
-abstract class $CreateNoteEventCopyWith<$Res> {
-  factory $CreateNoteEventCopyWith(
-          CreateNoteEvent value, $Res Function(CreateNoteEvent) then) =
-      _$CreateNoteEventCopyWithImpl<$Res, CreateNoteEvent>;
+abstract class $ResponseEventCopyWith<$Res> {
+  factory $ResponseEventCopyWith(
+          ResponseEvent value, $Res Function(ResponseEvent) then) =
+      _$ResponseEventCopyWithImpl<$Res, ResponseEvent>;
 }
 
 /// @nodoc
-class _$CreateNoteEventCopyWithImpl<$Res, $Val extends CreateNoteEvent>
-    implements $CreateNoteEventCopyWith<$Res> {
-  _$CreateNoteEventCopyWithImpl(this._value, this._then);
+class _$ResponseEventCopyWithImpl<$Res, $Val extends ResponseEvent>
+    implements $ResponseEventCopyWith<$Res> {
+  _$ResponseEventCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -91,7 +91,7 @@ abstract class _$$FetchEventImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$FetchEventImplCopyWithImpl<$Res>
-    extends _$CreateNoteEventCopyWithImpl<$Res, _$FetchEventImpl>
+    extends _$ResponseEventCopyWithImpl<$Res, _$FetchEventImpl>
     implements _$$FetchEventImplCopyWith<$Res> {
   __$$FetchEventImplCopyWithImpl(
       _$FetchEventImpl _value, $Res Function(_$FetchEventImpl) _then)
@@ -121,7 +121,7 @@ class _$FetchEventImpl implements FetchEvent {
 
   @override
   String toString() {
-    return 'CreateNoteEvent.fetch(result: $result)';
+    return 'ResponseEvent.fetch(result: $result)';
   }
 
   @override
@@ -210,7 +210,7 @@ class _$FetchEventImpl implements FetchEvent {
   }
 }
 
-abstract class FetchEvent implements CreateNoteEvent {
+abstract class FetchEvent implements ResponseEvent {
   const factory FetchEvent({required final UseCaseResult<dynamic> result}) =
       _$FetchEventImpl;
 
@@ -229,7 +229,7 @@ abstract class _$$SuccessEventImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$SuccessEventImplCopyWithImpl<$Res>
-    extends _$CreateNoteEventCopyWithImpl<$Res, _$SuccessEventImpl>
+    extends _$ResponseEventCopyWithImpl<$Res, _$SuccessEventImpl>
     implements _$$SuccessEventImplCopyWith<$Res> {
   __$$SuccessEventImplCopyWithImpl(
       _$SuccessEventImpl _value, $Res Function(_$SuccessEventImpl) _then)
@@ -243,7 +243,7 @@ class _$SuccessEventImpl implements SuccessEvent {
 
   @override
   String toString() {
-    return 'CreateNoteEvent.success()';
+    return 'ResponseEvent.success()';
   }
 
   @override
@@ -324,7 +324,7 @@ class _$SuccessEventImpl implements SuccessEvent {
   }
 }
 
-abstract class SuccessEvent implements CreateNoteEvent {
+abstract class SuccessEvent implements ResponseEvent {
   const factory SuccessEvent() = _$SuccessEventImpl;
 }
 
@@ -337,7 +337,7 @@ abstract class _$$LoadingEventImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$LoadingEventImplCopyWithImpl<$Res>
-    extends _$CreateNoteEventCopyWithImpl<$Res, _$LoadingEventImpl>
+    extends _$ResponseEventCopyWithImpl<$Res, _$LoadingEventImpl>
     implements _$$LoadingEventImplCopyWith<$Res> {
   __$$LoadingEventImplCopyWithImpl(
       _$LoadingEventImpl _value, $Res Function(_$LoadingEventImpl) _then)
@@ -351,7 +351,7 @@ class _$LoadingEventImpl implements LoadingEvent {
 
   @override
   String toString() {
-    return 'CreateNoteEvent.loading()';
+    return 'ResponseEvent.loading()';
   }
 
   @override
@@ -432,12 +432,12 @@ class _$LoadingEventImpl implements LoadingEvent {
   }
 }
 
-abstract class LoadingEvent implements CreateNoteEvent {
+abstract class LoadingEvent implements ResponseEvent {
   const factory LoadingEvent() = _$LoadingEventImpl;
 }
 
 /// @nodoc
-mixin _$CreateNoteState {
+mixin _$ResponseState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
@@ -485,16 +485,16 @@ mixin _$CreateNoteState {
 }
 
 /// @nodoc
-abstract class $CreateNoteStateCopyWith<$Res> {
-  factory $CreateNoteStateCopyWith(
-          CreateNoteState value, $Res Function(CreateNoteState) then) =
-      _$CreateNoteStateCopyWithImpl<$Res, CreateNoteState>;
+abstract class $ResponseStateCopyWith<$Res> {
+  factory $ResponseStateCopyWith(
+          ResponseState value, $Res Function(ResponseState) then) =
+      _$ResponseStateCopyWithImpl<$Res, ResponseState>;
 }
 
 /// @nodoc
-class _$CreateNoteStateCopyWithImpl<$Res, $Val extends CreateNoteState>
-    implements $CreateNoteStateCopyWith<$Res> {
-  _$CreateNoteStateCopyWithImpl(this._value, this._then);
+class _$ResponseStateCopyWithImpl<$Res, $Val extends ResponseState>
+    implements $ResponseStateCopyWith<$Res> {
+  _$ResponseStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -511,7 +511,7 @@ abstract class _$$InitialImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$InitialImplCopyWithImpl<$Res>
-    extends _$CreateNoteStateCopyWithImpl<$Res, _$InitialImpl>
+    extends _$ResponseStateCopyWithImpl<$Res, _$InitialImpl>
     implements _$$InitialImplCopyWith<$Res> {
   __$$InitialImplCopyWithImpl(
       _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
@@ -525,7 +525,7 @@ class _$InitialImpl implements _Initial {
 
   @override
   String toString() {
-    return 'CreateNoteState.initial()';
+    return 'ResponseState.initial()';
   }
 
   @override
@@ -606,7 +606,7 @@ class _$InitialImpl implements _Initial {
   }
 }
 
-abstract class _Initial implements CreateNoteState {
+abstract class _Initial implements ResponseState {
   const factory _Initial() = _$InitialImpl;
 }
 
@@ -619,7 +619,7 @@ abstract class _$$LoadingImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$LoadingImplCopyWithImpl<$Res>
-    extends _$CreateNoteStateCopyWithImpl<$Res, _$LoadingImpl>
+    extends _$ResponseStateCopyWithImpl<$Res, _$LoadingImpl>
     implements _$$LoadingImplCopyWith<$Res> {
   __$$LoadingImplCopyWithImpl(
       _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
@@ -633,7 +633,7 @@ class _$LoadingImpl implements _Loading {
 
   @override
   String toString() {
-    return 'CreateNoteState.loading()';
+    return 'ResponseState.loading()';
   }
 
   @override
@@ -714,7 +714,7 @@ class _$LoadingImpl implements _Loading {
   }
 }
 
-abstract class _Loading implements CreateNoteState {
+abstract class _Loading implements ResponseState {
   const factory _Loading() = _$LoadingImpl;
 }
 
@@ -729,7 +729,7 @@ abstract class _$$ErrorImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$ErrorImplCopyWithImpl<$Res>
-    extends _$CreateNoteStateCopyWithImpl<$Res, _$ErrorImpl>
+    extends _$ResponseStateCopyWithImpl<$Res, _$ErrorImpl>
     implements _$$ErrorImplCopyWith<$Res> {
   __$$ErrorImplCopyWithImpl(
       _$ErrorImpl _value, $Res Function(_$ErrorImpl) _then)
@@ -759,7 +759,7 @@ class _$ErrorImpl implements _Error {
 
   @override
   String toString() {
-    return 'CreateNoteState.error(message: $message)';
+    return 'ResponseState.error(message: $message)';
   }
 
   @override
@@ -848,7 +848,7 @@ class _$ErrorImpl implements _Error {
   }
 }
 
-abstract class _Error implements CreateNoteState {
+abstract class _Error implements ResponseState {
   const factory _Error({required final String message}) = _$ErrorImpl;
 
   String get message;

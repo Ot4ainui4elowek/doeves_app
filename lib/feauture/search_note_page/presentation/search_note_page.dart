@@ -1,7 +1,7 @@
 import 'package:doeves_app/core/presentation/app_bars/custom_app_bar.dart';
-import 'package:doeves_app/core/presentation/app_wrapper.dart';
 import 'package:doeves_app/core/presentation/buttons/app_bar_button.dart';
 import 'package:doeves_app/core/presentation/hero_widgets/hero_search_widget.dart';
+import 'package:doeves_app/core/presentation/ui/app_wrapper.dart';
 import 'package:doeves_app/feauture/search_note_page/presentation/search_note_page_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:reactive_variables/reactive_variables.dart';

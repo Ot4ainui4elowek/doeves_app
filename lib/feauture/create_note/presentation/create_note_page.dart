@@ -1,12 +1,10 @@
-import 'dart:math';
-
-import 'package:doeves_app/core/presentation/animated_visibility.dart';
 import 'package:doeves_app/core/presentation/app_bars/title_app_bar.dart';
-import 'package:doeves_app/core/presentation/app_wrapper.dart';
+import 'package:doeves_app/core/presentation/bloc_builders/response_bloc_builder.dart';
 import 'package:doeves_app/core/presentation/buttons/back_button.dart';
-import 'package:doeves_app/core/presentation/close_screen_handler.dart';
-import 'package:doeves_app/core/presentation/logo/app_logo_animated.dart';
 import 'package:doeves_app/core/presentation/text_fields/clear_text_field.dart';
+import 'package:doeves_app/core/presentation/ui/animated_visibility.dart';
+import 'package:doeves_app/core/presentation/ui/app_wrapper.dart';
+import 'package:doeves_app/core/presentation/ui/close_screen_handler.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/create_content_entity.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/tasks_list/create_task_list_impl.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/text/create_text_content_impl.dart';
@@ -18,7 +16,6 @@ import 'package:doeves_app/feauture/create_note/presentation/widgets/text_conten
 import 'package:doeves_app/feauture/main_page/data/model/notes/note_response_model.dart';
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class CreateNotePage extends StatefulWidget {
@@ -104,41 +101,9 @@ class _CreateNotePageState extends State<CreateNotePage> {
   Widget _titleAndDescriptionBlocBuilder(Widget child) => Container(
         constraints:
             BoxConstraints(minHeight: MediaQuery.of(context).size.height - 100),
-        child: BlocBuilder(
-          bloc: vm.controller.titleAndDescriptionBloc,
-          builder: (context, state) =>
-              vm.controller.titleAndDescriptionBloc.state.maybeWhen(
-            orElse: () => const SizedBox(height: 0),
-            initial: () => child,
-            loading: () => Center(
-              child: AppLogoAnimated(
-                curve: Curves.linear,
-                repeat: true,
-                width: min(double.maxFinite, 200),
-              ),
-            ),
-            error: (message) => Center(
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.error_outline,
-                      color: Theme.of(context).colorScheme.error,
-                      size: 50,
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      message,
-                      textAlign: TextAlign.center,
-                      style: AppTextTheme.textXl(weight: TextWeight.medium)
-                          .copyWith(color: Theme.of(context).colorScheme.error),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+        child: ResponseBlocBuilder(
+          bloc: controller.titleAndDescriptionBloc,
+          child: child,
         ),
       );
 
@@ -206,6 +171,120 @@ class _CreateNotePageState extends State<CreateNotePage> {
         ),
       );
 
+  void _showDeleteDialogBuilder(
+      {required BuildContext context, Future<void> Function()? deleteNote}) {
+    if (deleteNote == null) {
+      return;
+    }
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        actionsPadding: const EdgeInsets.all(8),
+        title: Column(
+          children: [
+            Text(
+              'Do you want to delete the note?',
+              style: AppTextTheme.textXl(weight: TextWeight.regular),
+            ),
+          ],
+        ),
+        actionsAlignment: MainAxisAlignment.spaceBetween,
+        actions: [
+          TextButton(
+            onPressed: context.pop,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                'Cancell',
+                style:
+                    AppTextTheme.textBase(weight: TextWeight.medium).copyWith(
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              deleteNote();
+              context.pop();
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                'Delete',
+                style:
+                    AppTextTheme.textBase(weight: TextWeight.medium).copyWith(
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _bottomAppBarBuilder() {
+    return Container(
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(25),
+          topRight: Radius.circular(25),
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: BottomAppBar(
+        padding: const EdgeInsets.only(
+          left: 16,
+          right: 88,
+        ),
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 5,
+        color: Theme.of(context).colorScheme.surfaceContainer,
+        child: Row(
+          children: [
+            // Container(
+            //   margin: const EdgeInsets.only(right: 10),
+            //   child: FloatingActionButton(
+            //     onPressed: () => _showNavigationBar(context),
+            //     heroTag: UniqueKey(),
+            //     child: const Icon(Icons.add),
+            //   ),
+            // ),
+            controller.noteId.observer(
+              (context, value) => AnimatedVisibility(
+                visible: value != -1,
+                child: FloatingActionButton(
+                  onPressed: () => _showDeleteDialogBuilder(
+                      context: context,
+                      deleteNote: value != -1
+                          ? () async {
+                              await controller.deleteNote(
+                                  id: value, context: context);
+                              handler.delete(
+                                  context: context,
+                                  deleteData: NoteResponseModel(
+                                      id: value,
+                                      name: controller.titleTextController.text,
+                                      description: controller
+                                          .descriptionTextController.text,
+                                      dateOfCreate: DateTime.now()));
+                            }
+                          : null),
+                  heroTag: UniqueKey(),
+                  child: Icon(
+                    Icons.delete_outline,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -220,23 +299,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
           child: Scaffold(
             body: _bodyBuilder,
             bottomNavigationBar: controller.noteId.observer(
-              (context, value) => _BottomBar(
-                deleteNote: value != -1
-                    ? () async {
-                        await controller.deleteNote(
-                            id: value, context: context);
-                        handler.delete(
-                            context: context,
-                            deleteData: NoteResponseModel(
-                                id: value,
-                                name: controller.titleTextController.text,
-                                description:
-                                    controller.descriptionTextController.text,
-                                dateOfCreate: DateTime.now()));
-                      }
-                    : null,
-                // contentWidgetDatatList: controller.getAddContentList,
-              ),
+              (context, value) => _bottomAppBarBuilder(),
             ),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.endDocked,
@@ -283,137 +346,89 @@ class _ContentFactoryWidget extends StatelessWidget {
   }
 }
 
-class _BottomBar extends StatelessWidget {
-  const _BottomBar(
-      {
-      //required Map<CreateContentEnum, void Function()> contentWidgetDatatList,
-      this.deleteNote});
-  //   : _contentWidgetDatatList = contentWidgetDatatList;
-  // final Map<CreateContentEnum, void Function()> _contentWidgetDatatList;
-  final void Function()? deleteNote;
+// class _BottomBar extends StatelessWidget {
+//   const _BottomBar(
+//       {
+//       //required Map<CreateContentEnum, void Function()> contentWidgetDatatList,
+//       this.deleteNote});
+//   //   : _contentWidgetDatatList = contentWidgetDatatList;
+//   // final Map<CreateContentEnum, void Function()> _contentWidgetDatatList;
+//   final void Function()? deleteNote;
 
-  // void _showNavigationBar(BuildContext context) {
-  //   if (FocusScope.of(context).hasFocus) {
-  //     FocusScope.of(context).unfocus();
-  //   }
-  //   showModalBottomSheet(
-  //     showDragHandle: true,
-  //     context: context,
-  //     builder: (context) => Container(
-  //       width: double.maxFinite,
-  //       padding: const EdgeInsets.all(16).copyWith(top: 0),
-  //       child: SingleChildScrollView(
-  //         scrollDirection: Axis.horizontal,
-  //         child: Row(
-  //           mainAxisSize: MainAxisSize.min,
-  //           children: [
-  //             ActionOnNoteButton(
-  //               actionText: 'Add text',
-  //               icon: Icons.text_fields_rounded,
-  //               onPressed: _contentWidgetDatatList[CreateContentEnum.text],
-  //             ),
-  //             ActionOnNoteButton(
-  //               actionText: 'Add task list',
-  //               icon: Icons.list_rounded,
-  //               onPressed: _contentWidgetDatatList[CreateContentEnum.taskList],
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
+//   // void _showNavigationBar(BuildContext context) {
+//   //   if (FocusScope.of(context).hasFocus) {
+//   //     FocusScope.of(context).unfocus();
+//   //   }
+//   //   showModalBottomSheet(
+//   //     showDragHandle: true,
+//   //     context: context,
+//   //     builder: (context) => Container(
+//   //       width: double.maxFinite,
+//   //       padding: const EdgeInsets.all(16).copyWith(top: 0),
+//   //       child: SingleChildScrollView(
+//   //         scrollDirection: Axis.horizontal,
+//   //         child: Row(
+//   //           mainAxisSize: MainAxisSize.min,
+//   //           children: [
+//   //             ActionOnNoteButton(
+//   //               actionText: 'Add text',
+//   //               icon: Icons.text_fields_rounded,
+//   //               onPressed: _contentWidgetDatatList[CreateContentEnum.text],
+//   //             ),
+//   //             ActionOnNoteButton(
+//   //               actionText: 'Add task list',
+//   //               icon: Icons.list_rounded,
+//   //               onPressed: _contentWidgetDatatList[CreateContentEnum.taskList],
+//   //             ),
+//   //           ],
+//   //         ),
+//   //       ),
+//   //     ),
+//   //   );
+//   // }
 
-  void _showDeleteDialogBuilder(BuildContext context) {
-    if (deleteNote == null) {
-      return;
-    }
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        actionsPadding: const EdgeInsets.all(8),
-        title: Text(
-          'Do you want to delete the note?',
-          style: AppTextTheme.textXl(weight: TextWeight.regular),
-        ),
-        actionsAlignment: MainAxisAlignment.spaceBetween,
-        actions: [
-          TextButton(
-            onPressed: context.pop,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                'Cancell',
-                style:
-                    AppTextTheme.textBase(weight: TextWeight.medium).copyWith(
-                  color: Theme.of(context).colorScheme.outline,
-                ),
-              ),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              deleteNote!();
-              context.pop();
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                'Delete',
-                style:
-                    AppTextTheme.textBase(weight: TextWeight.medium).copyWith(
-                  color: Theme.of(context).colorScheme.error,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(25),
-          topRight: Radius.circular(25),
-        ),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: BottomAppBar(
-        padding: const EdgeInsets.only(
-          left: 16,
-          right: 88,
-        ),
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 5,
-        color: Theme.of(context).colorScheme.surfaceContainer,
-        child: Row(
-          children: [
-            // Container(
-            //   margin: const EdgeInsets.only(right: 10),
-            //   child: FloatingActionButton(
-            //     onPressed: () => _showNavigationBar(context),
-            //     heroTag: UniqueKey(),
-            //     child: const Icon(Icons.add),
-            //   ),
-            // ),
-            AnimatedVisibility(
-              visible: deleteNote != null,
-              child: FloatingActionButton(
-                onPressed: () => _showDeleteDialogBuilder(context),
-                heroTag: UniqueKey(),
-                child: Icon(
-                  Icons.delete_outline,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       decoration: const BoxDecoration(
+//         borderRadius: BorderRadius.only(
+//           topLeft: Radius.circular(25),
+//           topRight: Radius.circular(25),
+//         ),
+//       ),
+//       clipBehavior: Clip.antiAlias,
+//       child: BottomAppBar(
+//         padding: const EdgeInsets.only(
+//           left: 16,
+//           right: 88,
+//         ),
+//         shape: const CircularNotchedRectangle(),
+//         notchMargin: 5,
+//         color: Theme.of(context).colorScheme.surfaceContainer,
+//         child: Row(
+//           children: [
+//             // Container(
+//             //   margin: const EdgeInsets.only(right: 10),
+//             //   child: FloatingActionButton(
+//             //     onPressed: () => _showNavigationBar(context),
+//             //     heroTag: UniqueKey(),
+//             //     child: const Icon(Icons.add),
+//             //   ),
+//             // ),
+//             AnimatedVisibility(
+//               visible: deleteNote != null,
+//               child: FloatingActionButton(
+//                 onPressed: () => _showDeleteDialogBuilder(context),
+//                 heroTag: UniqueKey(),
+//                 child: Icon(
+//                   Icons.delete_outline,
+//                   color: Theme.of(context).colorScheme.onPrimary,
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

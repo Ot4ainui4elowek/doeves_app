@@ -8,7 +8,7 @@ import 'package:doeves_app/feauture/authorization/data/model/http_status_and_err
 import 'package:flutter/cupertino.dart';
 import 'package:retrofit/dio.dart';
 
-import 'app_error/app_error.dart';
+import '../app_error/app_error.dart';
 
 abstract mixin class RestApiHandler {
   @protected

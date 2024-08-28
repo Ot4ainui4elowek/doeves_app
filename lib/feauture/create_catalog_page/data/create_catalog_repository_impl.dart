@@ -1,5 +1,5 @@
 import 'package:doeves_app/core/domain/app_error/app_error.dart';
-import 'package:doeves_app/core/domain/rest_api_handler.dart';
+import 'package:doeves_app/core/domain/use_case_result/rest_api_handler.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/feauture/authorization/data/model/http_status_and_errors.dart';
 import 'package:doeves_app/feauture/create_catalog_page/domain/create_catalog_respository.dart';

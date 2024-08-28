@@ -1,4 +1,4 @@
-import 'package:doeves_app/core/domain/data_transfer_object.dart';
+import 'package:doeves_app/core/domain/data_transfer/data_transfer_object.dart';
 import 'package:doeves_app/core/domain/view_model/view_model_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

@@ -13,6 +13,7 @@ abstract interface class NotesRepository {
   Future<UseCaseResult<EmptyGoodResponse>> deleteMultipleNotes({
     required List<int> deleteNotesList,
     required String jwtToken,
+    bool? anywhere,
   });
 
   Future<UseCaseResult<EmptyGoodResponse>> moveNote({

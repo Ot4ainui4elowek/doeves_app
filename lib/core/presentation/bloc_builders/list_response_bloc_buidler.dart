@@ -1,14 +1,14 @@
 import 'dart:math';
 
 import 'package:doeves_app/core/domain/app_error/app_error.dart';
+import 'package:doeves_app/core/domain/blocs/list_response_bloc/list_response_bloc.dart';
 import 'package:doeves_app/core/presentation/logo/app_logo_animated.dart';
-import 'package:doeves_app/feauture/main_page/domain/response_bloc/response_bloc.dart';
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ResponseBlocBuidler extends StatelessWidget {
-  const ResponseBlocBuidler({
+class ListResponseBlocBuidler extends StatelessWidget {
+  const ListResponseBlocBuidler({
     super.key,
     required this.bloc,
     this.emptyResponseWidget,
@@ -17,7 +17,7 @@ class ResponseBlocBuidler extends StatelessWidget {
     required this.epmtyListText,
   });
 
-  final ResponseBloc bloc;
+  final ListResponseBloc bloc;
   final Widget? emptyResponseWidget;
   final Widget? emptyListWidget;
   final String emptyResponseText;

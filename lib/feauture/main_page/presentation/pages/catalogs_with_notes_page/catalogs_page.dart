@@ -1,8 +1,9 @@
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
-import 'package:doeves_app/core/presentation/animated_visibility.dart';
+import 'package:doeves_app/core/presentation/bloc_builders/list_response_bloc_buidler.dart';
 import 'package:doeves_app/core/presentation/buttons/app_elevated_button.dart';
-import 'package:doeves_app/core/presentation/counter_widget.dart';
-import 'package:doeves_app/core/presentation/scrollable_row.dart';
+import 'package:doeves_app/core/presentation/ui/animated_visibility.dart';
+import 'package:doeves_app/core/presentation/ui/counter_widget.dart';
+import 'package:doeves_app/core/presentation/ui/scrollable_row.dart';
 import 'package:doeves_app/feauture/app_drawer/presentation/drawer_service.dart';
 import 'package:doeves_app/feauture/main_page/domain/device_params.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/catalogs_with_notes_page/catalogs_page_vm.dart';
@@ -12,7 +13,6 @@ import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/searc
 import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/select_all_button.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/selection_mode_button.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/catalogs/catalog_list_item.dart';
-import 'package:doeves_app/feauture/main_page/presentation/widgets/response_bloc_buidler.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/selectable_container.dart';
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';
@@ -183,7 +183,7 @@ class _CatalogsPageState extends State<CatalogsPage> {
           constraints: BoxConstraints(
               minHeight:
                   value.isEmpty ? MediaQuery.of(context).size.height - 300 : 0),
-          child: ResponseBlocBuidler(
+          child: ListResponseBlocBuidler(
             bloc: vm.catalogsBloc,
             emptyResponseText: 'All catalogs are loaded!',
             epmtyListText:

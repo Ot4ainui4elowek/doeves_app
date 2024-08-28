@@ -6,17 +6,20 @@ part of 'authorization_client_data_source.dart';
 // RetrofitGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element
 
 class _AuthorizationClientDataSource implements AuthorizationClientDataSource {
   _AuthorizationClientDataSource(
     this._dio, {
     this.baseUrl,
+    this.errorLogger,
   });
 
   final Dio _dio;
 
   String? baseUrl;
+
+  final ParseErrorLogger? errorLogger;
 
   @override
   Future<HttpResponse<SignInResponseModel>> signIn(
@@ -26,25 +29,31 @@ class _AuthorizationClientDataSource implements AuthorizationClientDataSource {
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(data.toJson());
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<SignInResponseModel>>(Options(
+    final _options = _setStreamType<HttpResponse<SignInResponseModel>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/user/login',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = SignInResponseModel.fromJson(_result.data!);
-    final httpResponse = HttpResponse(value, _result);
+        .compose(
+          _dio.options,
+          '/user/login',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late SignInResponseModel _value;
+    try {
+      _value = SignInResponseModel.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 
@@ -56,25 +65,31 @@ class _AuthorizationClientDataSource implements AuthorizationClientDataSource {
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(data.toJson());
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<SignUpResponseModel>>(Options(
+    final _options = _setStreamType<HttpResponse<SignUpResponseModel>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/user',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = SignUpResponseModel.fromJson(_result.data!);
-    final httpResponse = HttpResponse(value, _result);
+        .compose(
+          _dio.options,
+          '/user',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late SignUpResponseModel _value;
+    try {
+      _value = SignUpResponseModel.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 
@@ -88,7 +103,7 @@ class _AuthorizationClientDataSource implements AuthorizationClientDataSource {
     final _headers = <String, dynamic>{r'Authorization': token};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
+    final _options =
         _setStreamType<HttpResponse<VerificationResponseModel>>(Options(
       method: 'POST',
       headers: _headers,
@@ -104,9 +119,16 @@ class _AuthorizationClientDataSource implements AuthorizationClientDataSource {
                 baseUrl: _combineBaseUrls(
               _dio.options.baseUrl,
               baseUrl,
-            ))));
-    final value = VerificationResponseModel.fromJson(_result.data!);
-    final httpResponse = HttpResponse(value, _result);
+            )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late VerificationResponseModel _value;
+    try {
+      _value = VerificationResponseModel.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 
@@ -118,7 +140,7 @@ class _AuthorizationClientDataSource implements AuthorizationClientDataSource {
     final _headers = <String, dynamic>{r'Authorization': jwtToken};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
+    final _options =
         _setStreamType<HttpResponse<VerificationResponseModel>>(Options(
       method: 'POST',
       headers: _headers,
@@ -134,9 +156,16 @@ class _AuthorizationClientDataSource implements AuthorizationClientDataSource {
                 baseUrl: _combineBaseUrls(
               _dio.options.baseUrl,
               baseUrl,
-            ))));
-    final value = VerificationResponseModel.fromJson(_result.data!);
-    final httpResponse = HttpResponse(value, _result);
+            )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late VerificationResponseModel _value;
+    try {
+      _value = VerificationResponseModel.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 

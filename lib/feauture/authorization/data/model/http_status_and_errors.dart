@@ -16,7 +16,8 @@ enum HttpStatusAndErrors implements HttpStatus {
   e400('invalid data'),
   incorrectNumber('incorrectNumber'),
   passwordMismatch('passwordMismatch'),
-  emptyResult('empty-result');
+  emptyResult('empty-result'),
+  undefinedJWTToken('unedined jwt token');
 
   const HttpStatusAndErrors(this.value);
 

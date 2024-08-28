@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'response_bloc.dart';
+part of 'list_response_bloc.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,7 +15,7 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$ResponseBlocEvent<T> {
+mixin _$ListResponseBlocEvent<T> {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -88,17 +88,17 @@ mixin _$ResponseBlocEvent<T> {
 }
 
 /// @nodoc
-abstract class $ResponseBlocEventCopyWith<T, $Res> {
-  factory $ResponseBlocEventCopyWith(ResponseBlocEvent<T> value,
-          $Res Function(ResponseBlocEvent<T>) then) =
-      _$ResponseBlocEventCopyWithImpl<T, $Res, ResponseBlocEvent<T>>;
+abstract class $ListResponseBlocEventCopyWith<T, $Res> {
+  factory $ListResponseBlocEventCopyWith(ListResponseBlocEvent<T> value,
+          $Res Function(ListResponseBlocEvent<T>) then) =
+      _$ListResponseBlocEventCopyWithImpl<T, $Res, ListResponseBlocEvent<T>>;
 }
 
 /// @nodoc
-class _$ResponseBlocEventCopyWithImpl<T, $Res,
-        $Val extends ResponseBlocEvent<T>>
-    implements $ResponseBlocEventCopyWith<T, $Res> {
-  _$ResponseBlocEventCopyWithImpl(this._value, this._then);
+class _$ListResponseBlocEventCopyWithImpl<T, $Res,
+        $Val extends ListResponseBlocEvent<T>>
+    implements $ListResponseBlocEventCopyWith<T, $Res> {
+  _$ListResponseBlocEventCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -118,7 +118,8 @@ abstract class _$$FetchDataEventImplCopyWith<T, $Res> {
 
 /// @nodoc
 class __$$FetchDataEventImplCopyWithImpl<T, $Res>
-    extends _$ResponseBlocEventCopyWithImpl<T, $Res, _$FetchDataEventImpl<T>>
+    extends _$ListResponseBlocEventCopyWithImpl<T, $Res,
+        _$FetchDataEventImpl<T>>
     implements _$$FetchDataEventImplCopyWith<T, $Res> {
   __$$FetchDataEventImplCopyWithImpl(_$FetchDataEventImpl<T> _value,
       $Res Function(_$FetchDataEventImpl<T>) _then)
@@ -156,7 +157,7 @@ class _$FetchDataEventImpl<T> implements FetchDataEvent<T> {
 
   @override
   String toString() {
-    return 'ResponseBlocEvent<$T>.fetch(result: $result, initialListIsEmpty: $initialListIsEmpty)';
+    return 'ListResponseBlocEvent<$T>.fetch(result: $result, initialListIsEmpty: $initialListIsEmpty)';
   }
 
   @override
@@ -273,7 +274,7 @@ class _$FetchDataEventImpl<T> implements FetchDataEvent<T> {
   }
 }
 
-abstract class FetchDataEvent<T> implements ResponseBlocEvent<T> {
+abstract class FetchDataEvent<T> implements ListResponseBlocEvent<T> {
   factory FetchDataEvent(
       {required final UseCaseResult<ListResponseModel<T>> result,
       required final bool initialListIsEmpty}) = _$FetchDataEventImpl<T>;
@@ -294,7 +295,7 @@ abstract class _$$LoadingEventImplCopyWith<T, $Res> {
 
 /// @nodoc
 class __$$LoadingEventImplCopyWithImpl<T, $Res>
-    extends _$ResponseBlocEventCopyWithImpl<T, $Res, _$LoadingEventImpl<T>>
+    extends _$ListResponseBlocEventCopyWithImpl<T, $Res, _$LoadingEventImpl<T>>
     implements _$$LoadingEventImplCopyWith<T, $Res> {
   __$$LoadingEventImplCopyWithImpl(
       _$LoadingEventImpl<T> _value, $Res Function(_$LoadingEventImpl<T>) _then)
@@ -308,7 +309,7 @@ class _$LoadingEventImpl<T> implements LoadingEvent<T> {
 
   @override
   String toString() {
-    return 'ResponseBlocEvent<$T>.loading()';
+    return 'ListResponseBlocEvent<$T>.loading()';
   }
 
   @override
@@ -414,7 +415,7 @@ class _$LoadingEventImpl<T> implements LoadingEvent<T> {
   }
 }
 
-abstract class LoadingEvent<T> implements ResponseBlocEvent<T> {
+abstract class LoadingEvent<T> implements ListResponseBlocEvent<T> {
   factory LoadingEvent() = _$LoadingEventImpl<T>;
 }
 
@@ -427,7 +428,7 @@ abstract class _$$EmptyResponseEventImplCopyWith<T, $Res> {
 
 /// @nodoc
 class __$$EmptyResponseEventImplCopyWithImpl<T, $Res>
-    extends _$ResponseBlocEventCopyWithImpl<T, $Res,
+    extends _$ListResponseBlocEventCopyWithImpl<T, $Res,
         _$EmptyResponseEventImpl<T>>
     implements _$$EmptyResponseEventImplCopyWith<T, $Res> {
   __$$EmptyResponseEventImplCopyWithImpl(_$EmptyResponseEventImpl<T> _value,
@@ -442,7 +443,7 @@ class _$EmptyResponseEventImpl<T> implements EmptyResponseEvent<T> {
 
   @override
   String toString() {
-    return 'ResponseBlocEvent<$T>.emptyResponse()';
+    return 'ListResponseBlocEvent<$T>.emptyResponse()';
   }
 
   @override
@@ -549,7 +550,7 @@ class _$EmptyResponseEventImpl<T> implements EmptyResponseEvent<T> {
   }
 }
 
-abstract class EmptyResponseEvent<T> implements ResponseBlocEvent<T> {
+abstract class EmptyResponseEvent<T> implements ListResponseBlocEvent<T> {
   factory EmptyResponseEvent() = _$EmptyResponseEventImpl<T>;
 }
 
@@ -563,7 +564,7 @@ abstract class _$$ResetToInitialStateEventImplCopyWith<T, $Res> {
 
 /// @nodoc
 class __$$ResetToInitialStateEventImplCopyWithImpl<T, $Res>
-    extends _$ResponseBlocEventCopyWithImpl<T, $Res,
+    extends _$ListResponseBlocEventCopyWithImpl<T, $Res,
         _$ResetToInitialStateEventImpl<T>>
     implements _$$ResetToInitialStateEventImplCopyWith<T, $Res> {
   __$$ResetToInitialStateEventImplCopyWithImpl(
@@ -579,7 +580,7 @@ class _$ResetToInitialStateEventImpl<T> implements ResetToInitialStateEvent<T> {
 
   @override
   String toString() {
-    return 'ResponseBlocEvent<$T>.resetToInitialState()';
+    return 'ListResponseBlocEvent<$T>.resetToInitialState()';
   }
 
   @override
@@ -686,7 +687,7 @@ class _$ResetToInitialStateEventImpl<T> implements ResetToInitialStateEvent<T> {
   }
 }
 
-abstract class ResetToInitialStateEvent<T> implements ResponseBlocEvent<T> {
+abstract class ResetToInitialStateEvent<T> implements ListResponseBlocEvent<T> {
   factory ResetToInitialStateEvent() = _$ResetToInitialStateEventImpl<T>;
 }
 
@@ -699,7 +700,8 @@ abstract class _$$ClearStateEventImplCopyWith<T, $Res> {
 
 /// @nodoc
 class __$$ClearStateEventImplCopyWithImpl<T, $Res>
-    extends _$ResponseBlocEventCopyWithImpl<T, $Res, _$ClearStateEventImpl<T>>
+    extends _$ListResponseBlocEventCopyWithImpl<T, $Res,
+        _$ClearStateEventImpl<T>>
     implements _$$ClearStateEventImplCopyWith<T, $Res> {
   __$$ClearStateEventImplCopyWithImpl(_$ClearStateEventImpl<T> _value,
       $Res Function(_$ClearStateEventImpl<T>) _then)
@@ -713,7 +715,7 @@ class _$ClearStateEventImpl<T> implements ClearStateEvent<T> {
 
   @override
   String toString() {
-    return 'ResponseBlocEvent<$T>.clearState()';
+    return 'ListResponseBlocEvent<$T>.clearState()';
   }
 
   @override
@@ -819,7 +821,7 @@ class _$ClearStateEventImpl<T> implements ClearStateEvent<T> {
   }
 }
 
-abstract class ClearStateEvent<T> implements ResponseBlocEvent<T> {
+abstract class ClearStateEvent<T> implements ListResponseBlocEvent<T> {
   factory ClearStateEvent() = _$ClearStateEventImpl<T>;
 }
 
@@ -834,7 +836,7 @@ abstract class _$$ErrorEventImplCopyWith<T, $Res> {
 
 /// @nodoc
 class __$$ErrorEventImplCopyWithImpl<T, $Res>
-    extends _$ResponseBlocEventCopyWithImpl<T, $Res, _$ErrorEventImpl<T>>
+    extends _$ListResponseBlocEventCopyWithImpl<T, $Res, _$ErrorEventImpl<T>>
     implements _$$ErrorEventImplCopyWith<T, $Res> {
   __$$ErrorEventImplCopyWithImpl(
       _$ErrorEventImpl<T> _value, $Res Function(_$ErrorEventImpl<T>) _then)
@@ -864,7 +866,7 @@ class _$ErrorEventImpl<T> implements ErrorEvent<T> {
 
   @override
   String toString() {
-    return 'ResponseBlocEvent<$T>.error(message: $message)';
+    return 'ListResponseBlocEvent<$T>.error(message: $message)';
   }
 
   @override
@@ -978,7 +980,7 @@ class _$ErrorEventImpl<T> implements ErrorEvent<T> {
   }
 }
 
-abstract class ErrorEvent<T> implements ResponseBlocEvent<T> {
+abstract class ErrorEvent<T> implements ListResponseBlocEvent<T> {
   factory ErrorEvent(final String message) = _$ErrorEventImpl<T>;
 
   String get message;
@@ -988,7 +990,7 @@ abstract class ErrorEvent<T> implements ResponseBlocEvent<T> {
 }
 
 /// @nodoc
-mixin _$ResponseBlocState {
+mixin _$ListResponseBlocState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
@@ -1048,16 +1050,17 @@ mixin _$ResponseBlocState {
 }
 
 /// @nodoc
-abstract class $ResponseBlocStateCopyWith<$Res> {
-  factory $ResponseBlocStateCopyWith(
-          ResponseBlocState value, $Res Function(ResponseBlocState) then) =
-      _$ResponseBlocStateCopyWithImpl<$Res, ResponseBlocState>;
+abstract class $ListResponseBlocStateCopyWith<$Res> {
+  factory $ListResponseBlocStateCopyWith(ListResponseBlocState value,
+          $Res Function(ListResponseBlocState) then) =
+      _$ListResponseBlocStateCopyWithImpl<$Res, ListResponseBlocState>;
 }
 
 /// @nodoc
-class _$ResponseBlocStateCopyWithImpl<$Res, $Val extends ResponseBlocState>
-    implements $ResponseBlocStateCopyWith<$Res> {
-  _$ResponseBlocStateCopyWithImpl(this._value, this._then);
+class _$ListResponseBlocStateCopyWithImpl<$Res,
+        $Val extends ListResponseBlocState>
+    implements $ListResponseBlocStateCopyWith<$Res> {
+  _$ListResponseBlocStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -1074,7 +1077,7 @@ abstract class _$$InitialImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$InitialImplCopyWithImpl<$Res>
-    extends _$ResponseBlocStateCopyWithImpl<$Res, _$InitialImpl>
+    extends _$ListResponseBlocStateCopyWithImpl<$Res, _$InitialImpl>
     implements _$$InitialImplCopyWith<$Res> {
   __$$InitialImplCopyWithImpl(
       _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
@@ -1088,7 +1091,7 @@ class _$InitialImpl implements _Initial {
 
   @override
   String toString() {
-    return 'ResponseBlocState.initial()';
+    return 'ListResponseBlocState.initial()';
   }
 
   @override
@@ -1181,7 +1184,7 @@ class _$InitialImpl implements _Initial {
   }
 }
 
-abstract class _Initial implements ResponseBlocState {
+abstract class _Initial implements ListResponseBlocState {
   const factory _Initial() = _$InitialImpl;
 }
 
@@ -1194,7 +1197,7 @@ abstract class _$$LoadingImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$LoadingImplCopyWithImpl<$Res>
-    extends _$ResponseBlocStateCopyWithImpl<$Res, _$LoadingImpl>
+    extends _$ListResponseBlocStateCopyWithImpl<$Res, _$LoadingImpl>
     implements _$$LoadingImplCopyWith<$Res> {
   __$$LoadingImplCopyWithImpl(
       _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
@@ -1208,7 +1211,7 @@ class _$LoadingImpl implements _Loading {
 
   @override
   String toString() {
-    return 'ResponseBlocState.loading()';
+    return 'ListResponseBlocState.loading()';
   }
 
   @override
@@ -1301,7 +1304,7 @@ class _$LoadingImpl implements _Loading {
   }
 }
 
-abstract class _Loading implements ResponseBlocState {
+abstract class _Loading implements ListResponseBlocState {
   const factory _Loading() = _$LoadingImpl;
 }
 
@@ -1314,7 +1317,7 @@ abstract class _$$EmptyStateImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$EmptyStateImplCopyWithImpl<$Res>
-    extends _$ResponseBlocStateCopyWithImpl<$Res, _$EmptyStateImpl>
+    extends _$ListResponseBlocStateCopyWithImpl<$Res, _$EmptyStateImpl>
     implements _$$EmptyStateImplCopyWith<$Res> {
   __$$EmptyStateImplCopyWithImpl(
       _$EmptyStateImpl _value, $Res Function(_$EmptyStateImpl) _then)
@@ -1328,7 +1331,7 @@ class _$EmptyStateImpl implements _EmptyState {
 
   @override
   String toString() {
-    return 'ResponseBlocState.emptyState()';
+    return 'ListResponseBlocState.emptyState()';
   }
 
   @override
@@ -1421,7 +1424,7 @@ class _$EmptyStateImpl implements _EmptyState {
   }
 }
 
-abstract class _EmptyState implements ResponseBlocState {
+abstract class _EmptyState implements ListResponseBlocState {
   const factory _EmptyState() = _$EmptyStateImpl;
 }
 
@@ -1436,7 +1439,7 @@ abstract class _$$ErrorImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$ErrorImplCopyWithImpl<$Res>
-    extends _$ResponseBlocStateCopyWithImpl<$Res, _$ErrorImpl>
+    extends _$ListResponseBlocStateCopyWithImpl<$Res, _$ErrorImpl>
     implements _$$ErrorImplCopyWith<$Res> {
   __$$ErrorImplCopyWithImpl(
       _$ErrorImpl _value, $Res Function(_$ErrorImpl) _then)
@@ -1466,7 +1469,7 @@ class _$ErrorImpl implements _Error {
 
   @override
   String toString() {
-    return 'ResponseBlocState.error(error: $error)';
+    return 'ListResponseBlocState.error(error: $error)';
   }
 
   @override
@@ -1567,7 +1570,7 @@ class _$ErrorImpl implements _Error {
   }
 }
 
-abstract class _Error implements ResponseBlocState {
+abstract class _Error implements ListResponseBlocState {
   const factory _Error(final AppError error) = _$ErrorImpl;
 
   AppError get error;
@@ -1585,7 +1588,7 @@ abstract class _$$EmptyResultImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$EmptyResultImplCopyWithImpl<$Res>
-    extends _$ResponseBlocStateCopyWithImpl<$Res, _$EmptyResultImpl>
+    extends _$ListResponseBlocStateCopyWithImpl<$Res, _$EmptyResultImpl>
     implements _$$EmptyResultImplCopyWith<$Res> {
   __$$EmptyResultImplCopyWithImpl(
       _$EmptyResultImpl _value, $Res Function(_$EmptyResultImpl) _then)
@@ -1599,7 +1602,7 @@ class _$EmptyResultImpl implements _EmptyResult {
 
   @override
   String toString() {
-    return 'ResponseBlocState.emptyResponse()';
+    return 'ListResponseBlocState.emptyResponse()';
   }
 
   @override
@@ -1692,6 +1695,6 @@ class _$EmptyResultImpl implements _EmptyResult {
   }
 }
 
-abstract class _EmptyResult implements ResponseBlocState {
+abstract class _EmptyResult implements ListResponseBlocState {
   const factory _EmptyResult() = _$EmptyResultImpl;
 }

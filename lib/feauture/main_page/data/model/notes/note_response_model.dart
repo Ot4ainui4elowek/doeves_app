@@ -1,10 +1,11 @@
+import 'package:doeves_app/core/domain/id_model.dart';
 import 'package:doeves_app/feauture/main_page/data/model/catalogs/catalog_response_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'note_response_model.g.dart';
 
 @JsonSerializable()
-class NoteResponseModel {
+class NoteResponseModel implements IdModel {
   NoteResponseModel({
     required this.id,
     required this.name,
@@ -18,6 +19,7 @@ class NoteResponseModel {
 
   Map<String, dynamic> toJson() => _$NoteResponseModelToJson(this);
 
+  @override
   @JsonKey(name: 'id')
   final int id;
 

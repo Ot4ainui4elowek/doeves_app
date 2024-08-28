@@ -1,7 +1,7 @@
 import 'package:doeves_app/core/presentation/app_bars/title_app_bar.dart';
-import 'package:doeves_app/core/presentation/app_wrapper.dart';
 import 'package:doeves_app/core/presentation/buttons/app_elevated_button.dart';
 import 'package:doeves_app/core/presentation/buttons/app_filled_button.dart';
+import 'package:doeves_app/core/presentation/ui/app_wrapper.dart';
 import 'package:doeves_app/feauture/authorization/presentation/verification_page/verification_page_vm.dart';
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';

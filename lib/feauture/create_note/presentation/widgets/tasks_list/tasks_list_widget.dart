@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:doeves_app/core/presentation/app_divider.dart';
 import 'package:doeves_app/core/presentation/text_fields/clear_text_field.dart';
+import 'package:doeves_app/core/presentation/ui/app_divider.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/tasks_list/create_task_list_impl.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/tasks_list/task_list_item.dart';
 import 'package:doeves_app/feauture/create_note/presentation/widgets/tasks_list/task_widget.dart';

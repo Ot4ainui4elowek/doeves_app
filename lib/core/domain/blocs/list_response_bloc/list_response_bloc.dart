@@ -4,15 +4,16 @@ import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'response_bloc.freezed.dart';
-part 'response_event.dart';
-part 'response_state.dart';
+part 'list_response_bloc.freezed.dart';
+part 'list_response_event.dart';
+part 'list_response_state.dart';
 
-class ResponseBloc extends Bloc<ResponseBlocEvent, ResponseBlocState> {
-  ResponseBloc() : super(const ResponseBlocState.initial()) {
+class ListResponseBloc
+    extends Bloc<ListResponseBlocEvent, ListResponseBlocState> {
+  ListResponseBloc() : super(const ListResponseBlocState.initial()) {
     on<LoadingEvent>(
       (event, emit) {
-        emit(const ResponseBlocState.loading());
+        emit(const ListResponseBlocState.loading());
       },
     );
     on<FetchDataEvent>(
@@ -21,41 +22,42 @@ class ResponseBloc extends Bloc<ResponseBlocEvent, ResponseBlocState> {
           case GoodUseCaseResult(:final data):
             {
               if (event.initialListIsEmpty && data.list.isEmpty) {
-                emit(const ResponseBlocState.initial());
+                emit(const ListResponseBlocState.initial());
               } else if (!event.initialListIsEmpty && data.list.isEmpty) {
-                emit(const ResponseBlocState.emptyResponse());
+                emit(const ListResponseBlocState.emptyResponse());
               } else {
-                emit(const ResponseBlocState.emptyState());
+                emit(const ListResponseBlocState.emptyState());
               }
             }
           case DataBadUseCaseResult(:final errorData):
             {
-              emit(ResponseBlocState.error(SpecificError(errorData.message)));
+              emit(ListResponseBlocState.error(
+                  SpecificError(errorData.message)));
             }
           case BadUseCaseResult(:final errorList):
             {
-              emit(ResponseBlocState.error(errorList[0]));
+              emit(ListResponseBlocState.error(errorList[0]));
             }
           default:
             {
-              emit(ResponseBlocState.error(SpecificError('Unknown error')));
+              emit(ListResponseBlocState.error(SpecificError('Unknown error')));
             }
         }
       },
     );
     on<EmptyResponseEvent>(
-      (event, emit) => emit(const ResponseBlocState.emptyResponse()),
+      (event, emit) => emit(const ListResponseBlocState.emptyResponse()),
     );
 
     on<ResetToInitialStateEvent>(
-      (event, emit) => emit(const ResponseBlocState.initial()),
+      (event, emit) => emit(const ListResponseBlocState.initial()),
     );
     on<ClearStateEvent>(
-      (event, emit) => emit(const ResponseBlocState.emptyState()),
+      (event, emit) => emit(const ListResponseBlocState.emptyState()),
     );
     on<ErrorEvent>(
       (event, emit) => emit(
-        ResponseBlocState.error(SpecificError(event.message)),
+        ListResponseBlocState.error(SpecificError(event.message)),
       ),
     );
   }

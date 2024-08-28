@@ -6,17 +6,20 @@ part of 'catalogs_data_source.dart';
 // RetrofitGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element
 
 class _CatalogsClientDataSource implements CatalogsClientDataSource {
   _CatalogsClientDataSource(
     this._dio, {
     this.baseUrl,
+    this.errorLogger,
   });
 
   final Dio _dio;
 
   String? baseUrl;
+
+  final ParseErrorLogger? errorLogger;
 
   @override
   Future<HttpResponse<IdResponseModel>> createCatalog({
@@ -29,25 +32,31 @@ class _CatalogsClientDataSource implements CatalogsClientDataSource {
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(newCatalog.toJson());
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<IdResponseModel>>(Options(
+    final _options = _setStreamType<HttpResponse<IdResponseModel>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/catalog',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = IdResponseModel.fromJson(_result.data!);
-    final httpResponse = HttpResponse(value, _result);
+        .compose(
+          _dio.options,
+          '/catalog',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late IdResponseModel _value;
+    try {
+      _value = IdResponseModel.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 
@@ -65,7 +74,7 @@ class _CatalogsClientDataSource implements CatalogsClientDataSource {
     final _headers = <String, dynamic>{r'Authorization': jwtToken};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<List<dynamic>>(
+    final _options =
         _setStreamType<HttpResponse<List<CatalogResponseModel>>>(Options(
       method: 'GET',
       headers: _headers,
@@ -81,12 +90,19 @@ class _CatalogsClientDataSource implements CatalogsClientDataSource {
                 baseUrl: _combineBaseUrls(
               _dio.options.baseUrl,
               baseUrl,
-            ))));
-    var value = _result.data!
-        .map((dynamic i) =>
-            CatalogResponseModel.fromJson(i as Map<String, dynamic>))
-        .toList();
-    final httpResponse = HttpResponse(value, _result);
+            )));
+    final _result = await _dio.fetch<List<dynamic>>(_options);
+    late List<CatalogResponseModel> _value;
+    try {
+      _value = _result.data!
+          .map((dynamic i) =>
+              CatalogResponseModel.fromJson(i as Map<String, dynamic>))
+          .toList();
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 
@@ -100,25 +116,31 @@ class _CatalogsClientDataSource implements CatalogsClientDataSource {
     final _headers = <String, dynamic>{r'Authorization': jwtToken};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
-    final _result =
-        await _dio.fetch<String>(_setStreamType<HttpResponse<String>>(Options(
+    final _options = _setStreamType<HttpResponse<String>>(Options(
       method: 'DELETE',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/catalog/${idList}',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = _result.data!;
-    final httpResponse = HttpResponse(value, _result);
+        .compose(
+          _dio.options,
+          '/catalog/${idList}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<String>(_options);
+    late String _value;
+    try {
+      _value = _result.data!;
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 
@@ -133,25 +155,31 @@ class _CatalogsClientDataSource implements CatalogsClientDataSource {
     final _headers = <String, dynamic>{r'Authorization': jwtToken};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
-    final _result =
-        await _dio.fetch<String>(_setStreamType<HttpResponse<String>>(Options(
+    final _options = _setStreamType<HttpResponse<String>>(Options(
       method: 'PATCH',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/catalog/${id}/name',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = _result.data!;
-    final httpResponse = HttpResponse(value, _result);
+        .compose(
+          _dio.options,
+          '/catalog/${id}/name',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<String>(_options);
+    late String _value;
+    try {
+      _value = _result.data!;
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 
@@ -170,7 +198,7 @@ class _CatalogsClientDataSource implements CatalogsClientDataSource {
     final _headers = <String, dynamic>{r'Authorization': jwtToken};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<List<dynamic>>(
+    final _options =
         _setStreamType<HttpResponse<List<NoteResponseModel>>>(Options(
       method: 'GET',
       headers: _headers,
@@ -186,12 +214,19 @@ class _CatalogsClientDataSource implements CatalogsClientDataSource {
                 baseUrl: _combineBaseUrls(
               _dio.options.baseUrl,
               baseUrl,
-            ))));
-    var value = _result.data!
-        .map((dynamic i) =>
-            NoteResponseModel.fromJson(i as Map<String, dynamic>))
-        .toList();
-    final httpResponse = HttpResponse(value, _result);
+            )));
+    final _result = await _dio.fetch<List<dynamic>>(_options);
+    late List<NoteResponseModel> _value;
+    try {
+      _value = _result.data!
+          .map((dynamic i) =>
+              NoteResponseModel.fromJson(i as Map<String, dynamic>))
+          .toList();
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 

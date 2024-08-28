@@ -1,9 +1,9 @@
 import 'dart:developer';
 
-import 'package:doeves_app/core/domain/data_transfer_object.dart';
+import 'package:doeves_app/core/domain/data_transfer/data_transfer_object.dart';
 
-abstract mixin class DataTransferHandler<T> {
-  Future<void> requestToPage({
+abstract mixin class DataTransferHandler {
+  Future<void> requestToPage<T>({
     required DataTransferObject<T>? data,
     void Function(T deletedData)? delete,
     void Function(T editData)? edit,

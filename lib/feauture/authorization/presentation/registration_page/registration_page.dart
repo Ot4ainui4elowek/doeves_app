@@ -1,10 +1,10 @@
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
-import 'package:doeves_app/core/presentation/app_wrapper.dart';
 import 'package:doeves_app/core/presentation/buttons/app_filled_button.dart';
 import 'package:doeves_app/core/presentation/buttons/back_button.dart';
 import 'package:doeves_app/core/presentation/text_fields/app_text_field.dart';
 import 'package:doeves_app/core/presentation/text_fields/controllers/password_text_editing_controller.dart';
 import 'package:doeves_app/core/presentation/text_fields/password_text_field.dart';
+import 'package:doeves_app/core/presentation/ui/app_wrapper.dart';
 import 'package:doeves_app/feauture/authorization/presentation/registration_page/registration_page_vm.dart';
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';

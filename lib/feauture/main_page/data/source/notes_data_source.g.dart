@@ -6,17 +6,20 @@ part of 'notes_data_source.dart';
 // RetrofitGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element
 
 class _NotesClientDataSource implements NotesClientDataSource {
   _NotesClientDataSource(
     this._dio, {
     this.baseUrl,
+    this.errorLogger,
   });
 
   final Dio _dio;
 
   String? baseUrl;
+
+  final ParseErrorLogger? errorLogger;
 
   @override
   Future<HttpResponse<IdResponseModel>> createNote({
@@ -29,25 +32,31 @@ class _NotesClientDataSource implements NotesClientDataSource {
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(note.toJson());
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<IdResponseModel>>(Options(
+    final _options = _setStreamType<HttpResponse<IdResponseModel>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/note',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = IdResponseModel.fromJson(_result.data!);
-    final httpResponse = HttpResponse(value, _result);
+        .compose(
+          _dio.options,
+          '/note',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late IdResponseModel _value;
+    try {
+      _value = IdResponseModel.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 
@@ -63,25 +72,31 @@ class _NotesClientDataSource implements NotesClientDataSource {
     final _headers = <String, dynamic>{r'Authorization': token};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
-    final _result =
-        await _dio.fetch<String>(_setStreamType<HttpResponse<String>>(Options(
+    final _options = _setStreamType<HttpResponse<String>>(Options(
       method: 'PATCH',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/note/${noteId}/order-after',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = _result.data!;
-    final httpResponse = HttpResponse(value, _result);
+        .compose(
+          _dio.options,
+          '/note/${noteId}/order-after',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<String>(_options);
+    late String _value;
+    try {
+      _value = _result.data!;
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 
@@ -95,25 +110,31 @@ class _NotesClientDataSource implements NotesClientDataSource {
     final _headers = <String, dynamic>{r'Authorization': token};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<IdResponseModel>>(Options(
+    final _options = _setStreamType<HttpResponse<IdResponseModel>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/note/${id}',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = IdResponseModel.fromJson(_result.data!);
-    final httpResponse = HttpResponse(value, _result);
+        .compose(
+          _dio.options,
+          '/note/${id}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late IdResponseModel _value;
+    try {
+      _value = IdResponseModel.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 
@@ -128,25 +149,31 @@ class _NotesClientDataSource implements NotesClientDataSource {
     final _headers = <String, dynamic>{r'Authorization': token};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
-    final _result =
-        await _dio.fetch<String>(_setStreamType<HttpResponse<String>>(Options(
+    final _options = _setStreamType<HttpResponse<String>>(Options(
       method: 'PATCH',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/note/${id}/name',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = _result.data!;
-    final httpResponse = HttpResponse(value, _result);
+        .compose(
+          _dio.options,
+          '/note/${id}/name',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<String>(_options);
+    late String _value;
+    try {
+      _value = _result.data!;
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 
@@ -161,25 +188,31 @@ class _NotesClientDataSource implements NotesClientDataSource {
     final _headers = <String, dynamic>{r'Authorization': token};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
-    final _result =
-        await _dio.fetch<String>(_setStreamType<HttpResponse<String>>(Options(
+    final _options = _setStreamType<HttpResponse<String>>(Options(
       method: 'PATCH',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/note/${id}/description',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = _result.data!;
-    final httpResponse = HttpResponse(value, _result);
+        .compose(
+          _dio.options,
+          '/note/${id}/description',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<String>(_options);
+    late String _value;
+    try {
+      _value = _result.data!;
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 
@@ -187,31 +220,39 @@ class _NotesClientDataSource implements NotesClientDataSource {
   Future<HttpResponse<String>> deleteMultipleNotes({
     required String token,
     required String idList,
+    bool? anywhere,
   }) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'anywhere': anywhere};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{r'Authorization': token};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
-    final _result =
-        await _dio.fetch<String>(_setStreamType<HttpResponse<String>>(Options(
+    final _options = _setStreamType<HttpResponse<String>>(Options(
       method: 'DELETE',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/note/${idList}',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = _result.data!;
-    final httpResponse = HttpResponse(value, _result);
+        .compose(
+          _dio.options,
+          '/note/${idList}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<String>(_options);
+    late String _value;
+    try {
+      _value = _result.data!;
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 
@@ -231,7 +272,7 @@ class _NotesClientDataSource implements NotesClientDataSource {
     final _headers = <String, dynamic>{r'Authorization': token};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<List<dynamic>>(
+    final _options =
         _setStreamType<HttpResponse<List<NoteResponseModel>>>(Options(
       method: 'GET',
       headers: _headers,
@@ -247,12 +288,19 @@ class _NotesClientDataSource implements NotesClientDataSource {
                 baseUrl: _combineBaseUrls(
               _dio.options.baseUrl,
               baseUrl,
-            ))));
-    var value = _result.data!
-        .map((dynamic i) =>
-            NoteResponseModel.fromJson(i as Map<String, dynamic>))
-        .toList();
-    final httpResponse = HttpResponse(value, _result);
+            )));
+    final _result = await _dio.fetch<List<dynamic>>(_options);
+    late List<NoteResponseModel> _value;
+    try {
+      _value = _result.data!
+          .map((dynamic i) =>
+              NoteResponseModel.fromJson(i as Map<String, dynamic>))
+          .toList();
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 

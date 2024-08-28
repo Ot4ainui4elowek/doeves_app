@@ -1,12 +1,13 @@
+import 'package:doeves_app/core/domain/blocs/list_response_bloc/list_response_bloc.dart';
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
-import 'package:doeves_app/core/presentation/animated_visibility.dart';
+import 'package:doeves_app/core/presentation/bloc_builders/list_response_bloc_buidler.dart';
 import 'package:doeves_app/core/presentation/buttons/app_elevated_button.dart';
-import 'package:doeves_app/core/presentation/counter_widget.dart';
 import 'package:doeves_app/core/presentation/logo/app_logo_animated.dart';
-import 'package:doeves_app/core/presentation/scrollable_row.dart';
+import 'package:doeves_app/core/presentation/ui/animated_visibility.dart';
+import 'package:doeves_app/core/presentation/ui/counter_widget.dart';
+import 'package:doeves_app/core/presentation/ui/scrollable_row.dart';
 import 'package:doeves_app/feauture/app_drawer/presentation/drawer_service.dart';
 import 'package:doeves_app/feauture/main_page/domain/device_params.dart';
-import 'package:doeves_app/feauture/main_page/domain/response_bloc/response_bloc.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/home_page/home_page_vm.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/action_on_note_button.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/burger_menu_button.dart';
@@ -15,7 +16,6 @@ import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/searc
 import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/select_all_button.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/buttons/selection_mode_button.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/notes/note_with_content_widget.dart';
-import 'package:doeves_app/feauture/main_page/presentation/widgets/response_bloc_buidler.dart';
 import 'package:doeves_app/feauture/main_page/presentation/widgets/selectable_container.dart';
 import 'package:doeves_app/theme/text_theme.dart';
 import 'package:flutter/material.dart';
@@ -116,7 +116,7 @@ class _NotesHomePageState extends State<NotesHomePage>
             minHeight: vm.notesList.isEmpty
                 ? MediaQuery.of(context).size.height - 300
                 : 0),
-        child: ResponseBlocBuidler(
+        child: ListResponseBlocBuidler(
           bloc: vm.notesBloc,
           emptyResponseText: 'All notes are loaded!',
           epmtyListText:
@@ -249,7 +249,7 @@ class _NotesHomePageState extends State<NotesHomePage>
     );
     if (includingCatalogs != vm.includingCatalogs.value) {
       vm.notesList.clear();
-      vm.notesBloc.add(ResponseBlocEvent.loading());
+      vm.notesBloc.add(ListResponseBlocEvent.loading());
       vm.getNotes();
     }
   }

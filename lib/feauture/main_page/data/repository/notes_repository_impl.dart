@@ -1,5 +1,5 @@
 import 'package:doeves_app/core/domain/app_error/app_error.dart';
-import 'package:doeves_app/core/domain/rest_api_handler.dart';
+import 'package:doeves_app/core/domain/use_case_result/rest_api_handler.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/feauture/authorization/data/model/http_status_and_errors.dart';
 import 'package:doeves_app/feauture/main_page/data/model/notes/notes_list/notes_list_response_model.dart';
@@ -39,11 +39,15 @@ class NotesRepositoryImpl with RestApiHandler implements NotesRepository {
 
   @override
   Future<UseCaseResult<EmptyGoodResponse>> deleteMultipleNotes(
-      {required List<int> deleteNotesList, required String jwtToken}) async {
+      {required List<int> deleteNotesList,
+      required String jwtToken,
+      bool? anywhere}) async {
     try {
       final result = await request(
         callback: () => _notesDataSourse.deleteMultipleNotes(
-            token: jwtToken, idList: deleteNotesList.join(',')),
+            token: jwtToken,
+            idList: deleteNotesList.join(','),
+            anywhere: anywhere),
         dataMapper: EmptyGoodResponse.fromJson,
       );
       return getUseCaseResult(result);

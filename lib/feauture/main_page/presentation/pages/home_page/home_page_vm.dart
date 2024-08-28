@@ -3,22 +3,23 @@ import 'dart:developer';
 
 import 'package:doeves_app/core/data/secure_storage/secure_storage.dart';
 import 'package:doeves_app/core/domain/app_error/app_error.dart';
-import 'package:doeves_app/core/domain/data_transfer_handler.dart';
-import 'package:doeves_app/core/domain/data_transfer_object.dart';
+import 'package:doeves_app/core/domain/blocs/list_response_bloc/list_response_bloc.dart';
+import 'package:doeves_app/core/domain/data_transfer/data_transfer_handler.dart';
+import 'package:doeves_app/core/domain/data_transfer/data_transfer_object.dart';
+import 'package:doeves_app/core/domain/mixins/reorderable_list_mixin.dart';
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/core/presentation/notification_service/snack_bar_notification_service/snack_bar_notification_service_impl.dart';
-import 'package:doeves_app/feauture/create_note/domain/create_note_page_transfer_object.dart';
+import 'package:doeves_app/feauture/create_note/domain/create_note_data_transfer_object.dart';
 import 'package:doeves_app/feauture/main_page/data/model/notes/note_response_model.dart';
 import 'package:doeves_app/feauture/main_page/data/model/notes/notes_list/notes_list_response_model.dart';
 import 'package:doeves_app/feauture/main_page/data/model/notes/remove_list_of_notes/empty_good_response.dart';
 import 'package:doeves_app/feauture/main_page/domain/repository/notes/notes_repository.dart';
-import 'package:doeves_app/feauture/main_page/domain/response_bloc/response_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reactive_variables/reactive_variables.dart';
 
-class NotesHomePageViewModel with DataTransferHandler<NoteResponseModel> {
+class NotesHomePageViewModel with DataTransferHandler, ReorderableListMixin {
   NotesHomePageViewModel({
     required NotesRepository notesRepository,
     required SecureStorage storage,
@@ -109,7 +110,7 @@ class NotesHomePageViewModel with DataTransferHandler<NoteResponseModel> {
         !isLoading.value &&
         scrollController.position.atEdge &&
         scrollController.position.pixels != 0) {
-      notesBloc.add(ResponseBlocEvent.loading());
+      notesBloc.add(ListResponseBlocEvent.loading());
       getNotes();
     }
   }
@@ -118,7 +119,7 @@ class NotesHomePageViewModel with DataTransferHandler<NoteResponseModel> {
 
   final Rv<List<NoteResponseModel>> notesList = Rv([]);
 
-  final ResponseBloc notesBloc = ResponseBloc();
+  final ListResponseBloc notesBloc = ListResponseBloc();
 
   final includingCatalogs = false.rv;
 
@@ -130,7 +131,7 @@ class NotesHomePageViewModel with DataTransferHandler<NoteResponseModel> {
     if (jwtToken == null) {
       return;
     }
-    notesBloc.add(ResponseBlocEvent.loading());
+    notesBloc.add(ListResponseBlocEvent.loading());
     final result = await _notesRepository.getAllNotes(
         offset: notesList.length,
         limit: 10,
@@ -138,7 +139,7 @@ class NotesHomePageViewModel with DataTransferHandler<NoteResponseModel> {
         jwtToken: jwtToken);
 
     isLoading(false);
-    notesBloc.add(ResponseBlocEvent.fetch(
+    notesBloc.add(ListResponseBlocEvent.fetch(
         result: result, initialListIsEmpty: notesList.isEmpty));
     if (result is GoodUseCaseResult<NotesListResponseModel>) {
       final data = result.data.list;
@@ -177,7 +178,7 @@ class NotesHomePageViewModel with DataTransferHandler<NoteResponseModel> {
   }
 
   void _goToCreateNotePage(DataTransferObject<NoteResponseModel>? data) {
-    requestToPage(
+    requestToPage<NoteResponseModel>(
       data: data,
       create: (data) {
         log('add');
@@ -202,6 +203,11 @@ class NotesHomePageViewModel with DataTransferHandler<NoteResponseModel> {
         notesList.refresh();
       },
     );
+    if (notesList.isEmpty) {
+      notesBloc.add(ListResponseBlocEvent.resetToInitialState());
+    } else {
+      notesBloc.add(ListResponseBlocEvent.clearState());
+    }
   }
 
   Future<UseCaseResult> _deleteSomeNotes(List<int> idList) async {
@@ -218,9 +224,9 @@ class NotesHomePageViewModel with DataTransferHandler<NoteResponseModel> {
           .removeWhere((note) => selectedNotesList.value.contains(note.id));
       notesList.refresh();
       if (notesList.isNotEmpty) {
-        notesBloc.add(ResponseBlocEvent.clearState());
+        notesBloc.add(ListResponseBlocEvent.clearState());
       } else {
-        notesBloc.add(ResponseBlocEvent.resetToInitialState());
+        notesBloc.add(ListResponseBlocEvent.resetToInitialState());
       }
     }
     return result;
@@ -255,23 +261,16 @@ class NotesHomePageViewModel with DataTransferHandler<NoteResponseModel> {
     if (jwtToken == null) {
       return;
     }
-    final resuestNewIndex = newIndex - 1;
 
-    if (oldIndex < newIndex) {
-      newIndex--;
-    }
-
-    final oldId = notesList.value[oldIndex].id;
-    final newId =
-        resuestNewIndex == -1 ? null : notesList.value[resuestNewIndex].id;
-
-    final note = notesList.removeAt(oldIndex);
-
-    notesList.value.insert(newIndex, note);
-    final result = await _notesRepository.moveNote(
-      noteId: oldId,
-      prevNoteId: newId,
-      jwtToken: jwtToken,
+    final result = await onReorder(
+      callBack: (oldIndex, newIndex) async => await _notesRepository.moveNote(
+        noteId: oldIndex,
+        prevNoteId: newIndex,
+        jwtToken: jwtToken,
+      ),
+      list: notesList,
+      newIndex: newIndex,
+      oldIndex: oldIndex,
     );
 
     switch (result) {

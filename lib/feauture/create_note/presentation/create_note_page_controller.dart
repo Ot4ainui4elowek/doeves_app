@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:doeves_app/core/data/secure_storage/secure_storage.dart';
 import 'package:doeves_app/core/domain/app_error/app_error.dart';
+import 'package:doeves_app/core/domain/blocs/response_bloc/response_bloc.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/core/presentation/text_fields/controllers/app_text_editing_controller.dart';
-import 'package:doeves_app/feauture/create_note/domain/create_note/create_note_bloc.dart';
 import 'package:doeves_app/feauture/create_note/domain/entity/content/create_content_entity.dart';
 import 'package:doeves_app/feauture/create_note/domain/repository/create_note_repository.dart';
 import 'package:doeves_app/feauture/main_page/data/model/notes/create_note_request_model.dart';
@@ -27,7 +27,7 @@ class CreateNotePageController {
   })  : _secureStorage = secureStorage,
         _createNoteRepository = createNoteRepository;
 
-  final titleAndDescriptionBloc = CreateNoteBloc();
+  final titleAndDescriptionBloc = ResponseBloc();
 
   final CreateNoteRepository _createNoteRepository;
 
@@ -41,6 +41,8 @@ class CreateNotePageController {
 
   final Rv<int> noteId = Rv(-1);
 
+  final isDeleteAnywhere = false.rv;
+
   Future<UseCaseResult<EmptyGoodResponse>> editTitle(int id) async {
     final jwt = await _secureStorage.readToken();
 
@@ -50,7 +52,7 @@ class CreateNotePageController {
           SpecificError('undefined jwt token'),
         ],
       );
-      titleAndDescriptionBloc.add(CreateNoteEvent.fetch(result: result));
+      titleAndDescriptionBloc.add(ResponseEvent.fetch(result: result));
       return result;
     }
     final result = await _createNoteRepository.editTitle(
@@ -68,7 +70,7 @@ class CreateNotePageController {
           SpecificError('undefined jwt token'),
         ],
       );
-      titleAndDescriptionBloc.add(CreateNoteEvent.fetch(result: result));
+      titleAndDescriptionBloc.add(ResponseEvent.fetch(result: result));
       return result;
     }
     final result = await _createNoteRepository.editDescription(
@@ -80,7 +82,7 @@ class CreateNotePageController {
   Future<UseCaseResult<NoteResponseModel>> getNote({
     required int id,
   }) async {
-    titleAndDescriptionBloc.add(const CreateNoteEvent.loading());
+    titleAndDescriptionBloc.add(const ResponseEvent.loading());
 
     final jwt = await _secureStorage.readToken();
 
@@ -90,12 +92,12 @@ class CreateNotePageController {
           SpecificError('undefined jwt token'),
         ],
       );
-      titleAndDescriptionBloc.add(CreateNoteEvent.fetch(result: result));
+      titleAndDescriptionBloc.add(ResponseEvent.fetch(result: result));
       return result;
     }
     final result = await _createNoteRepository.getNote(id: id, jwtToken: jwt);
 
-    titleAndDescriptionBloc.add(CreateNoteEvent.fetch(result: result));
+    titleAndDescriptionBloc.add(ResponseEvent.fetch(result: result));
 
     return result;
   }

@@ -60,6 +60,7 @@ abstract class NotesClientDataSource {
   Future<HttpResponse<String>> deleteMultipleNotes({
     @Header('Authorization') required String token,
     @Path('listId') required String idList,
+    @Query('anywhere') bool? anywhere,
   });
 
   @GET('/note/all')
