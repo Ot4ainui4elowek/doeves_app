@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:doeves_app/core/data/secure_storage/secure_storage.dart';
 import 'package:doeves_app/core/domain/app_error/app_error.dart';
-import 'package:doeves_app/core/domain/data_transfer_controller.dart';
+import 'package:doeves_app/core/domain/data_transfer_handler.dart';
 import 'package:doeves_app/core/domain/data_transfer_object.dart';
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
@@ -22,12 +22,8 @@ class NotesHomePageViewModel with DataTransferHandler<NoteResponseModel> {
   NotesHomePageViewModel({
     required NotesRepository notesRepository,
     required SecureStorage storage,
-    DataTransferObject? noteTransferObject,
   })  : _secureStorage = storage,
-        _notesRepository = notesRepository,
-        _noteTransferObject = noteTransferObject;
-
-  final DataTransferObject? _noteTransferObject;
+        _notesRepository = notesRepository;
 
   final SecureStorage _secureStorage;
 
@@ -44,9 +40,6 @@ class NotesHomePageViewModel with DataTransferHandler<NoteResponseModel> {
   final notificationService = SnackBarNotificationServiceImpl();
 
   Future<void> init() async {
-    if (_noteTransferObject != null) {
-      log('transfer object');
-    }
     await getNotes();
 
     scrollController.addListener(checkScroll);
@@ -130,6 +123,7 @@ class NotesHomePageViewModel with DataTransferHandler<NoteResponseModel> {
   final includingCatalogs = false.rv;
 
   Future<void> getNotes() async {
+    log('get notes');
     isLoading(true);
 
     final jwtToken = await _secureStorage.readToken();

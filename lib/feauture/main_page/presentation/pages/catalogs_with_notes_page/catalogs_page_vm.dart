@@ -1,6 +1,9 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:doeves_app/core/data/secure_storage/secure_storage.dart';
+import 'package:doeves_app/core/domain/data_transfer_handler.dart';
+import 'package:doeves_app/core/domain/data_transfer_object.dart';
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/domain/use_case_result/use_case_result.dart';
 import 'package:doeves_app/core/presentation/notification_service/notification_service.dart';
@@ -12,11 +15,10 @@ import 'package:doeves_app/feauture/main_page/domain/repository/catalogs/catalog
 import 'package:doeves_app/feauture/main_page/domain/response_bloc/response_bloc.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/vm/pagination_selectable_list_vm.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reactive_variables/reactive_variables.dart';
 
-class CatalogsPageViewModel {
+class CatalogsPageViewModel with DataTransferHandler<CatalogResponseModel> {
   CatalogsPageViewModel({
     required CatalogsRepository catalogsRepository,
     required SecureStorage secureStorage,
@@ -42,8 +44,12 @@ class CatalogsPageViewModel {
 
   final catalogsBloc = ResponseBloc();
 
-  void init() {
-    getCatalogs();
+  Future<void> init() async {
+    await getCatalogs();
+    _catalogListController.init();
+  }
+
+  void didUpdateWidget() {
     _catalogListController.init();
   }
 
@@ -84,8 +90,9 @@ class CatalogsPageViewModel {
         result: result, initialListIsEmpty: catalogsList.isEmpty));
   }
 
-  void onPressedCatalog(
-      {required CatalogResponseModel catalog, required BuildContext context}) {
+  FutureOr<void> onPressedCatalog(
+      {required CatalogResponseModel catalog,
+      required BuildContext context}) async {
     if (isSelectedMode.value) {
       _onPressedCatalogSelectedMode(catalog.id);
     } else {
@@ -96,12 +103,43 @@ class CatalogsPageViewModel {
   Future<void> _openCatalog(
       {required CatalogResponseModel catalog,
       required BuildContext context}) async {
-    context.push(AppRoutes.goToCreateCatalogPage,
+    final result = await context.push<DataTransferObject<CatalogResponseModel>>(
+        AppRoutes.createCatalogPage,
         extra: OpenCatalogDataTrasferObject(catalog));
+    _goToCreateCatalogPage(result);
+  }
+
+  void _goToCreateCatalogPage(DataTransferObject<CatalogResponseModel>? data) {
+    requestToPage(
+      data: data,
+      create: (data) {
+        catalogsList.value.insert(0, data);
+        catalogsList.refresh();
+      },
+      delete: (deletedData) {
+        final index = catalogsList.value
+            .indexWhere((catalog) => catalog.id == deletedData.id);
+        if (index == -1) {
+          return;
+        }
+        catalogsList.removeAt(index);
+      },
+      edit: (editData) {
+        final index = catalogsList.value
+            .indexWhere((catalog) => catalog.id == editData.id);
+        log('$index ${editData.name}');
+        if (index == -1) {
+          return;
+        }
+        catalogsList.value[index] = editData;
+        catalogsList.refresh();
+        log('edit');
+      },
+    );
   }
 
   Future<void> createCatalog(BuildContext context) async {
-    context.push(AppRoutes.goToCreateCatalogPage,
+    context.push(AppRoutes.createCatalogPage,
         extra: CreateCatalogDataTransferObject.create());
   }
 

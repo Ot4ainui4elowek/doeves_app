@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/core/presentation/animated_visibility.dart';
 import 'package:doeves_app/core/presentation/buttons/app_elevated_button.dart';
@@ -113,6 +111,12 @@ class _CatalogsPageState extends State<CatalogsPage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            // AppElevatedButton(
+            //   mini: true,
+            //   onPressed: _showCatalogsDialog,
+            //   child: const Icon(Icons.folder_copy_outlined),
+            // ),
+            const SizedBox(width: 10),
             _selectedNotesCountBuilder,
             Expanded(
               child: Row(
@@ -221,7 +225,6 @@ class _CatalogsPageState extends State<CatalogsPage> {
 
   @override
   void didUpdateWidget(covariant oldWidget) {
-    log('update catalogs page');
     vm.init();
     super.didUpdateWidget(oldWidget);
   }
@@ -244,19 +247,20 @@ class _CatalogsPageState extends State<CatalogsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: _floatingActionButtonBuilder,
-        body: RefreshIndicator(
-          onRefresh: vm.refreshCatalogs,
-          child: CustomScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            controller: vm.scrollController,
-            slivers: [
-              _appBarBuilder,
-              SliverToBoxAdapter(
-                child: _catalogListBuilder,
-              )
-            ],
-          ),
-        ));
+      floatingActionButton: _floatingActionButtonBuilder,
+      body: RefreshIndicator(
+        onRefresh: vm.refreshCatalogs,
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          controller: vm.scrollController,
+          slivers: [
+            _appBarBuilder,
+            SliverToBoxAdapter(
+              child: _catalogListBuilder,
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -9,7 +9,7 @@ import 'package:doeves_app/feauture/main_page/data/model/notes/note_response_mod
 import 'package:doeves_app/feauture/main_page/data/model/notes/notes_list/notes_list_response_model.dart';
 import 'package:doeves_app/feauture/main_page/data/model/notes/remove_list_of_notes/empty_good_response.dart';
 import 'package:doeves_app/feauture/main_page/domain/response_bloc/response_bloc.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reactive_variables/reactive_variables.dart';
 
@@ -29,6 +29,8 @@ class CreateCatalogPageController {
   final Rv<List<int>> selectedList = Rv([]);
 
   final isLoading = false.rv;
+
+  final catalogId = Rv(-1);
 
   final SecureStorage _secureStorage;
 

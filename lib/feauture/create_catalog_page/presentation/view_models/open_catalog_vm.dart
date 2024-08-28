@@ -15,7 +15,7 @@ class OpenCatalogViewModel
     required CatalogResponseModel catalog,
     required this.controller,
   }) : _catalog = catalog {
-    catalogId(_catalogId);
+    catalogId = catalog.id;
 
     editCatalogName = DeferredAction(callback: _editCatalogName);
 
@@ -36,10 +36,10 @@ class OpenCatalogViewModel
   late final PaginationSelectableListController<NoteResponseModel, int>
       notesListController;
 
-  @override
-  final Rv<int> catalogId = Rv(-1);
-
   final CatalogResponseModel _catalog;
+
+  @override
+  int? catalogId;
 
   int get _catalogId => _catalog.id;
 
@@ -48,7 +48,8 @@ class OpenCatalogViewModel
 
   @override
   void init() {
-    log('init open vm $_catalogId');
+    log('init open vm $catalogId');
+    controller.catalogId(_catalogId);
     controller.catalognameController.addListener(editCatalogName.call);
     notesListController.init();
     controller.getNotes(_catalogId);

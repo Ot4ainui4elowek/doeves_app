@@ -329,8 +329,8 @@ class _NotesHomePageState extends State<NotesHomePage>
             Row(
               children: [
                 _searchButtonBuilder,
-                const SizedBox(width: 10),
-                _filterButtonBuilder,
+                // const SizedBox(width: 10),
+                // _filterButtonBuilder,
               ],
             )
           ],
@@ -342,7 +342,9 @@ class _NotesHomePageState extends State<NotesHomePage>
       );
 
   Widget get _floatingActionButtonBuilder => FloatingActionButton(
-        onPressed: () => vm.addNote(context),
+        onPressed: () => vm.addNote(
+          context,
+        ),
         child: Icon(
           Icons.add_rounded,
           color: Theme.of(context).colorScheme.onPrimary,

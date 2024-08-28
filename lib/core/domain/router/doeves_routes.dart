@@ -16,7 +16,7 @@ abstract class AppRoutes {
       '${AppRoutes.loginPage}/${AppRoutes.verificationPage}';
   static const operationStatusPage = '/operation-status-page';
 
-  static const createCatalogPage = 'catalog';
+  static const createCatalogPage = '/catalog';
   static const goToCreateCatalogPage =
       '${AppRoutes.catalogsPage}/${AppRoutes.createCatalogPage}';
 }

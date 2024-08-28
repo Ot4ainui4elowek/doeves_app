@@ -1,5 +1,4 @@
 import 'package:doeves_app/core/domain/container/app_container.dart';
-import 'package:doeves_app/core/domain/data_transfer_object.dart';
 import 'package:doeves_app/core/domain/router/doeves_routes.dart';
 import 'package:doeves_app/feauture/authorization/presentation/login_page/login_page.dart';
 import 'package:doeves_app/feauture/authorization/presentation/login_page/login_page_vm.dart';
@@ -15,6 +14,7 @@ import 'package:doeves_app/feauture/create_note/domain/create_note_page_transfer
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page.dart';
 import 'package:doeves_app/feauture/create_note/presentation/create_note_page_controller.dart';
 import 'package:doeves_app/feauture/create_note/presentation/view_models/create_note_page_vm.dart';
+import 'package:doeves_app/feauture/error_page/presentation/error_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/catalogs_with_notes_page/catalogs_page.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/catalogs_with_notes_page/catalogs_page_vm.dart';
 import 'package:doeves_app/feauture/main_page/presentation/pages/home_page/home_page.dart';
@@ -32,6 +32,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 final router = GoRouter(
+  errorBuilder: (context, state) => const ErrorPage(),
   initialLocation: AppRoutes.splashScreen,
   routes: [
     GoRoute(
@@ -99,21 +100,17 @@ final router = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-                path: AppRoutes.notesHomePage,
-                name: AppRoutes.notesHomePage,
-                builder: (context, state) {
-                  final transferObject = state.extra;
-                  final isValid = transferObject is DataTransferObject;
-                  return NotesHomePage(
-                    drawerService: AppContainer().serviceScope.drawerService,
-                    vm: NotesHomePageViewModel(
-                      noteTransferObject: isValid ? transferObject : null,
-                      notesRepository:
-                          AppContainer().repositoryScope.notesRepository,
-                      storage: AppContainer().secureScope.secureStorage,
-                    ),
-                  );
-                }),
+              path: AppRoutes.notesHomePage,
+              name: AppRoutes.notesHomePage,
+              builder: (context, state) => NotesHomePage(
+                drawerService: AppContainer().serviceScope.drawerService,
+                vm: NotesHomePageViewModel(
+                  notesRepository:
+                      AppContainer().repositoryScope.notesRepository,
+                  storage: AppContainer().secureScope.secureStorage,
+                ),
+              ),
+            ),
           ],
         ),
         StatefulShellBranch(
@@ -125,9 +122,11 @@ final router = GoRouter(
           ],
         ),
         StatefulShellBranch(
+          initialLocation: AppRoutes.catalogsPage,
           routes: [
             GoRoute(
               path: AppRoutes.catalogsPage,
+              name: AppRoutes.catalogsPage,
               builder: (context, state) => CatalogsPage(
                 drawerService: AppContainer().serviceScope.drawerService,
                 vm: CatalogsPageViewModel(
@@ -136,33 +135,36 @@ final router = GoRouter(
                   secureStorage: AppContainer().secureScope.secureStorage,
                 ),
               ),
-              routes: [
-                GoRoute(
-                  path: AppRoutes.createCatalogPage,
-                  name: AppRoutes.createCatalogPage,
-                  builder: (context, state) {
-                    final catalogData = state.extra;
-                    final isValid =
-                        catalogData is CreateCatalogDataTransferObject;
-                    return CreateCatalogPage(
-                      vm: CreateCatalogPageViewModel.create(
-                        data: isValid ? catalogData : null,
-                        controller: CreateCatalogPageController(
-                          catalogRepository: AppContainer()
-                              .repositoryScope
-                              .createCatalogRepository,
-                          secureStorage:
-                              AppContainer().secureScope.secureStorage,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ],
             ),
           ],
         ),
       ],
+    ),
+    GoRoute(
+      path: AppRoutes.createCatalogPage,
+      pageBuilder: (context, state) {
+        final catalogData = state.extra;
+        final isValid = catalogData is CreateCatalogDataTransferObject;
+        return CustomTransitionPage(
+          child: CreateCatalogPage(
+            vm: CreateCatalogPageViewModel.create(
+              data: isValid ? catalogData : null,
+              controller: CreateCatalogPageController(
+                catalogRepository:
+                    AppContainer().repositoryScope.createCatalogRepository,
+                secureStorage: AppContainer().secureScope.secureStorage,
+              ),
+            ),
+          ),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+              SlideTransition(
+            position: animation
+                .drive(Tween(begin: const Offset(1, 0), end: Offset.zero)),
+            //opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+            child: child,
+          ),
+        );
+      },
     ),
     GoRoute(
       path: AppRoutes.selectNewNotePage,

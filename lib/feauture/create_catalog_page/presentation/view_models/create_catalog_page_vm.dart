@@ -3,7 +3,6 @@ import 'package:doeves_app/feauture/create_catalog_page/domain/catalog_data_tran
 import 'package:doeves_app/feauture/create_catalog_page/presentation/create_catalog_page_controller.dart';
 import 'package:doeves_app/feauture/create_catalog_page/presentation/view_models/new_catalog_vm.dart';
 import 'package:doeves_app/feauture/create_catalog_page/presentation/view_models/open_catalog_vm.dart';
-import 'package:reactive_variables/reactive_variables.dart';
 
 abstract interface class CreateCatalogPageViewModel implements ViewModel {
   CreateCatalogPageViewModel(this.controller, this.catalogId);
@@ -12,7 +11,7 @@ abstract interface class CreateCatalogPageViewModel implements ViewModel {
 
   Future<void> dispose();
 
-  final Rv<int> catalogId;
+  int? catalogId;
 
   final CreateCatalogPageController controller;
 
